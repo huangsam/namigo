@@ -19,9 +19,9 @@ type ResponseHandler func(*http.Response) error
 
 // DocumentPipeline implements the DocumentExecutor interface.
 type DocumentPipeline struct {
-	client   *http.Client      // HTTP client
-	builder  RequestBuilder    // HTTP request builder
-	handlers []ResponseHandler // List of HTTP response handlers
+	httpClient       *http.Client      // HTTP client
+	requestBuilder   RequestBuilder    // HTTP request builder
+	responseHandlers []ResponseHandler // List of HTTP response handlers
 }
 
 // NewDocumentPipeline creates a pipeline for execution.
@@ -31,23 +31,23 @@ func NewDocumentPipeline(
 	handlers ...ResponseHandler,
 ) DocumentExecutor {
 	return &DocumentPipeline{
-		client:   client,
-		builder:  builder,
-		handlers: handlers,
+		httpClient:       client,
+		requestBuilder:   builder,
+		responseHandlers: handlers,
 	}
 }
 
 func (dp *DocumentPipeline) Execute() (*goquery.Document, error) {
-	req, err := dp.builder()
+	req, err := dp.requestBuilder()
 	if err != nil {
 		return nil, err
 	}
-	res, err := dp.client.Do(req)
+	res, err := dp.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
-	for _, handler := range dp.handlers { // For multiple side effects
+	for _, handler := range dp.responseHandlers { // For multiple side effects
 		if err = handler(res); err != nil {
 			return nil, err
 		}
