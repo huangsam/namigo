@@ -18,5 +18,8 @@ func main() {
 
 	searchTerm := "hello"
 
-	npm.SearchForMatch(searchTerm)
+	for _, res := range npm.Search(searchTerm) {
+		content := fmt.Sprintf("%s[%v] ->\n\t%s", res.Name, res.IsExactMatch, res.Description)
+		fmt.Println(content)
+	}
 }
