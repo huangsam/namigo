@@ -1,7 +1,6 @@
 package npm
 
 import (
-	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -12,10 +11,13 @@ import (
 )
 
 func Search(name string) []model.NPMResult {
+	result := []model.NPMResult{}
+
 	// Setup document query
 	client := &http.Client{Timeout: 5 * time.Second}
 	builder := func() (*http.Request, error) {
-		params := url.Values{"q": []string{"hello"}}
+		encodedName := url.PathEscape(name)
+		params := url.Values{"q": []string{encodedName}}
 		url := url.URL{
 			Scheme:   "https",
 			Host:     "www.npmjs.com",
@@ -24,18 +26,16 @@ func Search(name string) []model.NPMResult {
 		}
 		return http.NewRequest("GET", url.String(), nil)
 	}
-	pipe := util.NewDocumentPipeline(client, builder)
-	doc, err := pipe.Execute()
+	pipeline := util.NewDocumentPipeline(client, builder)
+	doc, err := pipeline.Execute()
 	if err != nil {
-		log.Fatal(err)
+		return result
 	}
-
-	result := []model.NPMResult{}
 
 	// Run document query
 	doc.Find("main section").Each(func(i int, section *goquery.Selection) {
-		pkg := section.Find("h3.db7ee1ac").Text()
-		match := section.Find("div.bea55649 span#pkg-list-exact-match").Text()
+		pkg := section.Find("h3").Text()
+		match := section.Find("span#pkg-list-exact-match").Text()
 		description := section.Find("p").Text()
 
 		result = append(result, model.NPMResult{
