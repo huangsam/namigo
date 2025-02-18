@@ -7,4 +7,7 @@ Your naming pal, written in Go 🐶
 ```shell
 # Run build
 bash scripts/build.sh
+
+# Run linters
+bash scripts/lint.sh
 ```
