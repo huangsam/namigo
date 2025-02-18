@@ -11,8 +11,10 @@ type DocumentExecutor interface {
 	Execute() (*goquery.Document, error)
 }
 
+// RequestBuilder builds a HTTP request for client.
 type RequestBuilder func() (*http.Request, error)
 
+// ResponseHandler handles side effects for a response.
 type ResponseHandler func(*http.Response) error
 
 // DocumentPipeline implements the DocumentExecutor interface.
@@ -23,7 +25,11 @@ type DocumentPipeline struct {
 }
 
 // NewDocumentPipeline creates a pipeline for execution.
-func NewDocumentPipeline(client *http.Client, builder RequestBuilder, handlers ...ResponseHandler) DocumentExecutor {
+func NewDocumentPipeline(
+	client *http.Client,
+	builder RequestBuilder,
+	handlers ...ResponseHandler,
+) DocumentExecutor {
 	return &DocumentPipeline{
 		client:   client,
 		builder:  builder,
