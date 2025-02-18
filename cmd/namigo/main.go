@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/huangsam/namigo/internal/util"
 )
 
 // https://registry.npmjs.com/namigo or scrape
@@ -18,22 +21,25 @@ func main() {
 	fmt.Println("Hello Namigo 🐶")
 	fmt.Println()
 
-	res, err := http.Get("https://www.npmjs.com/search?q=hello")
+	// Setup document query
+	client := &http.Client{Timeout: 5 * time.Second}
+	builder := func() (*http.Request, error) {
+		params := url.Values{"q": []string{"hello"}}
+		url := url.URL{
+			Scheme:   "https",
+			Host:     "www.npmjs.com",
+			Path:     "search",
+			RawQuery: params.Encode(),
+		}
+		return http.NewRequest("GET", url.String(), nil)
+	}
+	pipe := util.NewDocumentPipeline(client, builder)
+	doc, err := pipe.Execute()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer res.Body.Close()
-	if res.StatusCode != 200 {
-		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
-	}
 
-	// Load the HTML document
-	doc, err := goquery.NewDocumentFromReader(res.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Find the review items
+	// Run document query
 	doc.Find("main section").Each(func(i int, section *goquery.Selection) {
 		pkg, ok := section.Find("div.bea55649 a").Attr("href")
 		if ok {
