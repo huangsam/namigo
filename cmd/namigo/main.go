@@ -19,7 +19,7 @@ func main() {
 	searchTerm := "hello"
 
 	for _, res := range npm.Search(searchTerm) {
-		content := fmt.Sprintf("%s[%v] ->\n\t%s", res.Name, res.IsExactMatch, res.Description)
+		content := fmt.Sprintf("%s [exact=%v] ->\n\t%s", res.Name, res.IsExactMatch, res.Description)
 		fmt.Println(content)
 	}
 }
