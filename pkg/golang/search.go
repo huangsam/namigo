@@ -2,7 +2,6 @@ package golang
 
 import (
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
@@ -17,18 +16,7 @@ func SearchByScrape(name string) []model.GoPackageResult {
 
 	// Setup document query
 	client := &http.Client{Timeout: 5 * time.Second}
-	builder := func() (*http.Request, error) {
-		encodedName := url.PathEscape(name)
-		params := url.Values{"q": []string{encodedName}, "m": []string{"package"}}
-		url := url.URL{
-			Scheme:   "https",
-			Host:     "pkg.go.dev",
-			Path:     "search",
-			RawQuery: params.Encode(),
-		}
-		return http.NewRequest("GET", url.String(), nil)
-	}
-	pipeline := util.NewDocumentPipeline(client, builder)
+	pipeline := util.NewDocumentPipeline(client, listing(name))
 	doc, err := pipeline.Execute()
 	if err != nil {
 		return result

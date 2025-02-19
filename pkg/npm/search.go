@@ -2,7 +2,6 @@ package npm
 
 import (
 	"net/http"
-	"net/url"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
@@ -16,18 +15,7 @@ func SearchByScrape(name string) []model.NPMPackageResult {
 
 	// Setup document query
 	client := &http.Client{Timeout: 5 * time.Second}
-	builder := func() (*http.Request, error) {
-		encodedName := url.PathEscape(name)
-		params := url.Values{"q": []string{encodedName}}
-		url := url.URL{
-			Scheme:   "https",
-			Host:     "www.npmjs.com",
-			Path:     "search",
-			RawQuery: params.Encode(),
-		}
-		return http.NewRequest("GET", url.String(), nil)
-	}
-	pipeline := util.NewDocumentPipeline(client, builder)
+	pipeline := util.NewDocumentPipeline(client, listing(name))
 	doc, err := pipeline.Execute()
 	if err != nil {
 		return result
