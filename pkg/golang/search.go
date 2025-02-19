@@ -44,7 +44,7 @@ func SearchByScrape(name string) []model.GoPackageResult {
 
 		description := strings.Trim(section.Find("p").Text(), " \n")
 		if len(description) == 0 {
-			description = "No description"
+			description = model.NoDescription
 		}
 
 		result = append(result, model.GoPackageResult{

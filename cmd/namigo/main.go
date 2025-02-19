@@ -69,7 +69,7 @@ func main() {
 		if i >= maxResultsToPrint {
 			break
 		}
-		content := fmt.Sprintf("[pypi] %s", res.Name)
+		content := fmt.Sprintf("[pypi] %s ->\n\t%s", res.Name, res.Description)
 		fmt.Println(content)
 	}
 }
