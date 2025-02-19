@@ -3,12 +3,21 @@ package main
 import (
 	"fmt"
 
+	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/pkg/golang"
 	"github.com/huangsam/namigo/pkg/npm"
 	"github.com/huangsam/namigo/pkg/pypi"
 )
 
+// maxResultsToPrint is the max number of results to print for each result collection.
 const maxResultsToPrint = 10
+
+// portfolio is a collection of result slices.
+type portfolio struct {
+	npmResults    []model.NPMPackageResult
+	golangResults []model.GoPackageResult
+	pypiResults   []model.PyPIPackageResult
+}
 
 func main() {
 	fmt.Println("Hello Namigo 🐶")
@@ -16,7 +25,31 @@ func main() {
 
 	searchTerm := "hello"
 
-	for i, res := range npm.SearchByScrape(searchTerm) {
+	var ptf portfolio
+
+	ch := make(chan struct{})
+	defer close(ch)
+
+	go func() {
+		ptf.npmResults = npm.SearchByScrape(searchTerm)
+		ch <- struct{}{}
+	}()
+
+	go func() {
+		ptf.golangResults = golang.SearchByScrape(searchTerm)
+		ch <- struct{}{}
+	}()
+
+	go func() {
+		ptf.pypiResults = pypi.SearchByAPI(searchTerm)
+		ch <- struct{}{}
+	}()
+
+	for i := 0; i < 3; i++ {
+		<-ch
+	}
+
+	for i, res := range ptf.npmResults {
 		if i >= maxResultsToPrint {
 			break
 		}
@@ -24,7 +57,7 @@ func main() {
 		fmt.Println(content)
 	}
 
-	for i, res := range golang.SearchByScrape(searchTerm) {
+	for i, res := range ptf.golangResults {
 		if i >= maxResultsToPrint {
 			break
 		}
@@ -32,7 +65,7 @@ func main() {
 		fmt.Println(content)
 	}
 
-	for i, res := range pypi.SearchByAPI(searchTerm) {
+	for i, res := range ptf.pypiResults {
 		if i >= maxResultsToPrint {
 			break
 		}
