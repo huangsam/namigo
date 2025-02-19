@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/pkg/golang"
@@ -45,9 +46,13 @@ func main() {
 		ch <- struct{}{}
 	}()
 
+	fmt.Printf("Loading")
 	for i := 0; i < 3; i++ {
 		<-ch
+		fmt.Printf(".")
 	}
+	fmt.Println("done!")
+	time.Sleep(500 * time.Millisecond)
 
 	for i, res := range ptf.npmResults {
 		if i >= maxResultsToPrint {
