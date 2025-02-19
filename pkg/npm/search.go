@@ -13,7 +13,6 @@ import (
 func SearchByScrape(name string) []model.NPMPackageResult {
 	result := []model.NPMPackageResult{}
 
-	// Setup document query
 	client := &http.Client{Timeout: 5 * time.Second}
 	pipeline := util.NewDocumentPipeline(client, listing(name))
 	doc, err := pipeline.Execute()
@@ -21,7 +20,6 @@ func SearchByScrape(name string) []model.NPMPackageResult {
 		return result
 	}
 
-	// Run document query
 	doc.Find("main section").Each(func(i int, section *goquery.Selection) {
 		pkg := section.Find("h3").Text()
 		match := section.Find("span#pkg-list-exact-match").Text()

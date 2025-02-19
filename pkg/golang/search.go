@@ -14,7 +14,6 @@ import (
 func SearchByScrape(name string) []model.GoPackageResult {
 	result := []model.GoPackageResult{}
 
-	// Setup document query
 	client := &http.Client{Timeout: 5 * time.Second}
 	pipeline := util.NewDocumentPipeline(client, listing(name))
 	doc, err := pipeline.Execute()
@@ -22,7 +21,6 @@ func SearchByScrape(name string) []model.GoPackageResult {
 		return result
 	}
 
-	// Run document query
 	doc.Find(".SearchSnippet").Each(func(i int, section *goquery.Selection) {
 		content := strings.Fields(section.Find("h2").Text())
 		pkg, path := content[0], content[1]

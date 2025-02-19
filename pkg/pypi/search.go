@@ -33,11 +33,13 @@ func SearchByAPI(name string) []model.PyPIPackageResult {
 	taskChan := make(chan string)
 
 	go func() {
+		count := 0
 		for _, project := range simpleRes.Projects {
 			if strings.HasPrefix(project.Name, name) {
 				taskChan <- project.Name
+				count++
 			}
-			if len(result) >= 50 { // That's probably enough!
+			if count >= 50 { // That's probably enough!
 				break
 			}
 		}
