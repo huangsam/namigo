@@ -6,17 +6,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-type DocumentExecutor interface {
-	// Execute generates a Document for goquery.
-	Execute() (*goquery.Document, error)
-}
-
-// RequestBuilder builds a HTTP request for client.
-type RequestBuilder func() (*http.Request, error)
-
-// ResponseHandler handles side effects for a response.
-type ResponseHandler func(*http.Response) error
-
 // DocumentPipeline implements the DocumentExecutor interface.
 type DocumentPipeline struct {
 	httpClient       *http.Client      // HTTP client
@@ -29,7 +18,7 @@ func NewDocumentPipeline(
 	client *http.Client,
 	builder RequestBuilder,
 	handlers ...ResponseHandler,
-) DocumentExecutor {
+) DocumentGenerator {
 	return &DocumentPipeline{
 		httpClient:       client,
 		requestBuilder:   builder,

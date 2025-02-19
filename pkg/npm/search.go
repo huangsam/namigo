@@ -10,8 +10,9 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
-func Search(name string) []model.NPMResult {
-	result := []model.NPMResult{}
+// SearchByScrape searches for NPM packages by scraping www.npmjs.com.
+func SearchByScrape(name string) []model.NPMPackageResult {
+	result := []model.NPMPackageResult{}
 
 	// Setup document query
 	client := &http.Client{Timeout: 5 * time.Second}
@@ -38,7 +39,7 @@ func Search(name string) []model.NPMResult {
 		match := section.Find("span#pkg-list-exact-match").Text()
 		description := section.Find("p").Text()
 
-		result = append(result, model.NPMResult{
+		result = append(result, model.NPMPackageResult{
 			Name:         pkg,
 			Description:  description,
 			IsExactMatch: len(match) > 0,

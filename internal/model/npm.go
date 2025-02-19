@@ -1,7 +1,7 @@
 package model
 
-type NPMResult struct {
-	Name         string
-	Description  string
-	IsExactMatch bool
+type NPMPackageResult struct {
+	Name         string // Package name
+	Description  string // Package description
+	IsExactMatch bool   // Is exact match?
 }
