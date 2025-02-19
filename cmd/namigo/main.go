@@ -8,23 +8,34 @@ import (
 	"github.com/huangsam/namigo/pkg/pypi"
 )
 
+const maxResultsToPrint = 10
+
 func main() {
 	fmt.Println("Hello Namigo 🐶")
 	fmt.Println()
 
 	searchTerm := "hello"
 
-	for _, res := range npm.SearchByScrape(searchTerm) {
+	for i, res := range npm.SearchByScrape(searchTerm) {
+		if i >= maxResultsToPrint {
+			break
+		}
 		content := fmt.Sprintf("[npm] %s [exact=%v] ->\n\t%s", res.Name, res.IsExactMatch, res.Description)
 		fmt.Println(content)
 	}
 
-	for _, res := range golang.SearchByScrape(searchTerm) {
+	for i, res := range golang.SearchByScrape(searchTerm) {
+		if i >= maxResultsToPrint {
+			break
+		}
 		content := fmt.Sprintf("[golang] %s %s ->\n\t%s", res.Name, res.Path, res.Description)
 		fmt.Println(content)
 	}
 
-	for _, res := range pypi.SearchByAPI(searchTerm) {
+	for i, res := range pypi.SearchByAPI(searchTerm) {
+		if i >= maxResultsToPrint {
+			break
+		}
 		content := fmt.Sprintf("[pypi] %s", res.Name)
 		fmt.Println(content)
 	}
