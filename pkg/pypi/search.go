@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
@@ -12,58 +11,14 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
-// PypiListingResponse represents the response from the PyPI simple API.
-type PypiListingResponse struct {
-	Meta struct {
-		LastSerial int    `json:"_last-serial"`
-		APIVersion string `json:"api-version"`
-	} `json:"meta"`
-	Projects []struct {
-		LastSerial int    `json:"_last-serial"`
-		Name       string `json:"name"`
-	} `json:"projects"`
-}
-
-// PypiDetailResponse represents the response from the PyPI json API.
-type PypiDetailResponse struct {
-	Info struct {
-		Author      string `json:"author"`
-		Description string `json:"description"`
-		Summary     string `json:"summary"`
-		Version     string `json:"version"`
-	}
-}
-
-func listing() (*http.Request, error) {
-	url := url.URL{
-		Scheme: "https",
-		Host:   "pypi.org",
-		Path:   "simple/",
-	}
-	req, err := http.NewRequest("GET", url.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Add("Accept", "application/vnd.pypi.simple.v1+json")
-	return req, nil
-}
-
-func detail(pkg string) util.RequestBuilder {
-	return func() (*http.Request, error) {
-		url := url.URL{
-			Scheme: "https",
-			Host:   "pypi.org",
-			Path:   "pypi/" + pkg + "/json",
-		}
-		return http.NewRequest("GET", url.String(), nil)
-	}
-}
+// workerCount is the number of workers used to grab package details.
+const workerCount = 5
 
 // SearchByAPI searches for PyPI packages by querying pypi.org.
 func SearchByAPI(name string) []model.PyPIPackageResult {
 	client := &http.Client{Timeout: 5 * time.Second}
 
-	b, err := util.RESTAPIQuery(client, listing)
+	b, err := util.RESTAPIQuery(client, listing())
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -108,7 +63,6 @@ func SearchByAPI(name string) []model.PyPIPackageResult {
 	}
 
 	doneChan := make(chan struct{})
-	workerCount := 5
 	for i := 0; i < workerCount; i++ {
 		go func() {
 			worker()
