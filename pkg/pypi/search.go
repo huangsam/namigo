@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/huangsam/namigo/internal/model"
@@ -64,16 +65,15 @@ func SearchByAPI(name string) []model.PyPIPackageResult {
 		}
 	}
 
-	doneChan := make(chan struct{})
+	var wg sync.WaitGroup
+	wg.Add(workerCount)
 	for i := 0; i < workerCount; i++ {
 		go func() {
+			defer wg.Done()
 			worker()
-			doneChan <- struct{}{}
 		}()
 	}
-	for i := 0; i < workerCount; i++ {
-		<-doneChan
-	}
+	wg.Wait()
 
 	return result
 }
