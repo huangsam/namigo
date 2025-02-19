@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/huangsam/namigo/internal/model"
@@ -28,30 +29,29 @@ func main() {
 
 	var ptf portfolio
 
-	ch := make(chan struct{})
-	defer close(ch)
+	var wg sync.WaitGroup
 
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		ptf.npmResults = npm.SearchByScrape(searchTerm)
-		ch <- struct{}{}
 	}()
 
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		ptf.golangResults = golang.SearchByScrape(searchTerm)
-		ch <- struct{}{}
 	}()
 
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		ptf.pypiResults = pypi.SearchByAPI(searchTerm)
-		ch <- struct{}{}
 	}()
 
-	fmt.Printf("Loading")
-	for i := 0; i < 3; i++ {
-		<-ch
-		fmt.Printf(".")
-	}
-	fmt.Println("done!")
+	fmt.Printf("Loading...")
+	wg.Wait()
+	fmt.Printf("done!\n\n")
 	time.Sleep(500 * time.Millisecond)
 
 	for i, res := range ptf.npmResults {
