@@ -34,6 +34,7 @@ func SearchByProbe(name string, max int) ([]model.DNSResult, error) {
 				ips, err := net.LookupIP(fullDomain)
 				if err != nil {
 					errorCount++
+					continue
 				}
 				mu.Lock()
 				if resultCount < max {
@@ -49,8 +50,8 @@ func SearchByProbe(name string, max int) ([]model.DNSResult, error) {
 	}
 
 	wg.Wait()
-	if errorCount == len(domains) {
-		return result, fmt.Errorf("queries failed for %v", domains)
+	if resultCount == 0 && errorCount > 0 {
+		return result, fmt.Errorf("no results with %d errors", errorCount)
 	}
 	return result, nil
 }

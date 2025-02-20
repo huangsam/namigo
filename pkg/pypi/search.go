@@ -2,6 +2,7 @@ package pypi
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 	"sync"
@@ -37,6 +38,7 @@ func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
 
 	result := []model.PyPIPackageResult{}
 	resultCount := 0
+	errorCount := 0
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 
@@ -47,10 +49,12 @@ func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
 			for pkg := range taskChan {
 				bd, err := util.RESTAPIQuery(client, detail(pkg))
 				if err != nil {
+					errorCount++
 					continue
 				}
 				var detailRes PypiDetailResponse
 				if err := json.Unmarshal(bd, &detailRes); err != nil {
+					errorCount++
 					continue
 				}
 				description := detailRes.Info.Summary
@@ -75,5 +79,8 @@ func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
 	}
 
 	wg.Wait()
+	if resultCount == 0 && errorCount > 0 {
+		return result, fmt.Errorf("no results with %d errors", errorCount)
+	}
 	return result, nil
 }
