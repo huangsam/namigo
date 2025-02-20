@@ -16,13 +16,32 @@ const maxResultsToPrint = 10
 
 // portfolio is a collection of result slices.
 type portfolio struct {
-	npmResults    []model.NPMPackageResult
-	golangResults []model.GoPackageResult
-	pypiResults   []model.PyPIPackageResult
+	results struct {
+		golang []model.GoPackageResult
+		npm    []model.NPMPackageResult
+		pypi   []model.PyPIPackageResult
+	}
+	wg *sync.WaitGroup
 }
 
+// newPortfolio creates a new portfolio instance.
+func newPortfolio() *portfolio {
+	return &portfolio{wg: &sync.WaitGroup{}}
+}
+
+// isEmpty checks if the portfolio has zero results.
 func (p *portfolio) isEmpty() bool {
-	return len(p.npmResults)+len(p.golangResults)+len(p.pypiResults) == 0
+	return len(p.results.npm)+len(p.results.golang)+len(p.results.pypi) == 0
+}
+
+// register runs a routine as a goroutine and passes a WaitGroup to it.
+func (p *portfolio) register(f func(wg *sync.WaitGroup)) {
+	p.wg.Add(1)
+	go f(p.wg)
+}
+
+func (p *portfolio) wait() {
+	p.wg.Wait()
 }
 
 func main() {
@@ -31,62 +50,49 @@ func main() {
 
 	searchTerm := "hello"
 
-	var ptf portfolio
+	var ptf *portfolio = newPortfolio()
 
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		if searchResults, err := npm.SearchByScrape(searchTerm); err == nil {
-			fmt.Println("🟢 Load NPM results")
-			ptf.npmResults = searchResults
-		} else {
-			fmt.Println("🔴 Cannot get NPM results:", err.Error())
-		}
-	}()
-
-	wg.Add(1)
-	go func() {
+	ptf.register(func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		if searchResults, err := golang.SearchByScrape(searchTerm); err == nil {
 			fmt.Println("🟢 Load Golang results")
-			ptf.golangResults = searchResults
+			ptf.results.golang = searchResults
 		} else {
 			fmt.Println("🔴 Cannot get Golang results:", err.Error())
 		}
-	}()
+	})
 
-	wg.Add(1)
-	go func() {
+	ptf.register(func(wg *sync.WaitGroup) {
+		defer wg.Done()
+		if searchResults, err := npm.SearchByScrape(searchTerm); err == nil {
+			fmt.Println("🟢 Load NPM results")
+			ptf.results.npm = searchResults
+		} else {
+			fmt.Println("🔴 Cannot get NPM results:", err.Error())
+		}
+	})
+
+	ptf.register(func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		if searchResults, err := pypi.SearchByAPI(searchTerm); err == nil {
 			fmt.Println("🟢 Load PyPI results")
-			ptf.pypiResults = searchResults
+			ptf.results.pypi = searchResults
 		} else {
 			fmt.Println("🔴 Cannot get PyPI results:", err.Error())
 		}
-	}()
+	})
 
-	wg.Wait()
+	ptf.wait()
 
 	if ptf.isEmpty() {
-		fmt.Printf("👎 No results...\n")
+		fmt.Printf("🌧️ No results...\n")
 	} else {
 		fmt.Printf("🍺 Prepare results...\n\n")
 	}
 
 	time.Sleep(500 * time.Millisecond)
 
-	for i, res := range ptf.npmResults {
-		if i >= maxResultsToPrint {
-			break
-		}
-		content := fmt.Sprintf("[npm] %s [exact=%v] ->\n\t%s", res.Name, res.IsExactMatch, res.Description)
-		fmt.Println(content)
-	}
-
-	for i, res := range ptf.golangResults {
+	for i, res := range ptf.results.golang {
 		if i >= maxResultsToPrint {
 			break
 		}
@@ -94,7 +100,15 @@ func main() {
 		fmt.Println(content)
 	}
 
-	for i, res := range ptf.pypiResults {
+	for i, res := range ptf.results.npm {
+		if i >= maxResultsToPrint {
+			break
+		}
+		content := fmt.Sprintf("[npm] %s [exact=%v] ->\n\t%s", res.Name, res.IsExactMatch, res.Description)
+		fmt.Println(content)
+	}
+
+	for i, res := range ptf.results.pypi {
 		if i >= maxResultsToPrint {
 			break
 		}
