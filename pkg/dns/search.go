@@ -43,7 +43,7 @@ func SearchByProbe(name string, max int) ([]model.DNSResult, error) {
 					resultCount++
 				}
 				mu.Unlock()
-				if len(result) >= max {
+				if resultCount >= max {
 					return
 				}
 			}
