@@ -1,7 +1,6 @@
 package dns
 
 import (
-	"errors"
 	"fmt"
 	"net"
 	"sync"
@@ -41,7 +40,7 @@ func SearchByProbe(name string) ([]model.DNSResult, error) {
 
 	wg.Wait()
 	if errorCount == len(domains) {
-		return result, errors.New("all DNS queries failed")
+		return result, fmt.Errorf("queries failed for %v", domains)
 	}
 	return result, nil
 }
