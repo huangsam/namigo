@@ -54,6 +54,8 @@ func SearchAction(c *cli.Context) error {
 
 	ptf := newPortfolio()
 
+	errorCount := 0
+
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		if searchResults, err := golang.SearchByScrape(searchTerm); err == nil {
@@ -61,6 +63,7 @@ func SearchAction(c *cli.Context) error {
 			ptf.results.golang = searchResults
 		} else {
 			fmt.Println("🔴 Cannot get Golang results:", err.Error())
+			errorCount++
 		}
 	})
 
@@ -71,6 +74,7 @@ func SearchAction(c *cli.Context) error {
 			ptf.results.npm = searchResults
 		} else {
 			fmt.Println("🔴 Cannot get NPM results:", err.Error())
+			errorCount++
 		}
 	})
 
@@ -81,10 +85,15 @@ func SearchAction(c *cli.Context) error {
 			ptf.results.pypi = searchResults
 		} else {
 			fmt.Println("🔴 Cannot get PyPI results:", err.Error())
+			errorCount++
 		}
 	})
 
 	ptf.wait()
+
+	if errorCount > 0 {
+		return fmt.Errorf("found %d portfolio errors", errorCount)
+	}
 
 	if ptf.isEmpty() {
 		fmt.Printf("🌧️ No results...\n")
@@ -94,55 +103,71 @@ func SearchAction(c *cli.Context) error {
 
 	time.Sleep(500 * time.Millisecond)
 
-	if len(ptf.results.golang) > 0 {
-		fmt.Printf("%d Golang results found. First %d are:\n", len(ptf.results.golang), maxResultsToPrint)
-		for i, res := range ptf.results.golang {
-			if i >= maxResultsToPrint {
-				break
+	printResults := func(results any, label string, maxResults int, format func(any) string) {
+		switch res := results.(type) {
+		case []model.GoPackageResult:
+			if len(res) > 0 {
+				fmt.Printf("%d %s results found. First %d are:\n", len(res), label, maxResults)
+				for i, r := range res {
+					if i >= maxResults {
+						break
+					}
+					fmt.Println(format(r))
+				}
+				fmt.Println()
 			}
-			var content string
-			if len(res.Description) > 80 || len(res.Description) == 0 {
-				content = fmt.Sprintf("\t[golang] %s %s ->\n\t\t%.80s...", res.Name, res.Path, res.Description)
-			} else {
-				content = fmt.Sprintf("\t[golang] %s %s ->\n\t\t%s", res.Name, res.Path, res.Description)
+		case []model.NPMPackageResult:
+			if len(res) > 0 {
+				fmt.Printf("%d %s results found. First %d are:\n", len(res), label, maxResults)
+				for i, r := range res {
+					if i >= maxResults {
+						break
+					}
+					fmt.Println(format(r))
+				}
+				fmt.Println()
 			}
-			fmt.Println(content)
+		case []model.PyPIPackageResult:
+			if len(res) > 0 {
+				fmt.Printf("%d %s results found. First %d are:\n", len(res), label, maxResults)
+				for i, r := range res {
+					if i >= maxResults {
+						break
+					}
+					fmt.Println(format(r))
+				}
+				fmt.Println()
+			}
 		}
-		fmt.Println()
 	}
 
-	if len(ptf.results.npm) > 0 {
-		fmt.Printf("%d NPM results found. First %d are:\n", len(ptf.results.npm), maxResultsToPrint)
-		for i, res := range ptf.results.npm {
-			if i >= maxResultsToPrint {
-				break
-			}
-			var content string
-			if len(res.Description) > 80 || len(res.Description) == 0 {
-				content = fmt.Sprintf("\t[npm] %s [exact=%v] ->\n\t\t%.80s...", res.Name, res.IsExactMatch, res.Description)
-			} else {
-				content = fmt.Sprintf("\t[npm] %s [exact=%v] ->\n\t\t%s", res.Name, res.IsExactMatch, res.Description)
-			}
-			fmt.Println(content)
+	formatGo := func(result any) string {
+		res := result.(model.GoPackageResult)
+		if len(res.Description) > 80 || len(res.Description) == 0 {
+			return fmt.Sprintf("\t[golang] %s %s ->\n\t\t%.80s...", res.Name, res.Path, res.Description)
 		}
-		fmt.Println()
+		return fmt.Sprintf("\t[golang] %s %s ->\n\t\t%s", res.Name, res.Path, res.Description)
 	}
 
-	if len(ptf.results.pypi) > 0 {
-		fmt.Printf("%d PyPI results found. First %d are:\n", len(ptf.results.pypi), maxResultsToPrint)
-		for i, res := range ptf.results.pypi {
-			if i >= maxResultsToPrint {
-				break
-			}
-			var content string
-			if len(res.Description) > 80 || len(res.Description) == 0 {
-				content = fmt.Sprintf("\t[pypi] %s by %s ->\n\t\t%.80s...", res.Name, res.Author, res.Description)
-			} else {
-				content = fmt.Sprintf("\t[pypi] %s by %s ->\n\t\t%s", res.Name, res.Author, res.Description)
-			}
-			fmt.Println(content)
+	formatNPM := func(result any) string {
+		res := result.(model.NPMPackageResult)
+		if len(res.Description) > 80 || len(res.Description) == 0 {
+			return fmt.Sprintf("\t[npm] %s [exact=%v] ->\n\t\t%.80s...", res.Name, res.IsExactMatch, res.Description)
 		}
+		return fmt.Sprintf("\t[npm] %s [exact=%v] ->\n\t\t%s", res.Name, res.IsExactMatch, res.Description)
 	}
+
+	formatPyPI := func(result any) string {
+		res := result.(model.PyPIPackageResult)
+		if len(res.Description) > 80 || len(res.Description) == 0 {
+			return fmt.Sprintf("\t[pypi] %s by %s ->\n\t\t%.80s...", res.Name, res.Author, res.Description)
+		}
+		return fmt.Sprintf("\t[pypi] %s by %s ->\n\t\t%s", res.Name, res.Author, res.Description)
+	}
+
+	printResults(ptf.results.golang, "Golang", maxResultsToPrint, formatGo)
+	printResults(ptf.results.npm, "NPM", maxResultsToPrint, formatNPM)
+	printResults(ptf.results.pypi, "PyPI", maxResultsToPrint, formatPyPI)
 
 	return nil
 }
