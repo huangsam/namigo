@@ -2,6 +2,7 @@ package npm
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
@@ -28,6 +29,8 @@ func SearchByScrape(name string) ([]model.NPMPackageResult, error) {
 		description := section.Find("p").Text()
 		if len(description) == 0 {
 			description = model.NoDescription
+		} else {
+			description = strings.Trim(description, " \n\t")
 		}
 
 		result = append(result, model.NPMPackageResult{
