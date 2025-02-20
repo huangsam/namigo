@@ -70,8 +70,8 @@ func SearchAction(c *cli.Context) error {
 
 	ptf.wait()
 
-	if ptfErrorCount > 0 {
-		return fmt.Errorf("found %d portfolio errors", ptfErrorCount)
+	if ptfErrorCount == ptf.count() {
+		return errors.New("portfolio collection failed")
 	}
 
 	if ptf.isEmpty() {
