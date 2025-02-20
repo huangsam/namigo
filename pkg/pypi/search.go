@@ -10,9 +10,6 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
-// workerCount is the number of workers used to grab package details.
-const workerCount = 5
-
 // SearchByAPI searches for PyPI packages by querying pypi.org.
 func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
