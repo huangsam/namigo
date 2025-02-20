@@ -20,13 +20,14 @@ func SearchAction(c *cli.Context) error {
 	if len(searchTerm) == 0 {
 		return errors.New("Provide at least one search term")
 	}
+	maxResults := c.Int("max")
 
 	ptf := newSearchPortfolio()
 	ptfErrorCount := 0
 
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
-		if searchResults, err := golang.SearchByScrape(searchTerm); err == nil {
+		if searchResults, err := golang.SearchByScrape(searchTerm, maxResults); err == nil {
 			fmt.Println("🟢 Load Golang results")
 			ptf.results.golang = searchResults
 		} else {
@@ -37,7 +38,7 @@ func SearchAction(c *cli.Context) error {
 
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
-		if searchResults, err := npm.SearchByScrape(searchTerm); err == nil {
+		if searchResults, err := npm.SearchByScrape(searchTerm, maxResults); err == nil {
 			fmt.Println("🟢 Load NPM results")
 			ptf.results.npm = searchResults
 		} else {
@@ -48,7 +49,7 @@ func SearchAction(c *cli.Context) error {
 
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
-		if searchResults, err := pypi.SearchByAPI(searchTerm); err == nil {
+		if searchResults, err := pypi.SearchByAPI(searchTerm, maxResults); err == nil {
 			fmt.Println("🟢 Load PyPI results")
 			ptf.results.pypi = searchResults
 		} else {
@@ -59,7 +60,7 @@ func SearchAction(c *cli.Context) error {
 
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
-		if probeResults, err := dns.SearchByProbe(searchTerm); err == nil {
+		if probeResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
 			fmt.Println("🟢 Load DNS results")
 			ptf.results.DNS = probeResults
 		} else {
@@ -84,11 +85,10 @@ func SearchAction(c *cli.Context) error {
 
 	f := &searchFormatter{}
 
-	maxResultCount := c.Int("max")
-	util.PrintResults(ptf.results.golang, "Golang", maxResultCount, f.formatGo)
-	util.PrintResults(ptf.results.npm, "NPM", maxResultCount, f.formatNPM)
-	util.PrintResults(ptf.results.pypi, "PyPI", maxResultCount, f.formatPyPI)
-	util.PrintResults(ptf.results.DNS, "DNS", maxResultCount, f.formatDNS)
+	util.PrintResults(ptf.results.golang, "Golang", f.formatGo)
+	util.PrintResults(ptf.results.npm, "NPM", f.formatNPM)
+	util.PrintResults(ptf.results.pypi, "PyPI", f.formatPyPI)
+	util.PrintResults(ptf.results.DNS, "DNS", f.formatDNS)
 
 	return nil
 }

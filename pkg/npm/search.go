@@ -11,7 +11,7 @@ import (
 )
 
 // SearchByScrape searches for NPM packages by scraping www.npmjs.com.
-func SearchByScrape(name string) ([]model.NPMPackageResult, error) {
+func SearchByScrape(name string, max int) ([]model.NPMPackageResult, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 	pipeline := util.NewDocumentPipeline(client, listing(name))
 	doc, err := pipeline.Execute()
@@ -22,6 +22,10 @@ func SearchByScrape(name string) ([]model.NPMPackageResult, error) {
 	result := []model.NPMPackageResult{}
 
 	doc.Find("main section").Each(func(i int, section *goquery.Selection) {
+		if len(result) >= max {
+			return
+		}
+
 		pkg := section.Find("h3").Text()
 
 		match := section.Find("span#pkg-list-exact-match").Text()

@@ -11,7 +11,7 @@ import (
 )
 
 // SearchByScrape searches for Go packages by scraping pkg.go.dev.
-func SearchByScrape(name string) ([]model.GoPackageResult, error) {
+func SearchByScrape(name string, max int) ([]model.GoPackageResult, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 	pipeline := util.NewDocumentPipeline(client, listing(name))
 	doc, err := pipeline.Execute()
@@ -22,6 +22,10 @@ func SearchByScrape(name string) ([]model.GoPackageResult, error) {
 	result := []model.GoPackageResult{}
 
 	doc.Find(".SearchSnippet").Each(func(i int, section *goquery.Selection) {
+		if len(result) >= max {
+			return
+		}
+
 		content := strings.Fields(section.Find("h2").Text())
 		pkg, path := content[0], content[1]
 		if !strings.Contains(pkg, name) && !strings.Contains(path, name) {
