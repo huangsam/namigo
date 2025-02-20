@@ -60,7 +60,11 @@ func SearchByAPI(name string) ([]model.PyPIPackageResult, error) {
 			if len(description) == 0 {
 				description = model.NoDescription
 			}
-			result = append(result, model.PyPIPackageResult{Name: item, Description: description})
+			author := detailRes.Info.Author
+			if len(author) == 0 {
+				author = model.NoAuthor
+			}
+			result = append(result, model.PyPIPackageResult{Name: item, Description: description, Author: author})
 		}
 	}
 

@@ -1,4 +1,6 @@
 package model
 
-// NoDescription is used when there is missing content.
-const NoDescription = "No description"
+const (
+	NoAuthor      = "No author"
+	NoDescription = "No description"
+)
