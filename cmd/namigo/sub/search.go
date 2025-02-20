@@ -62,7 +62,7 @@ func SearchAction(c *cli.Context) error {
 		defer wg.Done()
 		if probeResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
 			fmt.Println("🟢 Load DNS results")
-			ptf.results.DNS = probeResults
+			ptf.results.dns = probeResults
 		} else {
 			fmt.Println("🔴 Cannot get DNS results:", err.Error())
 			ptfErrorCount++
@@ -88,7 +88,7 @@ func SearchAction(c *cli.Context) error {
 	util.PrintResults(ptf.results.golang, "Golang", f.formatGo)
 	util.PrintResults(ptf.results.npm, "NPM", f.formatNPM)
 	util.PrintResults(ptf.results.pypi, "PyPI", f.formatPyPI)
-	util.PrintResults(ptf.results.DNS, "DNS", f.formatDNS)
+	util.PrintResults(ptf.results.dns, "DNS", f.formatDNS)
 
 	return nil
 }

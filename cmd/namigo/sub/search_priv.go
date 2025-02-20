@@ -55,7 +55,7 @@ type searchPortfolio struct {
 		golang []model.GoPackageResult
 		npm    []model.NPMPackageResult
 		pypi   []model.PyPIPackageResult
-		DNS    []model.DNSResult
+		dns    []model.DNSResult
 	}
 	wg *sync.WaitGroup
 	c  int
@@ -71,7 +71,7 @@ func (p *searchPortfolio) isEmpty() bool {
 	return (len(p.results.npm) +
 		len(p.results.golang) +
 		len(p.results.pypi) +
-		len(p.results.DNS)) == 0
+		len(p.results.dns)) == 0
 }
 
 // run invokes a function as a goroutine and passes a WaitGroup into it.
