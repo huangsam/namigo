@@ -22,8 +22,13 @@ func SearchByScrape(name string) ([]model.NPMPackageResult, error) {
 
 	doc.Find("main section").Each(func(i int, section *goquery.Selection) {
 		pkg := section.Find("h3").Text()
+
 		match := section.Find("span#pkg-list-exact-match").Text()
+
 		description := section.Find("p").Text()
+		if len(description) == 0 {
+			description = model.NoDescription
+		}
 
 		result = append(result, model.NPMPackageResult{
 			Name:         pkg,
