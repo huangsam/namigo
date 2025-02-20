@@ -44,6 +44,7 @@ func (p *portfolio) wait() {
 	p.wg.Wait()
 }
 
+// SearchAction searches term for finding packages.
 func SearchAction(c *cli.Context) error {
 	searchTerm := c.Args().First()
 	if len(searchTerm) == 0 {
