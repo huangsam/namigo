@@ -34,12 +34,13 @@ func (p *portfolio) isEmpty() bool {
 	return len(p.results.npm)+len(p.results.golang)+len(p.results.pypi) == 0
 }
 
-// register runs a routine as a goroutine and passes a WaitGroup to it.
-func (p *portfolio) register(f func(wg *sync.WaitGroup)) {
+// run invokes a function as a goroutine and passes a WaitGroup into it.
+func (p *portfolio) run(f func(wg *sync.WaitGroup)) {
 	p.wg.Add(1)
 	go f(p.wg)
 }
 
+// wait blocks the main thread until all runners are complete.
 func (p *portfolio) wait() {
 	p.wg.Wait()
 }
@@ -50,9 +51,9 @@ func main() {
 
 	searchTerm := "hello"
 
-	var ptf *portfolio = newPortfolio()
+	ptf := newPortfolio()
 
-	ptf.register(func(wg *sync.WaitGroup) {
+	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		if searchResults, err := golang.SearchByScrape(searchTerm); err == nil {
 			fmt.Println("🟢 Load Golang results")
@@ -62,7 +63,7 @@ func main() {
 		}
 	})
 
-	ptf.register(func(wg *sync.WaitGroup) {
+	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		if searchResults, err := npm.SearchByScrape(searchTerm); err == nil {
 			fmt.Println("🟢 Load NPM results")
@@ -72,7 +73,7 @@ func main() {
 		}
 	})
 
-	ptf.register(func(wg *sync.WaitGroup) {
+	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		if searchResults, err := pypi.SearchByAPI(searchTerm); err == nil {
 			fmt.Println("🟢 Load PyPI results")
