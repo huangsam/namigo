@@ -2,7 +2,6 @@ package pypi
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strings"
 	"sync"
@@ -16,17 +15,17 @@ import (
 const workerCount = 5
 
 // SearchByAPI searches for PyPI packages by querying pypi.org.
-func SearchByAPI(name string) []model.PyPIPackageResult {
+func SearchByAPI(name string) ([]model.PyPIPackageResult, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 
 	b, err := util.RESTAPIQuery(client, listing())
 	if err != nil {
-		log.Fatal(err.Error())
+		return []model.PyPIPackageResult{}, err
 	}
 
 	var listingRes PypiListingResponse
 	if err := json.Unmarshal(b, &listingRes); err != nil {
-		log.Fatal(err.Error())
+		return []model.PyPIPackageResult{}, err
 	}
 
 	taskChan := make(chan string)
@@ -75,5 +74,5 @@ func SearchByAPI(name string) []model.PyPIPackageResult {
 	}
 	wg.Wait()
 
-	return result
+	return result, nil
 }

@@ -11,15 +11,15 @@ import (
 )
 
 // SearchByScrape searches for Go packages by scraping pkg.go.dev.
-func SearchByScrape(name string) []model.GoPackageResult {
-	result := []model.GoPackageResult{}
-
+func SearchByScrape(name string) ([]model.GoPackageResult, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 	pipeline := util.NewDocumentPipeline(client, listing(name))
 	doc, err := pipeline.Execute()
 	if err != nil {
-		return result
+		return []model.GoPackageResult{}, err
 	}
+
+	result := []model.GoPackageResult{}
 
 	doc.Find(".SearchSnippet").Each(func(i int, section *goquery.Selection) {
 		content := strings.Fields(section.Find("h2").Text())
@@ -40,5 +40,5 @@ func SearchByScrape(name string) []model.GoPackageResult {
 		})
 	})
 
-	return result
+	return result, nil
 }

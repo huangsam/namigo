@@ -10,15 +10,15 @@ import (
 )
 
 // SearchByScrape searches for NPM packages by scraping www.npmjs.com.
-func SearchByScrape(name string) []model.NPMPackageResult {
-	result := []model.NPMPackageResult{}
-
+func SearchByScrape(name string) ([]model.NPMPackageResult, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 	pipeline := util.NewDocumentPipeline(client, listing(name))
 	doc, err := pipeline.Execute()
 	if err != nil {
-		return result
+		return []model.NPMPackageResult{}, err
 	}
+
+	result := []model.NPMPackageResult{}
 
 	doc.Find("main section").Each(func(i int, section *goquery.Selection) {
 		pkg := section.Find("h3").Text()
@@ -32,5 +32,5 @@ func SearchByScrape(name string) []model.NPMPackageResult {
 		})
 	})
 
-	return result
+	return result, nil
 }

@@ -21,6 +21,10 @@ type portfolio struct {
 	pypiResults   []model.PyPIPackageResult
 }
 
+func (p *portfolio) isEmpty() bool {
+	return len(p.npmResults)+len(p.golangResults)+len(p.pypiResults) == 0
+}
+
 func main() {
 	fmt.Println("Hello Namigo 🐶")
 	fmt.Println()
@@ -34,24 +38,44 @@ func main() {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		ptf.npmResults = npm.SearchByScrape(searchTerm)
+		if searchResults, err := npm.SearchByScrape(searchTerm); err == nil {
+			fmt.Println("🟢 Load NPM results")
+			ptf.npmResults = searchResults
+		} else {
+			fmt.Println("🔴 Cannot get NPM results:", err.Error())
+		}
 	}()
 
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		ptf.golangResults = golang.SearchByScrape(searchTerm)
+		if searchResults, err := golang.SearchByScrape(searchTerm); err == nil {
+			fmt.Println("🟢 Load Golang results")
+			ptf.golangResults = searchResults
+		} else {
+			fmt.Println("🔴 Cannot get Golang results:", err.Error())
+		}
 	}()
 
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		ptf.pypiResults = pypi.SearchByAPI(searchTerm)
+		if searchResults, err := pypi.SearchByAPI(searchTerm); err == nil {
+			fmt.Println("🟢 Load PyPI results")
+			ptf.pypiResults = searchResults
+		} else {
+			fmt.Println("🔴 Cannot get PyPI results:", err.Error())
+		}
 	}()
 
-	fmt.Printf("Loading...")
 	wg.Wait()
-	fmt.Printf("done!\n\n")
+
+	if ptf.isEmpty() {
+		fmt.Printf("👎 No results...\n")
+	} else {
+		fmt.Printf("🍺 Prepare results...\n\n")
+	}
+
 	time.Sleep(500 * time.Millisecond)
 
 	for i, res := range ptf.npmResults {
