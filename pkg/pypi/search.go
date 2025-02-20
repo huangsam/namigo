@@ -24,18 +24,16 @@ func SearchByAPI(name string) []model.PyPIPackageResult {
 		log.Fatal(err.Error())
 	}
 
-	var simpleRes PypiListingResponse
-	if err := json.Unmarshal(b, &simpleRes); err != nil {
+	var listingRes PypiListingResponse
+	if err := json.Unmarshal(b, &listingRes); err != nil {
 		log.Fatal(err.Error())
 	}
-
-	result := []model.PyPIPackageResult{}
 
 	taskChan := make(chan string)
 
 	go func() {
 		count := 0
-		for _, project := range simpleRes.Projects {
+		for _, project := range listingRes.Projects {
 			if strings.HasPrefix(project.Name, name) {
 				taskChan <- project.Name
 				count++
@@ -46,6 +44,8 @@ func SearchByAPI(name string) []model.PyPIPackageResult {
 		}
 		close(taskChan)
 	}()
+
+	result := []model.PyPIPackageResult{}
 
 	worker := func() {
 		for item := range taskChan {
