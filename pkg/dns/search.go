@@ -9,7 +9,6 @@ import (
 )
 
 func SearchByProbe(name string, max int) ([]model.DNSResult, error) {
-	var wg sync.WaitGroup
 	domains := []string{"com", "org", "net", "io", "tech", "ai", "me", "shop"}
 	domainChan := make(chan string)
 
@@ -21,8 +20,10 @@ func SearchByProbe(name string, max int) ([]model.DNSResult, error) {
 	}()
 
 	result := []model.DNSResult{}
+	resultCount := 0
 	errorCount := 0
 	var mu sync.Mutex
+	var wg sync.WaitGroup
 
 	for i := 0; i < 4; i++ {
 		wg.Add(1)
@@ -35,11 +36,14 @@ func SearchByProbe(name string, max int) ([]model.DNSResult, error) {
 					errorCount++
 				}
 				mu.Lock()
-				result = append(result, model.DNSResult{FQDN: fullDomain, IPList: ips})
+				if resultCount < max {
+					result = append(result, model.DNSResult{FQDN: fullDomain, IPList: ips})
+					resultCount++
+				}
+				mu.Unlock()
 				if len(result) >= max {
 					return
 				}
-				mu.Unlock()
 			}
 		}()
 	}
