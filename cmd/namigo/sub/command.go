@@ -1,6 +1,7 @@
 package sub
 
 import (
+	"errors"
 	"fmt"
 	"sync"
 	"time"
@@ -45,6 +46,9 @@ func (p *portfolio) wait() {
 
 func SearchAction(c *cli.Context) error {
 	searchTerm := c.Args().First()
+	if len(searchTerm) == 0 {
+		return errors.New("Provide at least one search term")
+	}
 
 	maxResultsToPrint := c.Int("max")
 
