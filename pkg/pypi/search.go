@@ -75,6 +75,5 @@ func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
 	}
 
 	wg.Wait()
-
 	return result, nil
 }
