@@ -14,7 +14,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// SearchPackageAction searches term for finding packages.
+// SearchPackageAction searches for packages.
 func SearchPackageAction(c *cli.Context) error {
 	searchTerm := c.Args().First()
 	if len(searchTerm) == 0 {
@@ -81,7 +81,7 @@ func SearchPackageAction(c *cli.Context) error {
 	return nil
 }
 
-// SearchDNSAction searches term for finding DNS records.
+// SearchDNSAction searches for DNS records.
 func SearchDNSAction(c *cli.Context) error {
 	searchTerm := c.Args().First()
 	if len(searchTerm) == 0 {
