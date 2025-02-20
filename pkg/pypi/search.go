@@ -17,24 +17,30 @@ const workerCount = 5
 func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 
-	b, err := util.RESTAPIQuery(client, listing())
+	bl, err := util.RESTAPIQuery(client, listing())
 	if err != nil {
 		return []model.PyPIPackageResult{}, err
 	}
 
 	var listingRes PypiListingResponse
-	if err := json.Unmarshal(b, &listingRes); err != nil {
+	if err := json.Unmarshal(bl, &listingRes); err != nil {
 		return []model.PyPIPackageResult{}, err
 	}
 
-	result := []model.PyPIPackageResult{}
-
-	count := 0
-	for _, project := range listingRes.Projects {
-		if !strings.HasPrefix(project.Name, name) {
-			continue
+	taskChan := make(chan string)
+	go func() {
+		for _, project := range listingRes.Projects {
+			if strings.HasPrefix(project.Name, name) {
+				taskChan <- project.Name
+			}
 		}
-		bd, err := util.RESTAPIQuery(client, detail(project.Name))
+		close(taskChan)
+	}()
+
+	result := []model.PyPIPackageResult{}
+	count := 0
+	for pkg := range taskChan {
+		bd, err := util.RESTAPIQuery(client, detail(pkg))
 		if err != nil {
 			continue
 		}
@@ -50,7 +56,7 @@ func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
 		if len(author) == 0 {
 			author = model.NoAuthor
 		}
-		result = append(result, model.PyPIPackageResult{Name: project.Name, Description: description, Author: author})
+		result = append(result, model.PyPIPackageResult{Name: pkg, Description: description, Author: author})
 		count++
 		if count >= max {
 			break
