@@ -93,27 +93,32 @@ func main() {
 
 	time.Sleep(500 * time.Millisecond)
 
+	fmt.Printf("%d Golang results found. First %d are:\n", len(ptf.results.golang), maxResultsToPrint)
 	for i, res := range ptf.results.golang {
 		if i >= maxResultsToPrint {
 			break
 		}
-		content := fmt.Sprintf("[golang] %s %s ->\n\t%s", res.Name, res.Path, res.Description)
+		content := fmt.Sprintf("\t[golang] %s %s ->\n\t\t%s", res.Name, res.Path, res.Description)
 		fmt.Println(content)
 	}
+	fmt.Println()
 
+	fmt.Printf("%d NPM results found. First %d are:\n", len(ptf.results.npm), maxResultsToPrint)
 	for i, res := range ptf.results.npm {
 		if i >= maxResultsToPrint {
 			break
 		}
-		content := fmt.Sprintf("[npm] %s [exact=%v] ->\n\t%s", res.Name, res.IsExactMatch, res.Description)
+		content := fmt.Sprintf("\t[npm] %s [exact=%v] ->\n\t\t%s", res.Name, res.IsExactMatch, res.Description)
 		fmt.Println(content)
 	}
+	fmt.Println()
 
+	fmt.Printf("%d PyPI results found. First %d are:\n", len(ptf.results.pypi), maxResultsToPrint)
 	for i, res := range ptf.results.pypi {
 		if i >= maxResultsToPrint {
 			break
 		}
-		content := fmt.Sprintf("[pypi] %s ->\n\t%s", res.Name, res.Description)
+		content := fmt.Sprintf("\t[pypi] %s ->\n\t\t%s", res.Name, res.Description)
 		fmt.Println(content)
 	}
 }
