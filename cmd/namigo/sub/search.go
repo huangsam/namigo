@@ -14,8 +14,8 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// SearchAction searches term for finding packages.
-func SearchAction(c *cli.Context) error {
+// SearchPackageAction searches term for finding packages.
+func SearchPackageAction(c *cli.Context) error {
 	searchTerm := c.Args().First()
 	if len(searchTerm) == 0 {
 		return errors.New("Provide at least one search term")
@@ -58,6 +58,40 @@ func SearchAction(c *cli.Context) error {
 		}
 	})
 
+	ptf.wait()
+
+	if ptfErrorCount == ptf.count() {
+		return errors.New("portfolio collection failed")
+	}
+
+	if ptf.isEmpty() {
+		fmt.Printf("🌧️ No results\n")
+	} else {
+		fmt.Printf("🍺 Prepare results\n\n")
+	}
+
+	time.Sleep(500 * time.Millisecond)
+
+	f := &searchFormatter{}
+
+	util.PrintResults(ptf.results.golang, "Golang", f.formatGo)
+	util.PrintResults(ptf.results.npm, "NPM", f.formatNPM)
+	util.PrintResults(ptf.results.pypi, "PyPI", f.formatPyPI)
+
+	return nil
+}
+
+// SearchDNSAction searches term for finding DNS records.
+func SearchDNSAction(c *cli.Context) error {
+	searchTerm := c.Args().First()
+	if len(searchTerm) == 0 {
+		return errors.New("Provide at least one search term")
+	}
+	maxResults := c.Int("max")
+
+	ptf := newSearchPortfolio()
+	ptfErrorCount := 0
+
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		if probeResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
@@ -85,9 +119,6 @@ func SearchAction(c *cli.Context) error {
 
 	f := &searchFormatter{}
 
-	util.PrintResults(ptf.results.golang, "Golang", f.formatGo)
-	util.PrintResults(ptf.results.npm, "NPM", f.formatNPM)
-	util.PrintResults(ptf.results.pypi, "PyPI", f.formatPyPI)
 	util.PrintResults(ptf.results.dns, "DNS", f.formatDNS)
 
 	return nil

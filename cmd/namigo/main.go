@@ -15,7 +15,7 @@ func main() {
 		Commands: []*cli.Command{
 			{
 				Name:  "search",
-				Usage: "Search term for finding packages",
+				Usage: "Search for terms across entities",
 				Flags: []cli.Flag{
 					&cli.IntFlag{
 						Name:  "max",
@@ -23,7 +23,18 @@ func main() {
 						Value: 10,
 					},
 				},
-				Action: sub.SearchAction,
+				Subcommands: []*cli.Command{
+					{
+						Name:   "packages",
+						Usage:  "Search for packages",
+						Action: sub.SearchPackageAction,
+					},
+					{
+						Name:   "dns",
+						Usage:  "Search for DNS",
+						Action: sub.SearchDNSAction,
+					},
+				},
 			},
 		},
 	}
