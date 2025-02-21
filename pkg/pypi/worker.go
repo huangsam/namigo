@@ -9,7 +9,7 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
-// worker is concurrent logic for PyPI search.
+// worker runs concurrent logic for PyPI search.
 func worker(
 	client *http.Client,
 	taskChan chan string,
