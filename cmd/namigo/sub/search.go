@@ -1,7 +1,6 @@
 package sub
 
 import (
-	"errors"
 	"fmt"
 	"sync"
 	"time"
@@ -18,7 +17,7 @@ import (
 func SearchPackageAction(c *cli.Context) error {
 	searchTerm := c.Args().First()
 	if len(searchTerm) == 0 {
-		return errors.New("Provide at least one search term")
+		return ErrMissingTerm
 	}
 	maxResults := c.Int("max")
 
@@ -61,7 +60,7 @@ func SearchPackageAction(c *cli.Context) error {
 	ptf.wait()
 
 	if ptfErrorCount == ptf.count() {
-		return errors.New("portfolio collection failed")
+		return ErrPortfolioFailure
 	}
 
 	if ptf.isEmpty() {
@@ -85,7 +84,7 @@ func SearchPackageAction(c *cli.Context) error {
 func SearchDNSAction(c *cli.Context) error {
 	searchTerm := c.Args().First()
 	if len(searchTerm) == 0 {
-		return errors.New("Provide at least one search term")
+		return ErrMissingTerm
 	}
 	maxResults := c.Int("max")
 
@@ -106,7 +105,7 @@ func SearchDNSAction(c *cli.Context) error {
 	ptf.wait()
 
 	if ptfErrorCount == ptf.count() {
-		return errors.New("portfolio collection failed")
+		return ErrPortfolioFailure
 	}
 
 	if ptf.isEmpty() {
