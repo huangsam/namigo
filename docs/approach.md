@@ -32,3 +32,7 @@
 - Scrape <https://crates.io>
 - [Package Info](https://crates.io/api/v1/crates/anipwatch)
 - [Package Search](https://crates.io/api/v1/crates?page=1&per_page=10&q=height)
+
+## Java
+
+- TBD

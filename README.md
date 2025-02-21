@@ -2,6 +2,10 @@
 
 Your naming pal, written in Go 🐶
 
+> It's a dog. It's a friend. It's a Namigo!
+
+[Click here](./docs/approach.md) to learn more about the implementation details.
+
 <img src="./images/namigo.jpeg" alt="Namigo" width="250px" />
 
 ## Getting started
