@@ -7,6 +7,7 @@ import (
 	"github.com/huangsam/namigo/internal/model"
 )
 
+// worker is concurrent logic for DNS search.
 func worker(
 	domainChan chan string,
 	wg *sync.WaitGroup,
