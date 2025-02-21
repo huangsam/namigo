@@ -2,6 +2,11 @@ package model
 
 import "net"
 
+const (
+	NoAuthor      = "No author"
+	NoDescription = "No description"
+)
+
 type GoPackageResult struct {
 	Name        string // Package name
 	Path        string // Fully qualified package path
