@@ -12,6 +12,19 @@ bash scripts/build.sh
 bash scripts/lint.sh
 ```
 
+### Running binary
+
+```shell
+# Get help
+./bin/namigo help
+
+# Search for package matches
+./bin/namigo search package 'hello'
+
+# Search for DNS matches
+./bin/namigo search dns 'hello'
+```
+
 ## Code structure
 
 This codebase closely resembles [golang-standards/project-layout].
