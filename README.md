@@ -41,7 +41,7 @@ This codebase closely resembles [golang-standards/project-layout].
 The TLDR is:
 
 - `cmd` has entry points
-- `pkg` has name generation and discovery logic
+- `pkg` has business logic
 - `internal` has helpers
 
 [golang-standards/project-layout]: https://github.com/golang-standards/project-layout
