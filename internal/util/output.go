@@ -8,13 +8,16 @@ import (
 	"github.com/huangsam/namigo/internal/model"
 )
 
+// OutputMode represents the output mode.
 type OutputMode int
 
+// Output modes.
 const (
 	TextMode OutputMode = iota
 	JSONMode
 )
 
+// String returns the string representation of the output mode.
 func (o OutputMode) String() string {
 	switch o {
 	case TextMode:
@@ -26,6 +29,7 @@ func (o OutputMode) String() string {
 	}
 }
 
+// PrintResults prints the results based on the output mode.
 func PrintResults(results any, label string, format func(any) string, mode OutputMode) {
 	switch res := results.(type) {
 	case []model.GoPackageResult:
@@ -47,6 +51,7 @@ func PrintResults(results any, label string, format func(any) string, mode Outpu
 	}
 }
 
+// printResults prints the results based on the output mode.
 func printResults[T any](results []T, label string, format func(any) string, mode OutputMode) {
 	switch mode {
 	case JSONMode:
