@@ -2,6 +2,8 @@
 
 Your naming pal, written in Go 🐶
 
+<img src="./images/namigo.jpeg" alt="Namigo" width="250px" />
+
 ## Getting started
 
 ```shell
