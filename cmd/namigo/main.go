@@ -25,7 +25,7 @@ func main() {
 				},
 				Subcommands: []*cli.Command{
 					{
-						Name:   "packages",
+						Name:   "package",
 						Usage:  "Search for packages",
 						Action: sub.SearchPackageAction,
 					},
