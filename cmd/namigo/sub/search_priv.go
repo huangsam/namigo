@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/internal/util"
 )
 
 // searchFormatter formats different types of results.
@@ -89,4 +90,16 @@ func (p *searchPortfolio) wait() {
 // count returns the goroutine count.
 func (p *searchPortfolio) count() int {
 	return p.c
+}
+
+// getOutputMode returns an OutputMode instance.
+func getOutputMode(mode string) util.OutputMode {
+	switch mode {
+	case "text":
+		return util.TextMode
+	case "json":
+		return util.JSONMode
+	default:
+		return util.TextMode
+	}
 }

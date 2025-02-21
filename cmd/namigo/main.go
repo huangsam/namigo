@@ -22,6 +22,11 @@ func main() {
 						Usage: "Max number of results to display",
 						Value: 10,
 					},
+					&cli.StringFlag{
+						Name:  "mode",
+						Usage: "Output mode: text/json",
+						Value: "text",
+					},
 				},
 				Subcommands: []*cli.Command{
 					{

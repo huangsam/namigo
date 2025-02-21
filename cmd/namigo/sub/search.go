@@ -20,6 +20,7 @@ func SearchPackageAction(c *cli.Context) error {
 		return ErrMissingTerm
 	}
 	maxResults := c.Int("max")
+	outputMode := getOutputMode(c.String("mode"))
 
 	ptf := newSearchPortfolio()
 	ptfErrorCount := 0
@@ -73,9 +74,9 @@ func SearchPackageAction(c *cli.Context) error {
 
 	f := &searchFormatter{}
 
-	util.PrintResults(ptf.results.golang, "Golang", f.formatGo)
-	util.PrintResults(ptf.results.npm, "NPM", f.formatNPM)
-	util.PrintResults(ptf.results.pypi, "PyPI", f.formatPyPI)
+	util.PrintResults(ptf.results.golang, "Golang", f.formatGo, outputMode)
+	util.PrintResults(ptf.results.npm, "NPM", f.formatNPM, outputMode)
+	util.PrintResults(ptf.results.pypi, "PyPI", f.formatPyPI, outputMode)
 
 	return nil
 }
@@ -87,6 +88,7 @@ func SearchDNSAction(c *cli.Context) error {
 		return ErrMissingTerm
 	}
 	maxResults := c.Int("max")
+	outputMode := getOutputMode(c.String("mode"))
 
 	ptf := newSearchPortfolio()
 	ptfErrorCount := 0
@@ -118,7 +120,6 @@ func SearchDNSAction(c *cli.Context) error {
 
 	f := &searchFormatter{}
 
-	util.PrintResults(ptf.results.dns, "DNS", f.formatDNS)
-
+	util.PrintResults(ptf.results.dns, "DNS", f.formatDNS, outputMode)
 	return nil
 }
