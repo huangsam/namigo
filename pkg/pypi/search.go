@@ -12,6 +12,8 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
+const goroutineCount = 4
+
 // SearchByAPI searches for PyPI packages by querying pypi.org.
 func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
@@ -37,49 +39,17 @@ func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
 	}()
 
 	result := []model.PyPIPackageResult{}
-	resultCount := 0
 	errorCount := 0
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 
-	for i := 0; i < 4; i++ {
+	for i := 0; i < goroutineCount; i++ {
 		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for pkg := range taskChan {
-				bd, err := util.RESTAPIQuery(client, detail(pkg))
-				if err != nil {
-					errorCount++
-					continue
-				}
-				var detailRes PypiDetailResponse
-				if err := json.Unmarshal(bd, &detailRes); err != nil {
-					errorCount++
-					continue
-				}
-				description := detailRes.Info.Summary
-				if len(description) == 0 {
-					description = model.NoDescription
-				}
-				author := detailRes.Info.Author
-				if len(author) == 0 {
-					author = model.NoAuthor
-				}
-				mu.Lock()
-				if resultCount < max {
-					result = append(result, model.PyPIPackageResult{Name: pkg, Description: description, Author: author})
-					resultCount++
-				}
-				mu.Unlock()
-				if resultCount >= max {
-					break
-				}
-			}
-		}()
+		go worker(client, taskChan, &wg, &mu, &result, &errorCount, max)
 	}
 
 	wg.Wait()
-	if resultCount == 0 && errorCount > 0 {
+	if len(result) == 0 && errorCount > 0 {
 		return result, fmt.Errorf("no results with %d errors", errorCount)
 	}
 	return result, nil

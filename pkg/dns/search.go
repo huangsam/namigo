@@ -2,7 +2,6 @@ package dns
 
 import (
 	"fmt"
-	"net"
 	"sync"
 
 	"github.com/huangsam/namigo/internal/model"
@@ -15,43 +14,23 @@ func SearchByProbe(name string, max int) ([]model.DNSResult, error) {
 
 	go func() {
 		for _, domain := range domains {
-			domainChan <- domain
+			domainChan <- fmt.Sprintf("%s.%s", name, domain)
 		}
 		close(domainChan)
 	}()
 
 	result := []model.DNSResult{}
-	resultCount := 0
 	errorCount := 0
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 
 	for i := 0; i < 4; i++ {
 		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for domain := range domainChan {
-				fullDomain := fmt.Sprintf("%s.%s", name, domain)
-				ips, err := net.LookupIP(fullDomain)
-				if err != nil {
-					errorCount++
-					continue
-				}
-				mu.Lock()
-				if resultCount < max {
-					result = append(result, model.DNSResult{FQDN: fullDomain, IPList: ips})
-					resultCount++
-				}
-				mu.Unlock()
-				if resultCount >= max {
-					return
-				}
-			}
-		}()
+		go worker(domainChan, &wg, &mu, &result, &errorCount, max)
 	}
 
 	wg.Wait()
-	if resultCount == 0 && errorCount > 0 {
+	if len(result) == 0 && errorCount > 0 {
 		return result, fmt.Errorf("no results with %d errors", errorCount)
 	}
 	return result, nil
