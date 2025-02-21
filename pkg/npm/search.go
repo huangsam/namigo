@@ -2,10 +2,8 @@ package npm
 
 import (
 	"net/http"
-	"strings"
 	"time"
 
-	"github.com/PuerkitoBio/goquery"
 	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/internal/util"
 )
@@ -21,28 +19,7 @@ func SearchByScrape(name string, max int) ([]model.NPMPackageResult, error) {
 
 	result := []model.NPMPackageResult{}
 
-	doc.Find("main section").Each(func(i int, section *goquery.Selection) {
-		if len(result) >= max {
-			return
-		}
-
-		pkg := section.Find("h3").Text()
-
-		match := section.Find("span#pkg-list-exact-match").Text()
-
-		description := section.Find("p").Text()
-		if len(description) == 0 {
-			description = model.NoDescription
-		} else {
-			description = strings.Trim(description, " \n\t")
-		}
-
-		result = append(result, model.NPMPackageResult{
-			Name:         pkg,
-			Description:  description,
-			IsExactMatch: len(match) > 0,
-		})
-	})
+	worker(doc, &result, max)
 
 	return result, nil
 }
