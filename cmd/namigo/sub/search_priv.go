@@ -1,9 +1,8 @@
 package sub
 
 import (
-	"fmt"
-
 	"encoding/json"
+	"fmt"
 
 	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/pkg/search"
