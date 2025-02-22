@@ -32,33 +32,30 @@ func SearchPackageAction(c *cli.Context) error {
 
 	ptf.run(func(ptf *searchPortfolio) {
 		defer ptf.done()
+		fmt.Printf("🟡 Search for %s results\n", golangLabel)
 		if searchResults, err := golang.SearchByScrape(searchTerm, maxResults); err == nil {
-			fmt.Printf("🟢 Load %s results\n", golangLabel)
 			ptf.results.golang = searchResults
 		} else {
-			fmt.Printf("🔴 Cannot get %s results: %s\n", golangLabel, err)
 			ptf.errs.golang = err
 		}
 	})
 
 	ptf.run(func(ptf *searchPortfolio) {
 		defer ptf.done()
+		fmt.Printf("🟡 Search for %s results\n", npmLabel)
 		if searchResults, err := npm.SearchByScrape(searchTerm, maxResults); err == nil {
-			fmt.Printf("🟢 Load %s results\n", npmLabel)
 			ptf.results.npm = searchResults
 		} else {
-			fmt.Printf("🔴 Cannot get %s results: %s\n", npmLabel, err)
 			ptf.errs.npm = err
 		}
 	})
 
 	ptf.run(func(ptf *searchPortfolio) {
 		defer ptf.done()
+		fmt.Printf("🟡 Search for %s results\n", pypiLabel)
 		if searchResults, err := pypi.SearchByAPI(searchTerm, maxResults); err == nil {
-			fmt.Printf("🟢 Load %s results\n", pypiLabel)
 			ptf.results.pypi = searchResults
 		} else {
-			fmt.Printf("🔴 Cannot get %s results: %s\n", pypiLabel, err)
 			ptf.errs.pypi = err
 		}
 	})
@@ -96,11 +93,10 @@ func SearchDNSAction(c *cli.Context) error {
 
 	ptf.run(func(ptf *searchPortfolio) {
 		defer ptf.done()
+		fmt.Printf("🟡 Search for %s results\n", dnsLabel)
 		if probeResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
-			fmt.Printf("🟢 Load %s results\n", dnsLabel)
 			ptf.results.dns = probeResults
 		} else {
-			fmt.Printf("🔴 Cannot get %s results: %s\n", dnsLabel, err)
 			ptf.errs.dns = err
 		}
 	})
