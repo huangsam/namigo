@@ -64,7 +64,6 @@ type searchPortfolio struct {
 		dns    []model.DNSResult
 	}
 	wg *sync.WaitGroup
-	c  int
 }
 
 // newSearchPortfolio creates a new portfolio instance.
@@ -83,18 +82,12 @@ func (p *searchPortfolio) isEmpty() bool {
 // run invokes a function as a goroutine and passes a WaitGroup into it.
 func (p *searchPortfolio) run(f func(wg *sync.WaitGroup)) {
 	p.wg.Add(1)
-	p.c++
 	go f(p.wg)
 }
 
 // wait blocks the main thread until all runners are complete.
 func (p *searchPortfolio) wait() {
 	p.wg.Wait()
-}
-
-// count returns the goroutine count.
-func (p *searchPortfolio) count() int {
-	return p.c
 }
 
 // getOutputMode returns an OutputMode instance.
