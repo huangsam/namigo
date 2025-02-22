@@ -59,8 +59,7 @@ func printResults[T any](results []T, label string, format func(any) string, mod
 			Label   string `json:"label"`
 			Results []T    `json:"results"`
 		}
-		wrapped := &wrapper{Label: label, Results: results}
-		jsonData, err := json.MarshalIndent(wrapped, "", "  ")
+		jsonData, err := json.MarshalIndent(&wrapper{Label: label, Results: results}, "", "  ")
 		if err != nil {
 			fmt.Printf("Cannot print %s for %s: %v\n", mode, label, err)
 			return
