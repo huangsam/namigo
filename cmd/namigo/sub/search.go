@@ -35,10 +35,10 @@ func SearchPackageAction(c *cli.Context) error {
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		if searchResults, err := golang.SearchByScrape(searchTerm, maxResults); err == nil {
-			fmt.Println("🟢 Load Golang results")
+			fmt.Printf("🟢 Load %s results\n", golangLabel)
 			ptf.results.golang = searchResults
 		} else {
-			fmt.Println("🔴 Cannot get Golang results:", err.Error())
+			fmt.Printf("🔴 Cannot get %s results: %s\n", golangLabel, err)
 			ptfErrorMap[golangLabel] = err
 		}
 	})
@@ -46,10 +46,10 @@ func SearchPackageAction(c *cli.Context) error {
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		if searchResults, err := npm.SearchByScrape(searchTerm, maxResults); err == nil {
-			fmt.Println("🟢 Load NPM results")
+			fmt.Printf("🟢 Load %s results\n", npmLabel)
 			ptf.results.npm = searchResults
 		} else {
-			fmt.Println("🔴 Cannot get NPM results:", err.Error())
+			fmt.Printf("🔴 Cannot get %s results: %s\n", npmLabel, err)
 			ptfErrorMap[npmLabel] = err
 		}
 	})
@@ -57,10 +57,10 @@ func SearchPackageAction(c *cli.Context) error {
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		if searchResults, err := pypi.SearchByAPI(searchTerm, maxResults); err == nil {
-			fmt.Println("🟢 Load PyPI results")
+			fmt.Printf("🟢 Load %s results\n", pypiLabel)
 			ptf.results.pypi = searchResults
 		} else {
-			fmt.Println("🔴 Cannot get PyPI results:", err.Error())
+			fmt.Printf("🔴 Cannot get %s results: %s\n", pypiLabel, err)
 			ptfErrorMap[pypiLabel] = err
 		}
 	})
@@ -100,10 +100,10 @@ func SearchDNSAction(c *cli.Context) error {
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		if probeResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
-			fmt.Println("🟢 Load DNS results")
+			fmt.Printf("🟢 Load %s results\n", dnsLabel)
 			ptf.results.dns = probeResults
 		} else {
-			fmt.Println("🔴 Cannot get DNS results:", err.Error())
+			fmt.Printf("🔴 Cannot get %s results: %s\n", dnsLabel, err)
 			ptfErrorMap[dnsLabel] = err
 		}
 	})
