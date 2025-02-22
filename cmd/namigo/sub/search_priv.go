@@ -1,9 +1,7 @@
 package sub
 
 import (
-	"errors"
 	"fmt"
-	"strings"
 	"sync"
 
 	"github.com/huangsam/namigo/internal/model"
@@ -63,6 +61,12 @@ type searchPortfolio struct {
 		pypi   []model.PyPIPackageResult
 		dns    []model.DNSResult
 	}
+	errs struct {
+		golang error
+		npm    error
+		pypi   error
+		dns    error
+	}
 	wg *sync.WaitGroup
 }
 
@@ -71,23 +75,49 @@ func newSearchPortfolio() *searchPortfolio {
 	return &searchPortfolio{wg: &sync.WaitGroup{}}
 }
 
-// isEmpty checks if the portfolio has zero results.
-func (p *searchPortfolio) isEmpty() bool {
+// size returns the number of results collected.
+func (p *searchPortfolio) size() int {
 	return (len(p.results.npm) +
 		len(p.results.golang) +
 		len(p.results.pypi) +
-		len(p.results.dns)) == 0
+		len(p.results.dns))
 }
 
-// run invokes a function as a goroutine and passes a WaitGroup into it.
-func (p *searchPortfolio) run(f func(wg *sync.WaitGroup)) {
+// run invokes a goroutine and increments wg counter.
+func (p *searchPortfolio) run(f func(ptf *searchPortfolio)) {
 	p.wg.Add(1)
-	go f(p.wg)
+	go f(p)
+}
+
+// done decrements wg counter.
+func (p *searchPortfolio) done() {
+	p.wg.Done()
 }
 
 // wait blocks the main thread until all runners are complete.
 func (p *searchPortfolio) wait() {
 	p.wg.Wait()
+}
+
+// errors returns all errors found.
+func (p *searchPortfolio) errors() []error {
+	coll := []error{}
+	if p.size() == 0 {
+		coll = append(coll, ErrPorftolioEmpty)
+	}
+	if p.errs.golang != nil {
+		coll = append(coll, p.errs.golang)
+	}
+	if p.errs.npm != nil {
+		coll = append(coll, p.errs.npm)
+	}
+	if p.errs.pypi != nil {
+		coll = append(coll, p.errs.pypi)
+	}
+	if p.errs.dns != nil {
+		coll = append(coll, p.errs.dns)
+	}
+	return coll
 }
 
 // getOutputMode returns an OutputMode instance.
@@ -100,31 +130,4 @@ func getOutputMode(mode string) util.OutputMode {
 	default:
 		return util.TextMode
 	}
-}
-
-// errorMap is a custom error mapping.
-type errorMap map[string]error
-
-// newErrorMap creates a new errorMap.
-func newErrorMap() errorMap {
-	return map[string]error{
-		golangLabel: nil,
-		npmLabel:    nil,
-		pypiLabel:   nil,
-		dnsLabel:    nil,
-	}
-}
-
-// aggregate creates a combined error.
-func (em *errorMap) aggregate() error {
-	errs := []string{}
-	for _, err := range *em {
-		if err != nil {
-			errs = append(errs, err.Error())
-		}
-	}
-	if len(errs) > 0 {
-		return errors.New(strings.Join(errs, " && "))
-	}
-	return nil
 }

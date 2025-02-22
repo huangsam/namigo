@@ -2,7 +2,6 @@ package sub
 
 import (
 	"fmt"
-	"sync"
 	"time"
 
 	"github.com/huangsam/namigo/internal/util"
@@ -24,53 +23,52 @@ const (
 func SearchPackageAction(c *cli.Context) error {
 	searchTerm := c.Args().First()
 	if len(searchTerm) == 0 {
-		return ErrMissingTerm
+		return ErrMissingSearchTerm
 	}
 	maxResults := c.Int("max")
 	outputMode := getOutputMode(c.String("mode"))
 
 	ptf := newSearchPortfolio()
-	ptfErrorMap := newErrorMap()
 
-	ptf.run(func(wg *sync.WaitGroup) {
-		defer wg.Done()
+	ptf.run(func(ptf *searchPortfolio) {
+		defer ptf.done()
 		if searchResults, err := golang.SearchByScrape(searchTerm, maxResults); err == nil {
 			fmt.Printf("🟢 Load %s results\n", golangLabel)
 			ptf.results.golang = searchResults
 		} else {
 			fmt.Printf("🔴 Cannot get %s results: %s\n", golangLabel, err)
-			ptfErrorMap[golangLabel] = err
+			ptf.errs.golang = err
 		}
 	})
 
-	ptf.run(func(wg *sync.WaitGroup) {
-		defer wg.Done()
+	ptf.run(func(ptf *searchPortfolio) {
+		defer ptf.done()
 		if searchResults, err := npm.SearchByScrape(searchTerm, maxResults); err == nil {
 			fmt.Printf("🟢 Load %s results\n", npmLabel)
 			ptf.results.npm = searchResults
 		} else {
 			fmt.Printf("🔴 Cannot get %s results: %s\n", npmLabel, err)
-			ptfErrorMap[npmLabel] = err
+			ptf.errs.npm = err
 		}
 	})
 
-	ptf.run(func(wg *sync.WaitGroup) {
-		defer wg.Done()
+	ptf.run(func(ptf *searchPortfolio) {
+		defer ptf.done()
 		if searchResults, err := pypi.SearchByAPI(searchTerm, maxResults); err == nil {
 			fmt.Printf("🟢 Load %s results\n", pypiLabel)
 			ptf.results.pypi = searchResults
 		} else {
 			fmt.Printf("🔴 Cannot get %s results: %s\n", pypiLabel, err)
-			ptfErrorMap[pypiLabel] = err
+			ptf.errs.pypi = err
 		}
 	})
 
 	ptf.wait()
-	if err := ptfErrorMap.aggregate(); err != nil {
-		return err
-	} else if ptf.isEmpty() {
-		fmt.Println("🌧️ No results")
-		return ErrPorftolioEmpty
+	if errs := ptf.errors(); len(errs) > 0 {
+		for _, err := range errs {
+			fmt.Printf("💀 Error: %s\n", err)
+		}
+		return ErrPorftolioFailure
 	}
 
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
@@ -89,31 +87,30 @@ func SearchPackageAction(c *cli.Context) error {
 func SearchDNSAction(c *cli.Context) error {
 	searchTerm := c.Args().First()
 	if len(searchTerm) == 0 {
-		return ErrMissingTerm
+		return ErrMissingSearchTerm
 	}
 	maxResults := c.Int("max")
 	outputMode := getOutputMode(c.String("mode"))
 
 	ptf := newSearchPortfolio()
-	ptfErrorMap := newErrorMap()
 
-	ptf.run(func(wg *sync.WaitGroup) {
-		defer wg.Done()
+	ptf.run(func(ptf *searchPortfolio) {
+		defer ptf.done()
 		if probeResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
 			fmt.Printf("🟢 Load %s results\n", dnsLabel)
 			ptf.results.dns = probeResults
 		} else {
 			fmt.Printf("🔴 Cannot get %s results: %s\n", dnsLabel, err)
-			ptfErrorMap[dnsLabel] = err
+			ptf.errs.dns = err
 		}
 	})
 
 	ptf.wait()
-	if err := ptfErrorMap.aggregate(); err != nil {
-		return err
-	} else if ptf.isEmpty() {
-		fmt.Println("🌧️ No results")
-		return ErrPorftolioEmpty
+	if errs := ptf.errors(); len(errs) > 0 {
+		for _, err := range errs {
+			fmt.Printf("💀 Error: %s\n", err)
+		}
+		return ErrPorftolioFailure
 	}
 
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)

@@ -3,6 +3,7 @@ package sub
 import "errors"
 
 var (
-	ErrMissingTerm    = errors.New("search term is missing")
-	ErrPorftolioEmpty = errors.New("portfolio collection is empty")
+	ErrMissingSearchTerm = errors.New("missing search term")
+	ErrPorftolioEmpty    = errors.New("portfolio collection empty")
+	ErrPorftolioFailure  = errors.New("portfolio collection failure")
 )
