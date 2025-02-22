@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/huangsam/namigo/internal/util"
+	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/pkg/search"
 	"github.com/huangsam/namigo/pkg/search/dns"
 	"github.com/huangsam/namigo/pkg/search/golang"
@@ -14,26 +14,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const (
-	golangLabel = "Golang"
-	npmLabel    = "NPM"
-	pypiLabel   = "PyPI"
-	dnsLabel    = "DNS"
-)
-
 var ErrMissingSearchTerm = errors.New("missing search term")
-
-// getOutputMode returns an OutputMode instance.
-func getOutputMode(mode string) util.OutputMode {
-	switch mode {
-	case "text":
-		return util.TextMode
-	case "json":
-		return util.JSONMode
-	default:
-		return util.TextMode
-	}
-}
 
 // SearchPackageAction searches for packages.
 func SearchPackageAction(c *cli.Context) error {
@@ -42,13 +23,13 @@ func SearchPackageAction(c *cli.Context) error {
 		return ErrMissingSearchTerm
 	}
 	maxResults := c.Int("max")
-	outputMode := getOutputMode(c.String("mode"))
+	outputMode := model.GetOutputMode(c.String("mode"))
 
 	ptf := search.NewSearchPortfolio()
 
 	ptf.Run(func(ptf *search.SearchPortfolio) {
 		defer ptf.Done()
-		fmt.Printf("🟡 Search for %s results\n", golangLabel)
+		fmt.Printf("🟡 Search for %s results\n", ptf.Formats.Golang.Label())
 		if searchResults, err := golang.SearchByScrape(searchTerm, maxResults); err == nil {
 			ptf.Results.Golang = searchResults
 		} else {
@@ -58,7 +39,7 @@ func SearchPackageAction(c *cli.Context) error {
 
 	ptf.Run(func(ptf *search.SearchPortfolio) {
 		defer ptf.Done()
-		fmt.Printf("🟡 Search for %s results\n", npmLabel)
+		fmt.Printf("🟡 Search for %s results\n", ptf.Formats.NPM.Label())
 		if searchResults, err := npm.SearchByScrape(searchTerm, maxResults); err == nil {
 			ptf.Results.NPM = searchResults
 		} else {
@@ -68,7 +49,7 @@ func SearchPackageAction(c *cli.Context) error {
 
 	ptf.Run(func(ptf *search.SearchPortfolio) {
 		defer ptf.Done()
-		fmt.Printf("🟡 Search for %s results\n", pypiLabel)
+		fmt.Printf("🟡 Search for %s results\n", ptf.Formats.PyPI.Label())
 		if searchResults, err := pypi.SearchByAPI(searchTerm, maxResults); err == nil {
 			ptf.Results.PyPI = searchResults
 		} else {
@@ -87,11 +68,9 @@ func SearchPackageAction(c *cli.Context) error {
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
 	time.Sleep(500 * time.Millisecond)
 
-	f := &search.SearchFormatter{}
-
-	util.PrintResults(ptf.Results.Golang, golangLabel, f.FormatGo, outputMode)
-	util.PrintResults(ptf.Results.NPM, npmLabel, f.FormatNPM, outputMode)
-	util.PrintResults(ptf.Results.PyPI, pypiLabel, f.FormatPyPI, outputMode)
+	display(ptf.Results.Golang, &ptf.Formats.Golang, outputMode)
+	display(ptf.Results.NPM, &ptf.Formats.NPM, outputMode)
+	display(ptf.Results.PyPI, &ptf.Formats.PyPI, outputMode)
 
 	return nil
 }
@@ -103,13 +82,13 @@ func SearchDNSAction(c *cli.Context) error {
 		return ErrMissingSearchTerm
 	}
 	maxResults := c.Int("max")
-	outputMode := getOutputMode(c.String("mode"))
+	outputMode := model.GetOutputMode(c.String("mode"))
 
 	ptf := search.NewSearchPortfolio()
 
 	ptf.Run(func(ptf *search.SearchPortfolio) {
 		defer ptf.Done()
-		fmt.Printf("🟡 Search for %s results\n", dnsLabel)
+		fmt.Printf("🟡 Search for %s results\n", ptf.Formats.DNS.Label())
 		if probeResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
 			ptf.Results.DNS = probeResults
 		} else {
@@ -128,8 +107,6 @@ func SearchDNSAction(c *cli.Context) error {
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
 	time.Sleep(500 * time.Millisecond)
 
-	f := &search.SearchFormatter{}
-
-	util.PrintResults(ptf.Results.DNS, dnsLabel, f.FormatDNS, outputMode)
+	display(ptf.Results.DNS, &ptf.Formats.DNS, outputMode)
 	return nil
 }

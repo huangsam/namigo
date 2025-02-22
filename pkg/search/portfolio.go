@@ -12,7 +12,7 @@ var (
 	ErrPorftolioFailure = errors.New("portfolio collection failure")
 )
 
-// SearchPortfolio has result slices, errors and task helpers.
+// SearchPortfolio has entity helpers and task helpers.
 type SearchPortfolio struct {
 	Results struct {
 		Golang []model.GoPackageResult
@@ -25,6 +25,12 @@ type SearchPortfolio struct {
 		NPM    error
 		PyPI   error
 		DNS    error
+	}
+	Formats struct {
+		Golang GoFormatter
+		NPM    NPMFormatter
+		PyPI   PyPIFormatter
+		DNS    DNSFormatter
 	}
 	wg *sync.WaitGroup
 }
