@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/huangsam/namigo/internal/util"
-	"github.com/huangsam/namigo/pkg/dns"
-	"github.com/huangsam/namigo/pkg/golang"
-	"github.com/huangsam/namigo/pkg/npm"
-	"github.com/huangsam/namigo/pkg/pypi"
+	"github.com/huangsam/namigo/pkg/search/dns"
+	"github.com/huangsam/namigo/pkg/search/golang"
+	"github.com/huangsam/namigo/pkg/search/npm"
+	"github.com/huangsam/namigo/pkg/search/pypi"
 	"github.com/urfave/cli/v2"
 )
 
