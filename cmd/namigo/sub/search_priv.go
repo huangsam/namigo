@@ -14,28 +14,31 @@ type searchFormatter struct{}
 // formatGo formats Go package results.
 func (f *searchFormatter) formatGo(result any) string {
 	res := result.(model.GoPackageResult)
-	if len(res.Description) > 80 || len(res.Description) == 0 {
-		return fmt.Sprintf("📦 [golang] %s (%s) ->\n\t%.80s...", res.Name, res.Path, res.Description)
+	desc := res.Description
+	if len(desc) > 80 || len(desc) == 0 {
+		desc = fmt.Sprintf("%.80s...", desc)
 	}
-	return fmt.Sprintf("📦 [golang] %s (%s) ->\n\t%s", res.Name, res.Path, res.Description)
+	return fmt.Sprintf("📦 [golang] %s (%s) ->\n\t%s", res.Name, res.Path, desc)
 }
 
 // formatNPM formats NPM package results.
 func (f *searchFormatter) formatNPM(result any) string {
 	res := result.(model.NPMPackageResult)
-	if len(res.Description) > 80 || len(res.Description) == 0 {
-		return fmt.Sprintf("📦 [npm] %s [exact=%v] ->\n\t%.80s...", res.Name, res.IsExactMatch, res.Description)
+	desc := res.Description
+	if len(desc) > 80 || len(desc) == 0 {
+		desc = fmt.Sprintf("%.80s...", desc)
 	}
-	return fmt.Sprintf("📦 [npm] %s [exact=%v] ->\n\t%s", res.Name, res.IsExactMatch, res.Description)
+	return fmt.Sprintf("📦 [npm] %s [exact=%v] ->\n\t%s", res.Name, res.IsExactMatch, desc)
 }
 
 // formatPyPI formats PyPI package results.
 func (f *searchFormatter) formatPyPI(result any) string {
 	res := result.(model.PyPIPackageResult)
-	if len(res.Description) > 80 || len(res.Description) == 0 {
-		return fmt.Sprintf("📦 [pypi] %s by %s ->\n\t%.80s...", res.Name, res.Author, res.Description)
+	desc := res.Description
+	if len(desc) > 80 || len(desc) == 0 {
+		desc = fmt.Sprintf("%.80s...", desc)
 	}
-	return fmt.Sprintf("📦 [pypi] %s by %s ->\n\t%s", res.Name, res.Author, res.Description)
+	return fmt.Sprintf("📦 [pypi] %s by %s ->\n\t%s", res.Name, res.Author, desc)
 }
 
 // formatDNS formats DNS results.
