@@ -15,27 +15,27 @@ type searchFormatter struct{}
 func (f *searchFormatter) formatGo(result any) string {
 	res := result.(model.GoPackageResult)
 	if len(res.Description) > 80 || len(res.Description) == 0 {
-		return fmt.Sprintf("\t[golang] %s %s ->\n\t\t%.80s...", res.Name, res.Path, res.Description)
+		return fmt.Sprintf("📦 [golang] %s (%s) ->\n\t%.80s...", res.Name, res.Path, res.Description)
 	}
-	return fmt.Sprintf("\t[golang] %s %s ->\n\t\t%s", res.Name, res.Path, res.Description)
+	return fmt.Sprintf("📦 [golang] %s (%s) ->\n\t%s", res.Name, res.Path, res.Description)
 }
 
 // formatNPM formats NPM package results.
 func (f *searchFormatter) formatNPM(result any) string {
 	res := result.(model.NPMPackageResult)
 	if len(res.Description) > 80 || len(res.Description) == 0 {
-		return fmt.Sprintf("\t[npm] %s [exact=%v] ->\n\t\t%.80s...", res.Name, res.IsExactMatch, res.Description)
+		return fmt.Sprintf("📦 [npm] %s [exact=%v] ->\n\t%.80s...", res.Name, res.IsExactMatch, res.Description)
 	}
-	return fmt.Sprintf("\t[npm] %s [exact=%v] ->\n\t\t%s", res.Name, res.IsExactMatch, res.Description)
+	return fmt.Sprintf("📦 [npm] %s [exact=%v] ->\n\t%s", res.Name, res.IsExactMatch, res.Description)
 }
 
 // formatPyPI formats PyPI package results.
 func (f *searchFormatter) formatPyPI(result any) string {
 	res := result.(model.PyPIPackageResult)
 	if len(res.Description) > 80 || len(res.Description) == 0 {
-		return fmt.Sprintf("\t[pypi] %s by %s ->\n\t\t%.80s...", res.Name, res.Author, res.Description)
+		return fmt.Sprintf("📦 [pypi] %s by %s ->\n\t%.80s...", res.Name, res.Author, res.Description)
 	}
-	return fmt.Sprintf("\t[pypi] %s by %s ->\n\t\t%s", res.Name, res.Author, res.Description)
+	return fmt.Sprintf("📦 [pypi] %s by %s ->\n\t%s", res.Name, res.Author, res.Description)
 }
 
 // formatDNS formats DNS results.
@@ -47,7 +47,7 @@ func (f *searchFormatter) formatDNS(result any) string {
 	} else {
 		content = fmt.Sprintf("The IPs are %v", res.IPList)
 	}
-	return fmt.Sprintf("\t[dns] %s w/ %d IPs ->\n\t\t%v", res.FQDN, len(res.IPList), content)
+	return fmt.Sprintf("🌎 [dns] %s w/ %d IPs ->\n\t%v", res.FQDN, len(res.IPList), content)
 }
 
 // searchPortfolio has result slices and task helpers.

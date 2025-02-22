@@ -65,9 +65,9 @@ func SearchPackageAction(c *cli.Context) error {
 	}
 
 	if ptf.isEmpty() {
-		fmt.Printf("🌧️ No results\n")
+		fmt.Println("🌧️ No results")
 	} else {
-		fmt.Printf("🍺 Prepare results\n\n")
+		fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
 	}
 
 	time.Sleep(500 * time.Millisecond)
@@ -111,9 +111,9 @@ func SearchDNSAction(c *cli.Context) error {
 	}
 
 	if ptf.isEmpty() {
-		fmt.Printf("🌧️ No results\n")
+		fmt.Println("🌧️ No results")
 	} else {
-		fmt.Printf("🍺 Prepare results\n\n")
+		fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
 	}
 
 	time.Sleep(500 * time.Millisecond)

@@ -55,14 +55,18 @@ func PrintResults(results any, label string, format func(any) string, mode Outpu
 func printResults[T any](results []T, label string, format func(any) string, mode OutputMode) {
 	switch mode {
 	case JSONMode:
-		jsonData, err := json.MarshalIndent(results, "", "  ")
+		type wrapper struct {
+			Label   string `json:"label"`
+			Results []T    `json:"results"`
+		}
+		wrapped := &wrapper{Label: label, Results: results}
+		jsonData, err := json.MarshalIndent(wrapped, "", "  ")
 		if err != nil {
 			fmt.Printf("Cannot print %s for %s: %v\n", mode, label, err)
 			return
 		}
-		fmt.Printf("%s: %s\n", label, jsonData)
+		fmt.Printf("%s\n", jsonData)
 	case TextMode:
-		fmt.Printf("%d %s results found:\n", len(results), label)
 		for _, r := range results {
 			fmt.Println(format(r))
 		}
