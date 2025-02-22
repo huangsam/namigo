@@ -1,4 +1,4 @@
-package sub
+package search
 
 import "errors"
 

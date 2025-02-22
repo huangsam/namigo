@@ -1,10 +1,12 @@
 package sub
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/huangsam/namigo/internal/util"
+	"github.com/huangsam/namigo/pkg/search"
 	"github.com/huangsam/namigo/pkg/search/dns"
 	"github.com/huangsam/namigo/pkg/search/golang"
 	"github.com/huangsam/namigo/pkg/search/npm"
@@ -19,6 +21,20 @@ const (
 	dnsLabel    = "DNS"
 )
 
+var ErrMissingSearchTerm = errors.New("missing search term")
+
+// getOutputMode returns an OutputMode instance.
+func getOutputMode(mode string) util.OutputMode {
+	switch mode {
+	case "text":
+		return util.TextMode
+	case "json":
+		return util.JSONMode
+	default:
+		return util.TextMode
+	}
+}
+
 // SearchPackageAction searches for packages.
 func SearchPackageAction(c *cli.Context) error {
 	searchTerm := c.Args().First()
@@ -28,54 +44,54 @@ func SearchPackageAction(c *cli.Context) error {
 	maxResults := c.Int("max")
 	outputMode := getOutputMode(c.String("mode"))
 
-	ptf := newSearchPortfolio()
+	ptf := search.NewSearchPortfolio()
 
-	ptf.run(func(ptf *searchPortfolio) {
-		defer ptf.done()
+	ptf.Run(func(ptf *search.SearchPortfolio) {
+		defer ptf.Done()
 		fmt.Printf("🟡 Search for %s results\n", golangLabel)
 		if searchResults, err := golang.SearchByScrape(searchTerm, maxResults); err == nil {
-			ptf.results.golang = searchResults
+			ptf.Results.Golang = searchResults
 		} else {
-			ptf.errs.golang = err
+			ptf.Errs.Golang = err
 		}
 	})
 
-	ptf.run(func(ptf *searchPortfolio) {
-		defer ptf.done()
+	ptf.Run(func(ptf *search.SearchPortfolio) {
+		defer ptf.Done()
 		fmt.Printf("🟡 Search for %s results\n", npmLabel)
 		if searchResults, err := npm.SearchByScrape(searchTerm, maxResults); err == nil {
-			ptf.results.npm = searchResults
+			ptf.Results.NPM = searchResults
 		} else {
-			ptf.errs.npm = err
+			ptf.Errs.NPM = err
 		}
 	})
 
-	ptf.run(func(ptf *searchPortfolio) {
-		defer ptf.done()
+	ptf.Run(func(ptf *search.SearchPortfolio) {
+		defer ptf.Done()
 		fmt.Printf("🟡 Search for %s results\n", pypiLabel)
 		if searchResults, err := pypi.SearchByAPI(searchTerm, maxResults); err == nil {
-			ptf.results.pypi = searchResults
+			ptf.Results.PyPI = searchResults
 		} else {
-			ptf.errs.pypi = err
+			ptf.Errs.PyPI = err
 		}
 	})
 
-	ptf.wait()
-	if errs := ptf.errors(); len(errs) > 0 {
+	ptf.Wait()
+	if errs := ptf.Errors(); len(errs) > 0 {
 		for _, err := range errs {
 			fmt.Printf("💀 Error: %s\n", err)
 		}
-		return ErrPorftolioFailure
+		return search.ErrPorftolioFailure
 	}
 
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
 	time.Sleep(500 * time.Millisecond)
 
-	f := &searchFormatter{}
+	f := &search.SearchFormatter{}
 
-	util.PrintResults(ptf.results.golang, golangLabel, f.formatGo, outputMode)
-	util.PrintResults(ptf.results.npm, npmLabel, f.formatNPM, outputMode)
-	util.PrintResults(ptf.results.pypi, pypiLabel, f.formatPyPI, outputMode)
+	util.PrintResults(ptf.Results.Golang, golangLabel, f.FormatGo, outputMode)
+	util.PrintResults(ptf.Results.NPM, npmLabel, f.FormatNPM, outputMode)
+	util.PrintResults(ptf.Results.PyPI, pypiLabel, f.FormatPyPI, outputMode)
 
 	return nil
 }
@@ -89,31 +105,31 @@ func SearchDNSAction(c *cli.Context) error {
 	maxResults := c.Int("max")
 	outputMode := getOutputMode(c.String("mode"))
 
-	ptf := newSearchPortfolio()
+	ptf := search.NewSearchPortfolio()
 
-	ptf.run(func(ptf *searchPortfolio) {
-		defer ptf.done()
+	ptf.Run(func(ptf *search.SearchPortfolio) {
+		defer ptf.Done()
 		fmt.Printf("🟡 Search for %s results\n", dnsLabel)
 		if probeResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
-			ptf.results.dns = probeResults
+			ptf.Results.DNS = probeResults
 		} else {
-			ptf.errs.dns = err
+			ptf.Errs.DNS = err
 		}
 	})
 
-	ptf.wait()
-	if errs := ptf.errors(); len(errs) > 0 {
+	ptf.Wait()
+	if errs := ptf.Errors(); len(errs) > 0 {
 		for _, err := range errs {
 			fmt.Printf("💀 Error: %s\n", err)
 		}
-		return ErrPorftolioFailure
+		return search.ErrPorftolioFailure
 	}
 
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
 	time.Sleep(500 * time.Millisecond)
 
-	f := &searchFormatter{}
+	f := &search.SearchFormatter{}
 
-	util.PrintResults(ptf.results.dns, dnsLabel, f.formatDNS, outputMode)
+	util.PrintResults(ptf.Results.DNS, dnsLabel, f.FormatDNS, outputMode)
 	return nil
 }
