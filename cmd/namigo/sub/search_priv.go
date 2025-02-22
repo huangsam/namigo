@@ -1,7 +1,9 @@
 package sub
 
 import (
+	"errors"
 	"fmt"
+	"strings"
 	"sync"
 
 	"github.com/huangsam/namigo/internal/model"
@@ -105,4 +107,31 @@ func getOutputMode(mode string) util.OutputMode {
 	default:
 		return util.TextMode
 	}
+}
+
+// errorMap is a custom error mapping.
+type errorMap map[string]error
+
+// newErrorMap creates a new errorMap.
+func newErrorMap() errorMap {
+	return map[string]error{
+		golangLabel: nil,
+		npmLabel:    nil,
+		pypiLabel:   nil,
+		dnsLabel:    nil,
+	}
+}
+
+// aggregate creates a combined error.
+func (em *errorMap) aggregate() error {
+	errs := []string{}
+	for _, err := range *em {
+		if err != nil {
+			errs = append(errs, err.Error())
+		}
+	}
+	if len(errs) > 0 {
+		return errors.New(strings.Join(errs, " && "))
+	}
+	return nil
 }

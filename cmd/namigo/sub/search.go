@@ -13,6 +13,13 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+const (
+	golangLabel = "Golang"
+	npmLabel    = "NPM"
+	pypiLabel   = "PyPI"
+	dnsLabel    = "DNS"
+)
+
 // SearchPackageAction searches for packages.
 func SearchPackageAction(c *cli.Context) error {
 	searchTerm := c.Args().First()
@@ -23,7 +30,7 @@ func SearchPackageAction(c *cli.Context) error {
 	outputMode := getOutputMode(c.String("mode"))
 
 	ptf := newSearchPortfolio()
-	ptfErrorCount := 0
+	ptfErrorMap := newErrorMap()
 
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
@@ -32,7 +39,7 @@ func SearchPackageAction(c *cli.Context) error {
 			ptf.results.golang = searchResults
 		} else {
 			fmt.Println("🔴 Cannot get Golang results:", err.Error())
-			ptfErrorCount++
+			ptfErrorMap[golangLabel] = err
 		}
 	})
 
@@ -43,7 +50,7 @@ func SearchPackageAction(c *cli.Context) error {
 			ptf.results.npm = searchResults
 		} else {
 			fmt.Println("🔴 Cannot get NPM results:", err.Error())
-			ptfErrorCount++
+			ptfErrorMap[npmLabel] = err
 		}
 	})
 
@@ -54,29 +61,26 @@ func SearchPackageAction(c *cli.Context) error {
 			ptf.results.pypi = searchResults
 		} else {
 			fmt.Println("🔴 Cannot get PyPI results:", err.Error())
-			ptfErrorCount++
+			ptfErrorMap[pypiLabel] = err
 		}
 	})
 
 	ptf.wait()
-
-	if ptfErrorCount == ptf.count() {
-		return ErrPortfolioFailure
-	}
-
-	if ptf.isEmpty() {
+	if err := ptfErrorMap.aggregate(); err != nil {
+		return err
+	} else if ptf.isEmpty() {
 		fmt.Println("🌧️ No results")
-	} else {
-		fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
+		return ErrPorftolioEmpty
 	}
 
+	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
 	time.Sleep(500 * time.Millisecond)
 
 	f := &searchFormatter{}
 
-	util.PrintResults(ptf.results.golang, "Golang", f.formatGo, outputMode)
-	util.PrintResults(ptf.results.npm, "NPM", f.formatNPM, outputMode)
-	util.PrintResults(ptf.results.pypi, "PyPI", f.formatPyPI, outputMode)
+	util.PrintResults(ptf.results.golang, golangLabel, f.formatGo, outputMode)
+	util.PrintResults(ptf.results.npm, npmLabel, f.formatNPM, outputMode)
+	util.PrintResults(ptf.results.pypi, pypiLabel, f.formatPyPI, outputMode)
 
 	return nil
 }
@@ -91,7 +95,7 @@ func SearchDNSAction(c *cli.Context) error {
 	outputMode := getOutputMode(c.String("mode"))
 
 	ptf := newSearchPortfolio()
-	ptfErrorCount := 0
+	ptfErrorMap := newErrorMap()
 
 	ptf.run(func(wg *sync.WaitGroup) {
 		defer wg.Done()
@@ -100,26 +104,23 @@ func SearchDNSAction(c *cli.Context) error {
 			ptf.results.dns = probeResults
 		} else {
 			fmt.Println("🔴 Cannot get DNS results:", err.Error())
-			ptfErrorCount++
+			ptfErrorMap[dnsLabel] = err
 		}
 	})
 
 	ptf.wait()
-
-	if ptfErrorCount == ptf.count() {
-		return ErrPortfolioFailure
-	}
-
-	if ptf.isEmpty() {
+	if err := ptfErrorMap.aggregate(); err != nil {
+		return err
+	} else if ptf.isEmpty() {
 		fmt.Println("🌧️ No results")
-	} else {
-		fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
+		return ErrPorftolioEmpty
 	}
 
+	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
 	time.Sleep(500 * time.Millisecond)
 
 	f := &searchFormatter{}
 
-	util.PrintResults(ptf.results.dns, "DNS", f.formatDNS, outputMode)
+	util.PrintResults(ptf.results.dns, dnsLabel, f.formatDNS, outputMode)
 	return nil
 }
