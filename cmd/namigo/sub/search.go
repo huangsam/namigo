@@ -29,7 +29,7 @@ func SearchPackageAction(c *cli.Context) error {
 
 	ptf.Run(func(ptf *search.SearchPortfolio) {
 		defer ptf.Done()
-		fmt.Printf("🟡 Search for %s results\n", ptf.Formats.Golang.Label())
+		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.Golang.Label())
 		if searchResults, err := golang.SearchByScrape(searchTerm, maxResults); err == nil {
 			ptf.Results.Golang = searchResults
 		} else {
@@ -39,7 +39,7 @@ func SearchPackageAction(c *cli.Context) error {
 
 	ptf.Run(func(ptf *search.SearchPortfolio) {
 		defer ptf.Done()
-		fmt.Printf("🟡 Search for %s results\n", ptf.Formats.NPM.Label())
+		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.NPM.Label())
 		if searchResults, err := npm.SearchByScrape(searchTerm, maxResults); err == nil {
 			ptf.Results.NPM = searchResults
 		} else {
@@ -49,7 +49,7 @@ func SearchPackageAction(c *cli.Context) error {
 
 	ptf.Run(func(ptf *search.SearchPortfolio) {
 		defer ptf.Done()
-		fmt.Printf("🟡 Search for %s results\n", ptf.Formats.PyPI.Label())
+		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.PyPI.Label())
 		if searchResults, err := pypi.SearchByAPI(searchTerm, maxResults); err == nil {
 			ptf.Results.PyPI = searchResults
 		} else {
@@ -88,7 +88,7 @@ func SearchDNSAction(c *cli.Context) error {
 
 	ptf.Run(func(ptf *search.SearchPortfolio) {
 		defer ptf.Done()
-		fmt.Printf("🟡 Search for %s results\n", ptf.Formats.DNS.Label())
+		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.DNS.Label())
 		if probeResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
 			ptf.Results.DNS = probeResults
 		} else {
