@@ -1,27 +1,28 @@
-package search
+package search_test
 
 import (
 	"errors"
 	"testing"
 
 	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/pkg/search"
 )
 
 func TestPortfolioErrors(t *testing.T) {
 	tests := []struct {
 		name      string
-		portfolio Portfolio
+		portfolio search.Portfolio
 		wantErrs  []error
 	}{
 		{
 			name:      "No errors and no results",
-			portfolio: Portfolio{},
+			portfolio: search.Portfolio{},
 			wantErrs:  []error{},
 		},
 		{
 			name: "Golang error",
-			portfolio: Portfolio{
-				Errs: PortfolioErrors{
+			portfolio: search.Portfolio{
+				Errs: search.PortfolioErrors{
 					Golang: errors.New("golang error"),
 				},
 			},
@@ -29,8 +30,8 @@ func TestPortfolioErrors(t *testing.T) {
 		},
 		{
 			name: "NPM error",
-			portfolio: Portfolio{
-				Errs: PortfolioErrors{
+			portfolio: search.Portfolio{
+				Errs: search.PortfolioErrors{
 					NPM: errors.New("npm error"),
 				},
 			},
@@ -38,8 +39,8 @@ func TestPortfolioErrors(t *testing.T) {
 		},
 		{
 			name: "PyPI error",
-			portfolio: Portfolio{
-				Errs: PortfolioErrors{
+			portfolio: search.Portfolio{
+				Errs: search.PortfolioErrors{
 					PyPI: errors.New("pypi error"),
 				},
 			},
@@ -47,8 +48,8 @@ func TestPortfolioErrors(t *testing.T) {
 		},
 		{
 			name: "DNS error",
-			portfolio: Portfolio{
-				Errs: PortfolioErrors{
+			portfolio: search.Portfolio{
+				Errs: search.PortfolioErrors{
 					DNS: errors.New("dns error"),
 				},
 			},
@@ -56,8 +57,8 @@ func TestPortfolioErrors(t *testing.T) {
 		},
 		{
 			name: "Multiple errors",
-			portfolio: Portfolio{
-				Errs: PortfolioErrors{
+			portfolio: search.Portfolio{
+				Errs: search.PortfolioErrors{
 					Golang: errors.New("golang error"),
 					NPM:    errors.New("npm error"),
 					PyPI:   errors.New("pypi error"),
@@ -73,8 +74,8 @@ func TestPortfolioErrors(t *testing.T) {
 		},
 		{
 			name: "No errors with results",
-			portfolio: Portfolio{
-				Results: PortfolioResults{
+			portfolio: search.Portfolio{
+				Results: search.PortfolioResults{
 					Golang: []model.GoPackage{
 						{}, {}, {}, // Some fake results
 					},
@@ -87,7 +88,7 @@ func TestPortfolioErrors(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if gotErrs := tt.portfolio.Errors(); !equalErrors(gotErrs, tt.wantErrs) {
-				t.Errorf("Portfolio.Errors() = %v, want %v", gotErrs, tt.wantErrs)
+				t.Errorf("search.Portfolio.Errors() = %v, want %v", gotErrs, tt.wantErrs)
 			}
 		})
 	}

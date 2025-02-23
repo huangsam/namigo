@@ -1,12 +1,14 @@
-package pypi
+package pypi_test
 
 import (
 	"net/http"
 	"testing"
+
+	"github.com/huangsam/namigo/pkg/search/pypi"
 )
 
 func TestAPIList(t *testing.T) {
-	builder := APIList()
+	builder := pypi.APIList()
 	req, err := builder()
 	if err != nil {
 		t.Fatalf("APIList() error = %v", err)
@@ -29,7 +31,7 @@ func TestAPIList(t *testing.T) {
 
 func TestAPIDetail(t *testing.T) {
 	pkg := "example-package"
-	builder := APIDetail(pkg)
+	builder := pypi.APIDetail(pkg)
 	req, err := builder()
 	if err != nil {
 		t.Fatalf("APIDetail() error = %v", err)
