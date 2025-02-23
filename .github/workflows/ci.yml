@@ -19,5 +19,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.24'
+      - name: Run tests
+        run: bash ./scripts/test.sh
       - name: Run build
         run: bash ./scripts/build.sh

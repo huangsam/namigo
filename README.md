@@ -24,6 +24,9 @@ on building.
 # Run build
 bash scripts/build.sh
 
+# Run tests
+bash scripts/test.sh
+
 # Run linters
 bash scripts/lint.sh
 ```
