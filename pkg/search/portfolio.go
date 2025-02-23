@@ -12,8 +12,8 @@ var (
 	ErrPorftolioFailure = errors.New("portfolio collection failure")
 )
 
-// SearchPortfolio has entity helpers and task helpers.
-type SearchPortfolio struct {
+// Portfolio has entity helpers and task helpers.
+type Portfolio struct {
 	Results struct {
 		Golang []model.GoPackageResult
 		NPM    []model.NPMPackageResult
@@ -35,13 +35,13 @@ type SearchPortfolio struct {
 	wg *sync.WaitGroup
 }
 
-// NewSearchPortfolio creates a new portfolio instance.
-func NewSearchPortfolio() *SearchPortfolio {
-	return &SearchPortfolio{wg: &sync.WaitGroup{}}
+// NewPortfolio creates a new portfolio instance.
+func NewPortfolio() *Portfolio {
+	return &Portfolio{wg: &sync.WaitGroup{}}
 }
 
 // Size returns the number of results collected.
-func (p *SearchPortfolio) Size() int {
+func (p *Portfolio) Size() int {
 	return (len(p.Results.NPM) +
 		len(p.Results.Golang) +
 		len(p.Results.PyPI) +
@@ -49,23 +49,23 @@ func (p *SearchPortfolio) Size() int {
 }
 
 // Run invokes a goroutine and increments wg counter.
-func (p *SearchPortfolio) Run(f func(ptf *SearchPortfolio)) {
+func (p *Portfolio) Run(f func(ptf *Portfolio)) {
 	p.wg.Add(1)
 	go f(p)
 }
 
 // Done decrements wg counter.
-func (p *SearchPortfolio) Done() {
+func (p *Portfolio) Done() {
 	p.wg.Done()
 }
 
 // Wait blocks the main thread until all goroutines complete.
-func (p *SearchPortfolio) Wait() {
+func (p *Portfolio) Wait() {
 	p.wg.Wait()
 }
 
 // Errors returns all errors found.
-func (p *SearchPortfolio) Errors() []error {
+func (p *Portfolio) Errors() []error {
 	coll := []error{}
 	if p.Size() == 0 {
 		coll = append(coll, ErrPorftolioEmpty)

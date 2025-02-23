@@ -25,9 +25,9 @@ func SearchPackageAction(c *cli.Context) error {
 	maxResults := c.Int("max")
 	outputMode := model.GetOutputMode(c.String("mode"))
 
-	ptf := search.NewSearchPortfolio()
+	ptf := search.NewPortfolio()
 
-	ptf.Run(func(ptf *search.SearchPortfolio) {
+	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
 		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.Golang.Label())
 		if searchResults, err := golang.SearchByScrape(searchTerm, maxResults); err == nil {
@@ -37,7 +37,7 @@ func SearchPackageAction(c *cli.Context) error {
 		}
 	})
 
-	ptf.Run(func(ptf *search.SearchPortfolio) {
+	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
 		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.NPM.Label())
 		if searchResults, err := npm.SearchByScrape(searchTerm, maxResults); err == nil {
@@ -47,7 +47,7 @@ func SearchPackageAction(c *cli.Context) error {
 		}
 	})
 
-	ptf.Run(func(ptf *search.SearchPortfolio) {
+	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
 		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.PyPI.Label())
 		if searchResults, err := pypi.SearchByAPI(searchTerm, maxResults); err == nil {
@@ -84,9 +84,9 @@ func SearchDNSAction(c *cli.Context) error {
 	maxResults := c.Int("max")
 	outputMode := model.GetOutputMode(c.String("mode"))
 
-	ptf := search.NewSearchPortfolio()
+	ptf := search.NewPortfolio()
 
-	ptf.Run(func(ptf *search.SearchPortfolio) {
+	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
 		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.DNS.Label())
 		if probeResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
