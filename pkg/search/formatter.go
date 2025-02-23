@@ -11,6 +11,9 @@ const (
 	NPMLabel    = "NPM"    // Label for NPM packages
 	PyPILabel   = "PyPI"   // Label for PyPI packages
 	DNSLabel    = "DNS"    // Label for DNS records
+
+	MaxLineLength = 80 // Maximum line length
+	MaxIPLength   = 3  // Maximum IP length
 )
 
 // Formatter is an interface for formatting different types of results.
@@ -28,7 +31,7 @@ type GoFormatter struct{}
 func (f *GoFormatter) Result(result any) string {
 	res := result.(model.GoPackageResult)
 	desc := res.Description
-	if len(desc) > 80 || len(desc) == 0 {
+	if len(desc) > MaxLineLength {
 		desc = fmt.Sprintf("%.80s...", desc)
 	}
 	return fmt.Sprintf("📦 [%s] %s (%s) ->\n\t%s", f.Label(), res.Name, res.Path, desc)
@@ -44,7 +47,7 @@ type NPMFormatter struct{}
 func (f *NPMFormatter) Result(result any) string {
 	res := result.(model.NPMPackageResult)
 	desc := res.Description
-	if len(desc) > 80 || len(desc) == 0 {
+	if len(desc) > MaxLineLength {
 		desc = fmt.Sprintf("%.80s...", desc)
 	}
 	return fmt.Sprintf("📦 [%s] %s [exact=%v] ->\n\t%s", f.Label(), res.Name, res.IsExactMatch, desc)
@@ -60,7 +63,7 @@ type PyPIFormatter struct{}
 func (f *PyPIFormatter) Result(result any) string {
 	res := result.(model.PyPIPackageResult)
 	desc := res.Description
-	if len(desc) > 80 || len(desc) == 0 {
+	if len(desc) > MaxLineLength {
 		desc = fmt.Sprintf("%.80s...", desc)
 	}
 	return fmt.Sprintf("📦 [%s] %s by %s ->\n\t%s", f.Label(), res.Name, res.Author, desc)
@@ -75,13 +78,13 @@ type DNSFormatter struct{}
 
 func (f *DNSFormatter) Result(result any) string {
 	res := result.(model.DNSResult)
-	var content string
-	if len(res.IPList) > 3 {
-		content = fmt.Sprintf("The first 3 IPs are %v", res.IPList[0:3])
+	var desc string
+	if len(res.IPList) > MaxIPLength {
+		desc = fmt.Sprintf("The first %d IPs are %v", MaxIPLength, res.IPList[0:3])
 	} else {
-		content = fmt.Sprintf("The IPs are %v", res.IPList)
+		desc = fmt.Sprintf("The IPs are %v", res.IPList)
 	}
-	return fmt.Sprintf("🌎 [%s] %s w/ %d IPs ->\n\t%v", f.Label(), res.FQDN, len(res.IPList), content)
+	return fmt.Sprintf("🌎 [%s] %s w/ %d IPs ->\n\t%v", f.Label(), res.FQDN, len(res.IPList), desc)
 }
 
 func (f *DNSFormatter) Label() string {

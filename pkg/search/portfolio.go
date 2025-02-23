@@ -66,21 +66,21 @@ func (p *Portfolio) Wait() {
 
 // Errors returns all errors found.
 func (p *Portfolio) Errors() []error {
-	coll := []error{}
+	errs := []error{}
 	if p.Size() == 0 {
-		coll = append(coll, ErrPorftolioEmpty)
+		errs = append(errs, ErrPorftolioEmpty)
 	}
 	if p.Errs.Golang != nil {
-		coll = append(coll, p.Errs.Golang)
+		errs = append(errs, p.Errs.Golang)
 	}
 	if p.Errs.NPM != nil {
-		coll = append(coll, p.Errs.NPM)
+		errs = append(errs, p.Errs.NPM)
 	}
 	if p.Errs.PyPI != nil {
-		coll = append(coll, p.Errs.PyPI)
+		errs = append(errs, p.Errs.PyPI)
 	}
 	if p.Errs.DNS != nil {
-		coll = append(coll, p.Errs.DNS)
+		errs = append(errs, p.Errs.DNS)
 	}
-	return coll
+	return errs
 }
