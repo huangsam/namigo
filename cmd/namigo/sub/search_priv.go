@@ -47,7 +47,7 @@ func displayResultsByTypeMode[T any](results []T, formatter search.Formatter, mo
 		fmt.Printf("%s\n", data)
 	case model.TextMode:
 		for _, r := range results {
-			fmt.Println(formatter.Result(r))
+			fmt.Println(formatter.FormatResult(r))
 		}
 	}
 }

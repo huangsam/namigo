@@ -18,8 +18,8 @@ const (
 
 // Formatter is an interface for formatting different types of results.
 type Formatter interface {
-	// Result formats a single result.
-	Result(result any) string
+	// FormatResult formats a single result.
+	FormatResult(result any) string
 
 	// Label returns the canonical label for an entity.
 	Label() string
@@ -28,7 +28,7 @@ type Formatter interface {
 // GoFormatter formats Go package.
 type GoFormatter struct{}
 
-func (f *GoFormatter) Result(result any) string {
+func (f *GoFormatter) FormatResult(result any) string {
 	res := result.(model.GoPackage)
 	desc := res.Description
 	if len(desc) > MaxLineLength {
@@ -44,7 +44,7 @@ func (f *GoFormatter) Label() string {
 // NPMFormatter formats NPM package.
 type NPMFormatter struct{}
 
-func (f *NPMFormatter) Result(result any) string {
+func (f *NPMFormatter) FormatResult(result any) string {
 	res := result.(model.NPMPackage)
 	desc := res.Description
 	if len(desc) > MaxLineLength {
@@ -60,7 +60,7 @@ func (f *NPMFormatter) Label() string {
 // PyPIFormatter formats PyPI package.
 type PyPIFormatter struct{}
 
-func (f *PyPIFormatter) Result(result any) string {
+func (f *PyPIFormatter) FormatResult(result any) string {
 	res := result.(model.PyPIPackage)
 	desc := res.Description
 	if len(desc) > MaxLineLength {
@@ -76,7 +76,7 @@ func (f *PyPIFormatter) Label() string {
 // DNSFormatter formats DNS record.
 type DNSFormatter struct{}
 
-func (f *DNSFormatter) Result(result any) string {
+func (f *DNSFormatter) FormatResult(result any) string {
 	res := result.(model.DNSRecord)
 	var desc string
 	if len(res.IPList) > MaxIPLength {
