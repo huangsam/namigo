@@ -1,9 +1,9 @@
-# Data Approach
+# Search Approach
 
-This document outlines a data gathering and analysis approach for investigating
-online presence and software package information. It covers DNS, email address
-verification, and software package metadata from popular repositories for
-Go, JavaScript, Python, Rust, and Java.
+This document outlines a methodology for searching and discovering information
+related to online presence and software package availability.
+It covers DNS, email address verification, and software package metadata from
+popular repositories for Go, JavaScript, Python, Rust, and Java.
 
 ## DNS
 
