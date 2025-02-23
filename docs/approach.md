@@ -1,38 +1,60 @@
-# Data approach
+# Data Approach
 
 ## DNS
 
-- `dig namigo.com`
-- `whois namigo.com`
-- Repeat for popular TLDs like `io` and `ai`
+- **`dig`:**
+    - Retrieve DNS records (A, MX, TXT, NS).
+    - Use `+trace`, `+short`, and analyze TTL/DNSSEC.
+- **`whois`:**
+    - Get domain registration info.
+    - Check different `whois` servers and historical data.
+- **TLD Variation:**
+    - Check `.io`, `.ai`, etc. for availability/patterns.
 
 ## Email
 
-- Lookup: `namigo@gmail.com`
-- Repeat for popular providers like `@yahoo.com` and `@outlook.com`
+- **Lookup:**
+    - Verify email existence.
+    - Use verification services, check social profiles, headers, breaches.
+- **Provider Variation:**
+    - Check `@yahoo.com`, `@outlook.com`, etc.
+    - Use provider APIs, analyze spam scores, check for disposable emails.
 
 ## Go
 
-- Scrape <https://pkg.go.dev>
-- [Package Search](https://index.golang.org/index)
+- **pkg.go.dev:**
+    - Scrape metadata, popularity, dependencies.
+- **index.golang.org:**
+    - Search via API, analyze results.
 
-## JavaScript
+## JavaScript (npm)
 
-- Scrape <https://npmjs.com>
-- [Package Info](https://registry.npmjs.com/namigo)
-- [Package Search](https://registry.npmjs.com/-/v1/search?text=namigo)
+- **npmjs.com:**
+    - Scrape metadata, downloads, vulnerabilities.
+- **registry.npmjs.com/:package:**
+    - Get package info via API.
+- **registry.npmjs.com/-/v1/search:**
+    - Search via API, analyze results.
 
-## Python
+## Python (PyPI)
 
-- Scrape <https://pypi.org>
-- [Package Info](https://pypi.org/pypi/namigo/json)
+- **pypi.org:**
+    - Scrape metadata, downloads, vulnerabilities.
+- **pypi.org/pypi/:package/json:**
+    - Get package info via API.
 
-## Rust
+## Rust (Crates.io)
 
-- Scrape <https://crates.io>
-- [Package Info](https://crates.io/api/v1/crates/anipwatch)
-- [Package Search](https://crates.io/api/v1/crates?page=1&per_page=10&q=height)
+- **crates.io:**
+    - Scrape metadata, downloads, vulnerabilities.
+- **crates.io/api/v1/crates/:crate:**
+    - Get crate info via API.
+- **crates.io/api/v1/crates?q=:**
+    - Search via API, analyze results.
 
 ## Java
 
-- TBD
+- **Maven/Gradle:**
+    - Scrape metadata, dependencies, build info.
+    - Use APIs, analyze build files, Javadoc.
+    - Check GitHub/GitLab, use `jdeps`, vulnerability tools.
