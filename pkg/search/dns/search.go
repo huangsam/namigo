@@ -7,7 +7,7 @@ import (
 	"github.com/huangsam/namigo/internal/model"
 )
 
-// SearchByProbe searches for DNS hostnames via NS lookups.
+// SearchByProbe searches for DNS records via nameserver lookups.
 func SearchByProbe(name string, max int) ([]model.DNSRecord, error) {
 	domains := []string{"com", "org", "net", "io", "tech", "ai", "me", "shop"}
 	domainChan := make(chan string)

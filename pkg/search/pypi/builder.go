@@ -24,7 +24,7 @@ func APIList() util.RequestBuilder {
 	}
 }
 
-// APIDetail builds a request for PyPI APIDetail view.
+// APIDetail builds a request for PyPI detail view.
 func APIDetail(pkg string) util.RequestBuilder {
 	return func() (*http.Request, error) {
 		url := url.URL{

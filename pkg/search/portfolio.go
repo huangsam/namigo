@@ -48,13 +48,13 @@ func (p *Portfolio) Size() int {
 		len(p.Results.DNS))
 }
 
-// Run invokes a goroutine and increments wg counter.
+// Run invokes a goroutine and increments internal WaitGroup counter.
 func (p *Portfolio) Run(f func(ptf *Portfolio)) {
 	p.wg.Add(1)
 	go f(p)
 }
 
-// Done decrements wg counter.
+// Done decrements internal WaitGroup counter.
 func (p *Portfolio) Done() {
 	p.wg.Done()
 }
