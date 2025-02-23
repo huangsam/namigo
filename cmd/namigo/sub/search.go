@@ -68,9 +68,9 @@ func SearchPackageAction(c *cli.Context) error {
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
 	time.Sleep(500 * time.Millisecond)
 
-	display(ptf.Results.Golang, &ptf.Formats.Golang, outputMode)
-	display(ptf.Results.NPM, &ptf.Formats.NPM, outputMode)
-	display(ptf.Results.PyPI, &ptf.Formats.PyPI, outputMode)
+	displayResults(ptf.Results.Golang, &ptf.Formats.Golang, outputMode)
+	displayResults(ptf.Results.NPM, &ptf.Formats.NPM, outputMode)
+	displayResults(ptf.Results.PyPI, &ptf.Formats.PyPI, outputMode)
 
 	return nil
 }
@@ -107,6 +107,6 @@ func SearchDNSAction(c *cli.Context) error {
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
 	time.Sleep(500 * time.Millisecond)
 
-	display(ptf.Results.DNS, &ptf.Formats.DNS, outputMode)
+	displayResults(ptf.Results.DNS, &ptf.Formats.DNS, outputMode)
 	return nil
 }
