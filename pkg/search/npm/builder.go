@@ -8,8 +8,8 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
-// ScrapeListing builds the request for NPM list view.
-func ScrapeListing(name string) util.RequestBuilder {
+// ScrapeList builds the request for NPM list view.
+func ScrapeList(name string) util.RequestBuilder {
 	return func() (*http.Request, error) {
 		encodedName := url.PathEscape(name)
 		params := url.Values{"q": []string{encodedName}}
@@ -23,8 +23,8 @@ func ScrapeListing(name string) util.RequestBuilder {
 	}
 }
 
-// APIListing builds the request for NPM list view.
-func APIListing(name string, size int) util.RequestBuilder {
+// APIList builds the request for NPM list view.
+func APIList(name string, size int) util.RequestBuilder {
 	return func() (*http.Request, error) {
 		params := url.Values{}
 		params.Add("text", name)

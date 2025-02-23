@@ -2,8 +2,8 @@ package extern
 
 import "time"
 
-// NPMAPIListingResponse represents listing info from the NPM API.
-type NPMAPIListingResponse struct {
+// NPMAPIListResponse represents list info from the NPM API.
+type NPMAPIListResponse struct {
 	Objects []struct {
 		Downloads struct {
 			Monthly int `json:"monthly"`

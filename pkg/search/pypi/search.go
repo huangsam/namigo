@@ -19,19 +19,19 @@ const goroutineCount = 4
 func SearchByAPI(name string, max int) ([]model.PyPIPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 
-	bl, err := util.RESTAPIQuery(client, APIListing())
+	bl, err := util.RESTAPIQuery(client, APIList())
 	if err != nil {
 		return []model.PyPIPackage{}, err
 	}
 
-	var listingRes extern.PyPIAPIListingResponse
-	if err := json.Unmarshal(bl, &listingRes); err != nil {
+	var listRes extern.PyPIAPIListResponse
+	if err := json.Unmarshal(bl, &listRes); err != nil {
 		return []model.PyPIPackage{}, err
 	}
 
 	taskChan := make(chan string)
 	go func() {
-		for _, project := range listingRes.Projects {
+		for _, project := range listRes.Projects {
 			if strings.HasPrefix(project.Name, name) {
 				taskChan <- project.Name
 			}

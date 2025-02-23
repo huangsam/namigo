@@ -13,7 +13,7 @@ import (
 // SearchByScrape searches for NPM packages by scraping www.npmjs.com.
 func SearchByScrape(name string, max int) ([]model.NPMPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
-	pipeline := util.NewDocumentPipeline(client, ScrapeListing(name))
+	pipeline := util.NewDocumentPipeline(client, ScrapeList(name))
 	doc, err := pipeline.Execute()
 	if err != nil {
 		return []model.NPMPackage{}, err
@@ -29,15 +29,15 @@ func SearchByScrape(name string, max int) ([]model.NPMPackage, error) {
 // SearchByAPI searches for NPM packages by querying registry.npmjs.com.
 func SearchByAPI(name string, max int) ([]model.NPMPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
-	bl, err := util.RESTAPIQuery(client, APIListing(name, max))
+	bl, err := util.RESTAPIQuery(client, APIList(name, max))
 	if err != nil {
 		return []model.NPMPackage{}, err
 	}
 
-	var listingRes extern.NPMAPIListingResponse
-	if err := json.Unmarshal(bl, &listingRes); err != nil {
+	var listRes extern.NPMAPIListResponse
+	if err := json.Unmarshal(bl, &listRes); err != nil {
 		return []model.NPMPackage{}, err
 	}
 
-	return apiWorker(&listingRes, name)
+	return apiWorker(&listRes, name)
 }

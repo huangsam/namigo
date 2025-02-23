@@ -1,7 +1,7 @@
 package extern
 
-// PyPIAPIListingResponse represents listing info from the PyPI API.
-type PyPIAPIListingResponse struct {
+// PyPIAPIListResponse represents list info from the PyPI API.
+type PyPIAPIListResponse struct {
 	Meta struct {
 		LastSerial int    `json:"_last-serial"`
 		APIVersion string `json:"api-version"`

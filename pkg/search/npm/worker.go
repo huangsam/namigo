@@ -35,9 +35,9 @@ func docWorker(doc *goquery.Document, result *[]model.NPMPackage, maxResults int
 }
 
 // apiWorker runs serial logic for NPM query.
-func apiWorker(listingRes *extern.NPMAPIListingResponse, name string) ([]model.NPMPackage, error) {
+func apiWorker(listRes *extern.NPMAPIListResponse, name string) ([]model.NPMPackage, error) {
 	res := []model.NPMPackage{}
-	for _, object := range listingRes.Objects {
+	for _, object := range listRes.Objects {
 		pkg := object.Package.Name
 
 		description := object.Package.Description

@@ -7,8 +7,8 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
-// APIListing builds a request for PyPI list view.
-func APIListing() util.RequestBuilder {
+// APIList builds a request for PyPI list view.
+func APIList() util.RequestBuilder {
 	return func() (*http.Request, error) {
 		url := url.URL{
 			Scheme: "https",
