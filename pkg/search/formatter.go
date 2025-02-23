@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	GolangLabel = "Golang"
-	NPMLabel    = "NPM"
-	PyPILabel   = "PyPI"
-	DNSLabel    = "DNS"
+	GolangLabel = "Golang" // Label for Golang packages
+	NPMLabel    = "NPM"    // Label for NPM packages
+	PyPILabel   = "PyPI"   // Label for PyPI packages
+	DNSLabel    = "DNS"    // Label for DNS records
 )
 
 // Formatter is an interface for formatting different types of results.
