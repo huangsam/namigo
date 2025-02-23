@@ -21,7 +21,7 @@ func worker(
 ) {
 	defer wg.Done()
 	for pkg := range taskChan {
-		bd, err := util.RESTAPIQuery(client, detail(pkg))
+		bd, err := util.RESTAPIQuery(client, Detail(pkg))
 		if err != nil {
 			*errorCount++
 			continue

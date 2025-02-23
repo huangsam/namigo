@@ -18,7 +18,7 @@ const goroutineCount = 4
 func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 
-	bl, err := util.RESTAPIQuery(client, listing())
+	bl, err := util.RESTAPIQuery(client, Listing())
 	if err != nil {
 		return []model.PyPIPackageResult{}, err
 	}

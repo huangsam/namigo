@@ -7,8 +7,8 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
-// listing builds the request for NPM list view.
-func listing(name string) util.RequestBuilder {
+// Listing builds the request for NPM list view.
+func Listing(name string) util.RequestBuilder {
 	return func() (*http.Request, error) {
 		encodedName := url.PathEscape(name)
 		params := url.Values{"q": []string{encodedName}}

@@ -29,8 +29,8 @@ type PypiDetailResponse struct {
 	}
 }
 
-// listing builds a request for PyPI list view.
-func listing() util.RequestBuilder {
+// Listing builds a request for PyPI list view.
+func Listing() util.RequestBuilder {
 	return func() (*http.Request, error) {
 		url := url.URL{
 			Scheme: "https",
@@ -46,8 +46,8 @@ func listing() util.RequestBuilder {
 	}
 }
 
-// detail builds a request for PyPI detail view.
-func detail(pkg string) util.RequestBuilder {
+// Detail builds a request for PyPI Detail view.
+func Detail(pkg string) util.RequestBuilder {
 	return func() (*http.Request, error) {
 		url := url.URL{
 			Scheme: "https",
