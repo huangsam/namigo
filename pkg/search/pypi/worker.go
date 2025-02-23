@@ -21,12 +21,12 @@ func apiWorker(
 ) {
 	defer wg.Done()
 	for pkg := range taskChan {
-		bd, err := util.RESTAPIQuery(client, Detail(pkg))
+		bd, err := util.RESTAPIQuery(client, APIDetail(pkg))
 		if err != nil {
 			*errorCount++
 			continue
 		}
-		var detailRes PypiDetailResponse
+		var detailRes PyPIAPIDetailResponse
 		if err := json.Unmarshal(bd, &detailRes); err != nil {
 			*errorCount++
 			continue

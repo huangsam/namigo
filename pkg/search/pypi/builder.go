@@ -7,8 +7,8 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
-// PypiListingResponse represents listing info from the PyPI API.
-type PypiListingResponse struct {
+// PyPIAPIListingResponse represents listing info from the PyPI API.
+type PyPIAPIListingResponse struct {
 	Meta struct {
 		LastSerial int    `json:"_last-serial"`
 		APIVersion string `json:"api-version"`
@@ -19,8 +19,8 @@ type PypiListingResponse struct {
 	} `json:"projects"`
 }
 
-// PypiDetailResponse represents detailed info from the PyPI API.
-type PypiDetailResponse struct {
+// PyPIAPIDetailResponse represents detailed info from the PyPI API.
+type PyPIAPIDetailResponse struct {
 	Info struct {
 		Author      string `json:"author"`
 		Description string `json:"description"`
@@ -29,8 +29,8 @@ type PypiDetailResponse struct {
 	}
 }
 
-// Listing builds a request for PyPI list view.
-func Listing() util.RequestBuilder {
+// APIListing builds a request for PyPI list view.
+func APIListing() util.RequestBuilder {
 	return func() (*http.Request, error) {
 		url := url.URL{
 			Scheme: "https",
@@ -46,8 +46,8 @@ func Listing() util.RequestBuilder {
 	}
 }
 
-// Detail builds a request for PyPI Detail view.
-func Detail(pkg string) util.RequestBuilder {
+// APIDetail builds a request for PyPI APIDetail view.
+func APIDetail(pkg string) util.RequestBuilder {
 	return func() (*http.Request, error) {
 		url := url.URL{
 			Scheme: "https",

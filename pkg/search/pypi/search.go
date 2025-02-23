@@ -18,12 +18,12 @@ const goroutineCount = 4
 func SearchByAPI(name string, max int) ([]model.PyPIPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 
-	bl, err := util.RESTAPIQuery(client, Listing())
+	bl, err := util.RESTAPIQuery(client, APIListing())
 	if err != nil {
 		return []model.PyPIPackage{}, err
 	}
 
-	var listingRes PypiListingResponse
+	var listingRes PyPIAPIListingResponse
 	if err := json.Unmarshal(bl, &listingRes); err != nil {
 		return []model.PyPIPackage{}, err
 	}
