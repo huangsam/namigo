@@ -13,20 +13,10 @@ Your naming pal, written in Go 🐶
 
 ## Motivation
 
-Choosing the right name for your projects, packages, or even DNS entries
-can be surprisingly challenging. We often find ourselves stuck, brainstorming
-for hours, only to come up with names that are either already taken or don't
-quite capture the essence of our work.
-
-Namigo was born out of this very frustration. It aims to streamline the naming
-process by providing a simple and efficient tool to search for available names
-across different domains, such as package repositories and DNS. Whether you're
-a seasoned developer or just starting out, Namigo is designed to be your friendly
-companion, helping you find the perfect name quickly and easily. 
-
-Essentially, Namigo seeks to alleviate the "naming block" by offering a practical
-solution to explore and validate potential names, allowing you to focus on building
-rather than just brainstorming.
+Finding the right name for projects or packages is often harder than it seems.
+Namigo solves this "naming block" by providing a simple tool to quickly search
+for available names across package repositories and DNS, letting you focus
+on building.
 
 ## Getting started
 
