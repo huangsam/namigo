@@ -8,7 +8,7 @@ import (
 )
 
 // worker runs serial logic for Golang search.
-func worker(doc *goquery.Document, result *[]model.GoPackageResult, maxResults int, name string) {
+func worker(doc *goquery.Document, result *[]model.GoPackage, maxResults int, name string) {
 	doc.Find(".SearchSnippet").Each(func(i int, section *goquery.Selection) {
 		if len(*result) >= maxResults {
 			return
@@ -25,7 +25,7 @@ func worker(doc *goquery.Document, result *[]model.GoPackageResult, maxResults i
 			description = model.NoDescription
 		}
 
-		*result = append(*result, model.GoPackageResult{
+		*result = append(*result, model.GoPackage{
 			Name:        pkg,
 			Path:        path,
 			Description: description,

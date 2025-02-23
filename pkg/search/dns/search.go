@@ -8,7 +8,7 @@ import (
 )
 
 // SearchByProbe searches for DNS hostnames via NS lookups.
-func SearchByProbe(name string, max int) ([]model.DNSRecordResult, error) {
+func SearchByProbe(name string, max int) ([]model.DNSRecord, error) {
 	domains := []string{"com", "org", "net", "io", "tech", "ai", "me", "shop"}
 	domainChan := make(chan string)
 
@@ -19,7 +19,7 @@ func SearchByProbe(name string, max int) ([]model.DNSRecordResult, error) {
 		close(domainChan)
 	}()
 
-	result := []model.DNSRecordResult{}
+	result := []model.DNSRecord{}
 	errorCount := 0
 	var mu sync.Mutex
 	var wg sync.WaitGroup

@@ -8,7 +8,7 @@ import (
 )
 
 // worker runs serial logic for NPM search.
-func worker(doc *goquery.Document, result *[]model.NPMPackageResult, maxResults int) {
+func worker(doc *goquery.Document, result *[]model.NPMPackage, maxResults int) {
 	doc.Find("main section").Each(func(i int, section *goquery.Selection) {
 		if len(*result) >= maxResults {
 			return
@@ -25,7 +25,7 @@ func worker(doc *goquery.Document, result *[]model.NPMPackageResult, maxResults 
 			description = strings.Trim(description, " \n\t")
 		}
 
-		*result = append(*result, model.NPMPackageResult{
+		*result = append(*result, model.NPMPackage{
 			Name:         pkg,
 			Description:  description,
 			IsExactMatch: len(match) > 0,

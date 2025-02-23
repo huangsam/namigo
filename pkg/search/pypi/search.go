@@ -15,17 +15,17 @@ import (
 const goroutineCount = 4
 
 // SearchByAPI searches for PyPI packages by querying pypi.org.
-func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
+func SearchByAPI(name string, max int) ([]model.PyPIPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 
 	bl, err := util.RESTAPIQuery(client, Listing())
 	if err != nil {
-		return []model.PyPIPackageResult{}, err
+		return []model.PyPIPackage{}, err
 	}
 
 	var listingRes PypiListingResponse
 	if err := json.Unmarshal(bl, &listingRes); err != nil {
-		return []model.PyPIPackageResult{}, err
+		return []model.PyPIPackage{}, err
 	}
 
 	taskChan := make(chan string)
@@ -38,7 +38,7 @@ func SearchByAPI(name string, max int) ([]model.PyPIPackageResult, error) {
 		close(taskChan)
 	}()
 
-	result := []model.PyPIPackageResult{}
+	result := []model.PyPIPackage{}
 	errorCount := 0
 	var mu sync.Mutex
 	var wg sync.WaitGroup

@@ -7,25 +7,25 @@ const (
 	NoDescription = "No description" // Fallback for description
 )
 
-type GoPackageResult struct {
+type GoPackage struct {
 	Name        string // Package name
 	Path        string // Fully qualified package path
 	Description string // Package description
 }
 
-type NPMPackageResult struct {
+type NPMPackage struct {
 	Name         string // Package name
 	Description  string // Package description
 	IsExactMatch bool   // Is exact match?
 }
 
-type PyPIPackageResult struct {
+type PyPIPackage struct {
 	Name        string // Package name
 	Description string // Package description
 	Author      string // Package author
 }
 
-type DNSRecordResult struct {
+type DNSRecord struct {
 	FQDN   string   // Fully qualified domain name
 	IPList []net.IP // Associated IP addresses
 }

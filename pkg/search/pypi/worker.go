@@ -15,7 +15,7 @@ func worker(
 	taskChan chan string,
 	wg *sync.WaitGroup,
 	mu *sync.Mutex,
-	result *[]model.PyPIPackageResult,
+	result *[]model.PyPIPackage,
 	errorCount *int,
 	maxResults int,
 ) {
@@ -41,7 +41,7 @@ func worker(
 		}
 		mu.Lock()
 		if len(*result) < maxResults {
-			*result = append(*result, model.PyPIPackageResult{Name: pkg, Description: description, Author: author})
+			*result = append(*result, model.PyPIPackage{Name: pkg, Description: description, Author: author})
 		}
 		mu.Unlock()
 		if len(*result) >= maxResults {

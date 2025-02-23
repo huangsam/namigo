@@ -11,19 +11,19 @@ import (
 // displayResults prints results.
 func displayResults(results any, formatter search.Formatter, mode model.OutputMode) {
 	switch res := results.(type) {
-	case []model.GoPackageResult:
+	case []model.GoPackage:
 		if len(res) > 0 {
 			displayResultsByTypeMode(res, formatter, mode)
 		}
-	case []model.NPMPackageResult:
+	case []model.NPMPackage:
 		if len(res) > 0 {
 			displayResultsByTypeMode(res, formatter, mode)
 		}
-	case []model.PyPIPackageResult:
+	case []model.PyPIPackage:
 		if len(res) > 0 {
 			displayResultsByTypeMode(res, formatter, mode)
 		}
-	case []model.DNSRecordResult:
+	case []model.DNSRecord:
 		if len(res) > 0 {
 			displayResultsByTypeMode(res, formatter, mode)
 		}

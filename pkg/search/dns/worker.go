@@ -12,7 +12,7 @@ func worker(
 	domainChan chan string,
 	wg *sync.WaitGroup,
 	mu *sync.Mutex,
-	result *[]model.DNSRecordResult,
+	result *[]model.DNSRecord,
 	errorCount *int,
 	maxResults int,
 ) {
@@ -24,7 +24,7 @@ func worker(
 		}
 		mu.Lock()
 		if len(*result) < maxResults {
-			*result = append(*result, model.DNSRecordResult{FQDN: domain, IPList: ips})
+			*result = append(*result, model.DNSRecord{FQDN: domain, IPList: ips})
 		}
 		mu.Unlock()
 		if len(*result) >= maxResults {

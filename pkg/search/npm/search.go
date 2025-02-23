@@ -9,15 +9,15 @@ import (
 )
 
 // SearchByScrape searches for NPM packages by scraping www.npmjs.com.
-func SearchByScrape(name string, max int) ([]model.NPMPackageResult, error) {
+func SearchByScrape(name string, max int) ([]model.NPMPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 	pipeline := util.NewDocumentPipeline(client, Listing(name))
 	doc, err := pipeline.Execute()
 	if err != nil {
-		return []model.NPMPackageResult{}, err
+		return []model.NPMPackage{}, err
 	}
 
-	result := []model.NPMPackageResult{}
+	result := []model.NPMPackage{}
 
 	worker(doc, &result, max)
 

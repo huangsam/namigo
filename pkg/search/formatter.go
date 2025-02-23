@@ -25,11 +25,11 @@ type Formatter interface {
 	Label() string
 }
 
-// GoFormatter formats Go package results.
+// GoFormatter formats Go package.
 type GoFormatter struct{}
 
 func (f *GoFormatter) Result(result any) string {
-	res := result.(model.GoPackageResult)
+	res := result.(model.GoPackage)
 	desc := res.Description
 	if len(desc) > MaxLineLength {
 		desc = fmt.Sprintf("%.80s...", desc)
@@ -41,11 +41,11 @@ func (f *GoFormatter) Label() string {
 	return GolangLabel
 }
 
-// NPMFormatter formats NPM package results.
+// NPMFormatter formats NPM package.
 type NPMFormatter struct{}
 
 func (f *NPMFormatter) Result(result any) string {
-	res := result.(model.NPMPackageResult)
+	res := result.(model.NPMPackage)
 	desc := res.Description
 	if len(desc) > MaxLineLength {
 		desc = fmt.Sprintf("%.80s...", desc)
@@ -57,11 +57,11 @@ func (f *NPMFormatter) Label() string {
 	return NPMLabel
 }
 
-// PyPIFormatter formats PyPI package results.
+// PyPIFormatter formats PyPI package.
 type PyPIFormatter struct{}
 
 func (f *PyPIFormatter) Result(result any) string {
-	res := result.(model.PyPIPackageResult)
+	res := result.(model.PyPIPackage)
 	desc := res.Description
 	if len(desc) > MaxLineLength {
 		desc = fmt.Sprintf("%.80s...", desc)
@@ -73,11 +73,11 @@ func (f *PyPIFormatter) Label() string {
 	return PyPILabel
 }
 
-// DNSFormatter formats DNS results.
+// DNSFormatter formats DNS record.
 type DNSFormatter struct{}
 
 func (f *DNSFormatter) Result(result any) string {
-	res := result.(model.DNSRecordResult)
+	res := result.(model.DNSRecord)
 	var desc string
 	if len(res.IPList) > MaxIPLength {
 		desc = fmt.Sprintf("The first %d IPs are %v", MaxIPLength, res.IPList[0:3])

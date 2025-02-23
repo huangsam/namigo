@@ -15,10 +15,10 @@ var (
 // Portfolio has entity helpers and task helpers.
 type Portfolio struct {
 	Results struct {
-		Golang []model.GoPackageResult
-		NPM    []model.NPMPackageResult
-		PyPI   []model.PyPIPackageResult
-		DNS    []model.DNSRecordResult
+		Golang []model.GoPackage
+		NPM    []model.NPMPackage
+		PyPI   []model.PyPIPackage
+		DNS    []model.DNSRecord
 	}
 	Errs struct {
 		Golang error
