@@ -16,7 +16,7 @@ func RESTAPIQuery(c *http.Client, builder RequestBuilder) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if res.StatusCode >= 300 {
+	if res.StatusCode >= http.StatusBadRequest {
 		return nil, errors.New("Bad status: " + res.Status)
 	}
 	defer res.Body.Close()
