@@ -22,7 +22,7 @@ func TestPortfolioErrors(t *testing.T) {
 		{
 			name: "Golang error",
 			portfolio: search.Portfolio{
-				Errs: search.PortfolioErrors{
+				Err: search.PortfolioErrors{
 					Golang: errors.New("golang error"),
 				},
 			},
@@ -31,7 +31,7 @@ func TestPortfolioErrors(t *testing.T) {
 		{
 			name: "NPM error",
 			portfolio: search.Portfolio{
-				Errs: search.PortfolioErrors{
+				Err: search.PortfolioErrors{
 					NPM: errors.New("npm error"),
 				},
 			},
@@ -40,7 +40,7 @@ func TestPortfolioErrors(t *testing.T) {
 		{
 			name: "PyPI error",
 			portfolio: search.Portfolio{
-				Errs: search.PortfolioErrors{
+				Err: search.PortfolioErrors{
 					PyPI: errors.New("pypi error"),
 				},
 			},
@@ -49,7 +49,7 @@ func TestPortfolioErrors(t *testing.T) {
 		{
 			name: "DNS error",
 			portfolio: search.Portfolio{
-				Errs: search.PortfolioErrors{
+				Err: search.PortfolioErrors{
 					DNS: errors.New("dns error"),
 				},
 			},
@@ -58,7 +58,7 @@ func TestPortfolioErrors(t *testing.T) {
 		{
 			name: "Multiple errors",
 			portfolio: search.Portfolio{
-				Errs: search.PortfolioErrors{
+				Err: search.PortfolioErrors{
 					Golang: errors.New("golang error"),
 					NPM:    errors.New("npm error"),
 					PyPI:   errors.New("pypi error"),
@@ -75,7 +75,7 @@ func TestPortfolioErrors(t *testing.T) {
 		{
 			name: "No errors with results",
 			portfolio: search.Portfolio{
-				Results: search.PortfolioResults{
+				Res: search.PortfolioResults{
 					Golang: []model.GoPackage{
 						{}, {}, {}, // Some fake results
 					},

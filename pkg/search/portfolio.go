@@ -8,10 +8,10 @@ import (
 
 // Portfolio has entity helpers and task helpers.
 type Portfolio struct {
-	Results PortfolioResults
-	Errs    PortfolioErrors
-	Formats PortfolioFormatters
-	wg      *sync.WaitGroup
+	Res PortfolioResults
+	Err PortfolioErrors
+	Fmt PortfolioFormatters
+	wg  *sync.WaitGroup
 }
 
 type PortfolioResults struct {
@@ -42,10 +42,10 @@ func NewPortfolio() *Portfolio {
 
 // Size returns the number of results collected.
 func (p *Portfolio) Size() int {
-	return (len(p.Results.NPM) +
-		len(p.Results.Golang) +
-		len(p.Results.PyPI) +
-		len(p.Results.DNS))
+	return (len(p.Res.NPM) +
+		len(p.Res.Golang) +
+		len(p.Res.PyPI) +
+		len(p.Res.DNS))
 }
 
 // Run invokes a goroutine and increments internal WaitGroup counter.
@@ -67,17 +67,17 @@ func (p *Portfolio) Wait() {
 // Errors returns all errors found.
 func (p *Portfolio) Errors() []error {
 	errs := []error{}
-	if p.Errs.Golang != nil {
-		errs = append(errs, p.Errs.Golang)
+	if p.Err.Golang != nil {
+		errs = append(errs, p.Err.Golang)
 	}
-	if p.Errs.NPM != nil {
-		errs = append(errs, p.Errs.NPM)
+	if p.Err.NPM != nil {
+		errs = append(errs, p.Err.NPM)
 	}
-	if p.Errs.PyPI != nil {
-		errs = append(errs, p.Errs.PyPI)
+	if p.Err.PyPI != nil {
+		errs = append(errs, p.Err.PyPI)
 	}
-	if p.Errs.DNS != nil {
-		errs = append(errs, p.Errs.DNS)
+	if p.Err.DNS != nil {
+		errs = append(errs, p.Err.DNS)
 	}
 	return errs
 }

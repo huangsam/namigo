@@ -16,7 +16,7 @@ const (
 	MaxIPLength   = 3  // Maximum IP length
 )
 
-// Formatter is an interface for formatting different types of results.
+// Formatter is an interface to format results for different labels.
 type Formatter interface {
 	// FormatResult formats a single result.
 	FormatResult(result any) string

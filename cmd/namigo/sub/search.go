@@ -27,37 +27,37 @@ func SearchPackageAction(c *cli.Context) error {
 		return ErrMissingSearchTerm
 	}
 	maxResults := c.Int("max")
-	outputMode := model.GetOutputMode(c.String("mode"))
+	outputFormat := model.GetOutputFormat(c.String("format"))
 
 	ptf := search.NewPortfolio()
 
 	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
-		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.Golang.Label())
+		fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.Golang.Label())
 		if searchResults, err := golang.SearchByScrape(searchTerm, maxResults); err == nil {
-			ptf.Results.Golang = searchResults
+			ptf.Res.Golang = searchResults
 		} else {
-			ptf.Errs.Golang = err
+			ptf.Err.Golang = err
 		}
 	})
 
 	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
-		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.NPM.Label())
+		fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.NPM.Label())
 		if searchResults, err := npm.SearchByAPI(searchTerm, maxResults); err == nil {
-			ptf.Results.NPM = searchResults
+			ptf.Res.NPM = searchResults
 		} else {
-			ptf.Errs.NPM = err
+			ptf.Err.NPM = err
 		}
 	})
 
 	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
-		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.PyPI.Label())
+		fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.PyPI.Label())
 		if searchResults, err := pypi.SearchByAPI(searchTerm, maxResults); err == nil {
-			ptf.Results.PyPI = searchResults
+			ptf.Res.PyPI = searchResults
 		} else {
-			ptf.Errs.PyPI = err
+			ptf.Err.PyPI = err
 		}
 	})
 
@@ -71,12 +71,12 @@ func SearchPackageAction(c *cli.Context) error {
 		return ErrPorftolioEmpty
 	}
 
-	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
+	fmt.Printf("🍺 Prepare %s results\n\n", outputFormat)
 	time.Sleep(500 * time.Millisecond)
 
-	displayResults(ptf.Results.Golang, &ptf.Formats.Golang, outputMode)
-	displayResults(ptf.Results.NPM, &ptf.Formats.NPM, outputMode)
-	displayResults(ptf.Results.PyPI, &ptf.Formats.PyPI, outputMode)
+	displayResults(ptf.Res.Golang, &ptf.Fmt.Golang, outputFormat)
+	displayResults(ptf.Res.NPM, &ptf.Fmt.NPM, outputFormat)
+	displayResults(ptf.Res.PyPI, &ptf.Fmt.PyPI, outputFormat)
 
 	return nil
 }
@@ -88,17 +88,17 @@ func SearchDNSAction(c *cli.Context) error {
 		return ErrMissingSearchTerm
 	}
 	maxResults := c.Int("max")
-	outputMode := model.GetOutputMode(c.String("mode"))
+	outputFormat := model.GetOutputFormat(c.String("format"))
 
 	ptf := search.NewPortfolio()
 
 	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
-		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.DNS.Label())
+		fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.DNS.Label())
 		if probeResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
-			ptf.Results.DNS = probeResults
+			ptf.Res.DNS = probeResults
 		} else {
-			ptf.Errs.DNS = err
+			ptf.Err.DNS = err
 		}
 	})
 
@@ -112,9 +112,9 @@ func SearchDNSAction(c *cli.Context) error {
 		return ErrPorftolioEmpty
 	}
 
-	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
+	fmt.Printf("🍺 Prepare %s results\n\n", outputFormat)
 	time.Sleep(500 * time.Millisecond)
 
-	displayResults(ptf.Results.DNS, &ptf.Formats.DNS, outputMode)
+	displayResults(ptf.Res.DNS, &ptf.Fmt.DNS, outputFormat)
 	return nil
 }

@@ -23,8 +23,8 @@ func main() {
 						Value: 10,
 					},
 					&cli.StringFlag{
-						Name:  "mode",
-						Usage: "Output mode: text/json",
+						Name:  "format",
+						Usage: "Output format: text/json",
 						Value: "text",
 					},
 				},
