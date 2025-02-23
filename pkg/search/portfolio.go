@@ -14,25 +14,31 @@ var (
 
 // Portfolio has entity helpers and task helpers.
 type Portfolio struct {
-	Results struct {
-		Golang []model.GoPackage
-		NPM    []model.NPMPackage
-		PyPI   []model.PyPIPackage
-		DNS    []model.DNSRecord
-	}
-	Errs struct {
-		Golang error
-		NPM    error
-		PyPI   error
-		DNS    error
-	}
-	Formats struct {
-		Golang GoFormatter
-		NPM    NPMFormatter
-		PyPI   PyPIFormatter
-		DNS    DNSFormatter
-	}
-	wg *sync.WaitGroup
+	Results PortfolioResults
+	Errs    PortfolioErrors
+	Formats PortfolioFormatters
+	wg      *sync.WaitGroup
+}
+
+type PortfolioResults struct {
+	Golang []model.GoPackage
+	NPM    []model.NPMPackage
+	PyPI   []model.PyPIPackage
+	DNS    []model.DNSRecord
+}
+
+type PortfolioErrors struct {
+	Golang error
+	NPM    error
+	PyPI   error
+	DNS    error
+}
+
+type PortfolioFormatters struct {
+	Golang GoFormatter
+	NPM    NPMFormatter
+	PyPI   PyPIFormatter
+	DNS    DNSFormatter
 }
 
 // NewPortfolio creates a new portfolio instance.
@@ -67,9 +73,6 @@ func (p *Portfolio) Wait() {
 // Errors returns all errors found.
 func (p *Portfolio) Errors() []error {
 	errs := []error{}
-	if p.Size() == 0 {
-		errs = append(errs, ErrPorftolioEmpty)
-	}
 	if p.Errs.Golang != nil {
 		errs = append(errs, p.Errs.Golang)
 	}

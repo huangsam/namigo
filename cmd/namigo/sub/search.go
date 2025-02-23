@@ -63,6 +63,8 @@ func SearchPackageAction(c *cli.Context) error {
 			fmt.Printf("💀 Error: %s\n", err)
 		}
 		return search.ErrPorftolioFailure
+	} else if ptf.Size() == 0 {
+		return search.ErrPorftolioEmpty
 	}
 
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
@@ -102,6 +104,8 @@ func SearchDNSAction(c *cli.Context) error {
 			fmt.Printf("💀 Error: %s\n", err)
 		}
 		return search.ErrPorftolioFailure
+	} else if ptf.Size() == 0 {
+		return search.ErrPorftolioEmpty
 	}
 
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
