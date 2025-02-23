@@ -13,25 +13,25 @@ func displayResults(results any, formatter search.Formatter, mode model.OutputMo
 	switch res := results.(type) {
 	case []model.GoPackage:
 		if len(res) > 0 {
-			displayResultsByTypeMode(res, formatter, mode)
+			displayResultsHelper(res, formatter, mode)
 		}
 	case []model.NPMPackage:
 		if len(res) > 0 {
-			displayResultsByTypeMode(res, formatter, mode)
+			displayResultsHelper(res, formatter, mode)
 		}
 	case []model.PyPIPackage:
 		if len(res) > 0 {
-			displayResultsByTypeMode(res, formatter, mode)
+			displayResultsHelper(res, formatter, mode)
 		}
 	case []model.DNSRecord:
 		if len(res) > 0 {
-			displayResultsByTypeMode(res, formatter, mode)
+			displayResultsHelper(res, formatter, mode)
 		}
 	}
 }
 
-// displayResultsByTypeMode prints results by data type and output mode.
-func displayResultsByTypeMode[T any](results []T, formatter search.Formatter, mode model.OutputMode) {
+// displayResultsHelper prints results by data type and output mode.
+func displayResultsHelper[T any](results []T, formatter search.Formatter, mode model.OutputMode) {
 	switch mode {
 	case model.JSONMode:
 		type wrapper struct {
