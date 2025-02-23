@@ -15,7 +15,7 @@ func worker(doc *goquery.Document, result *[]model.GoPackageResult, maxResults i
 		}
 
 		content := strings.Fields(section.Find("h2").Text())
-		pkg, path := content[0], content[1]
+		pkg, path := content[0], strings.Trim(content[1], "()")
 		if !strings.Contains(pkg, name) && !strings.Contains(path, name) {
 			return
 		}
