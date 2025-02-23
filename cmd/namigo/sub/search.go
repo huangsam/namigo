@@ -40,7 +40,7 @@ func SearchPackageAction(c *cli.Context) error {
 	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
 		fmt.Printf("🔍 Search for %s results\n", ptf.Formats.NPM.Label())
-		if searchResults, err := npm.SearchByScrape(searchTerm, maxResults); err == nil {
+		if searchResults, err := npm.SearchByAPI(searchTerm, maxResults); err == nil {
 			ptf.Results.NPM = searchResults
 		} else {
 			ptf.Errs.NPM = err
