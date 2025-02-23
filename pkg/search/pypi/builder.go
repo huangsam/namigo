@@ -7,7 +7,7 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
-// PypiListingResponse represents the response from the PyPI simple API.
+// PypiListingResponse represents listing info from the PyPI API.
 type PypiListingResponse struct {
 	Meta struct {
 		LastSerial int    `json:"_last-serial"`
@@ -19,7 +19,7 @@ type PypiListingResponse struct {
 	} `json:"projects"`
 }
 
-// PypiDetailResponse represents the response from the PyPI json API.
+// PypiDetailResponse represents detailed info from the PyPI API.
 type PypiDetailResponse struct {
 	Info struct {
 		Author      string `json:"author"`
@@ -29,7 +29,7 @@ type PypiDetailResponse struct {
 	}
 }
 
-// listing builds the request for PyPI list view.
+// listing builds a request for PyPI list view.
 func listing() util.RequestBuilder {
 	return func() (*http.Request, error) {
 		url := url.URL{
@@ -46,7 +46,7 @@ func listing() util.RequestBuilder {
 	}
 }
 
-// detail builds the request for PyPI detail view.
+// detail builds a request for PyPI detail view.
 func detail(pkg string) util.RequestBuilder {
 	return func() (*http.Request, error) {
 		url := url.URL{
