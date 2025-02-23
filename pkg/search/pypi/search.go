@@ -45,7 +45,7 @@ func SearchByAPI(name string, max int) ([]model.PyPIPackage, error) {
 
 	for i := 0; i < goroutineCount; i++ {
 		wg.Add(1)
-		go worker(client, taskChan, &wg, &mu, &result, &errorCount, max)
+		go apiWorker(client, taskChan, &wg, &mu, &result, &errorCount, max)
 	}
 
 	wg.Wait()

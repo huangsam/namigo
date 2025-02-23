@@ -7,8 +7,8 @@ import (
 	"github.com/huangsam/namigo/internal/model"
 )
 
-// worker runs concurrent logic for DNS search.
-func worker(
+// netWorker runs concurrent logic for DNS search.
+func netWorker(
 	domainChan chan string,
 	wg *sync.WaitGroup,
 	mu *sync.Mutex,

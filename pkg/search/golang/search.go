@@ -19,7 +19,7 @@ func SearchByScrape(name string, max int) ([]model.GoPackage, error) {
 
 	result := []model.GoPackage{}
 
-	worker(doc, &result, max, name)
+	docWorker(doc, &result, max, name)
 
 	return result, nil
 }

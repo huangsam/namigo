@@ -26,7 +26,7 @@ func SearchByProbe(name string, max int) ([]model.DNSRecord, error) {
 
 	for i := 0; i < 4; i++ {
 		wg.Add(1)
-		go worker(domainChan, &wg, &mu, &result, &errorCount, max)
+		go netWorker(domainChan, &wg, &mu, &result, &errorCount, max)
 	}
 
 	wg.Wait()

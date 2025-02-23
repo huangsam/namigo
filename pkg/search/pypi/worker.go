@@ -9,8 +9,8 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
-// worker runs concurrent logic for PyPI search.
-func worker(
+// apiWorker runs concurrent logic for PyPI search.
+func apiWorker(
 	client *http.Client,
 	taskChan chan string,
 	wg *sync.WaitGroup,

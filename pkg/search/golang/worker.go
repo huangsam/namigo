@@ -7,8 +7,8 @@ import (
 	"github.com/huangsam/namigo/internal/model"
 )
 
-// worker runs serial logic for Golang search.
-func worker(doc *goquery.Document, result *[]model.GoPackage, maxResults int, name string) {
+// docWorker runs serial logic for Golang search.
+func docWorker(doc *goquery.Document, result *[]model.GoPackage, maxResults int, name string) {
 	doc.Find(".SearchSnippet").Each(func(i int, section *goquery.Selection) {
 		if len(*result) >= maxResults {
 			return

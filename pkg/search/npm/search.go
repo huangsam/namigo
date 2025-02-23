@@ -19,7 +19,7 @@ func SearchByScrape(name string, max int) ([]model.NPMPackage, error) {
 
 	result := []model.NPMPackage{}
 
-	worker(doc, &result, max)
+	docWorker(doc, &result, max)
 
 	return result, nil
 }

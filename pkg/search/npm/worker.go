@@ -7,8 +7,8 @@ import (
 	"github.com/huangsam/namigo/internal/model"
 )
 
-// worker runs serial logic for NPM search.
-func worker(doc *goquery.Document, result *[]model.NPMPackage, maxResults int) {
+// docWorker runs serial logic for NPM search.
+func docWorker(doc *goquery.Document, result *[]model.NPMPackage, maxResults int) {
 	doc.Find("main section").Each(func(i int, section *goquery.Selection) {
 		if len(*result) >= maxResults {
 			return
