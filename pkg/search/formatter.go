@@ -80,7 +80,7 @@ func (f *DNSFormatter) FormatResult(result any) string {
 	res := result.(model.DNSRecord)
 	var desc string
 	if len(res.IPList) > MaxIPLength {
-		desc = fmt.Sprintf("The first %d IPs are %v", MaxIPLength, res.IPList[0:3])
+		desc = fmt.Sprintf("The first %d IPs are %v", MaxIPLength, res.IPList[:3])
 	} else {
 		desc = fmt.Sprintf("The IPs are %v", res.IPList)
 	}
