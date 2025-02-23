@@ -1,15 +1,9 @@
 package search
 
 import (
-	"errors"
 	"sync"
 
 	"github.com/huangsam/namigo/internal/model"
-)
-
-var (
-	ErrPorftolioEmpty   = errors.New("portfolio collection empty")
-	ErrPorftolioFailure = errors.New("portfolio collection failure")
 )
 
 // Portfolio has entity helpers and task helpers.

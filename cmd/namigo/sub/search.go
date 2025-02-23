@@ -14,7 +14,11 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var ErrMissingSearchTerm = errors.New("missing search term")
+var (
+	ErrMissingSearchTerm = errors.New("missing search term")
+	ErrPorftolioEmpty    = errors.New("portfolio collection empty")
+	ErrPorftolioFailure  = errors.New("portfolio collection failure")
+)
 
 // SearchPackageAction searches for packages.
 func SearchPackageAction(c *cli.Context) error {
@@ -62,9 +66,9 @@ func SearchPackageAction(c *cli.Context) error {
 		for _, err := range errs {
 			fmt.Printf("💀 Error: %s\n", err)
 		}
-		return search.ErrPorftolioFailure
+		return ErrPorftolioFailure
 	} else if ptf.Size() == 0 {
-		return search.ErrPorftolioEmpty
+		return ErrPorftolioEmpty
 	}
 
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
@@ -103,9 +107,9 @@ func SearchDNSAction(c *cli.Context) error {
 		for _, err := range errs {
 			fmt.Printf("💀 Error: %s\n", err)
 		}
-		return search.ErrPorftolioFailure
+		return ErrPorftolioFailure
 	} else if ptf.Size() == 0 {
-		return search.ErrPorftolioEmpty
+		return ErrPorftolioEmpty
 	}
 
 	fmt.Printf("🍺 Prepare %s results\n\n", outputMode)
