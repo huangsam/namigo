@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/internal/model/extern"
 	"github.com/huangsam/namigo/internal/util"
 )
 
@@ -33,7 +34,7 @@ func SearchByAPI(name string, max int) ([]model.NPMPackage, error) {
 		return []model.NPMPackage{}, err
 	}
 
-	var listingRes NPMAPIListingResponse
+	var listingRes extern.NPMAPIListingResponse
 	if err := json.Unmarshal(bl, &listingRes); err != nil {
 		return []model.NPMPackage{}, err
 	}

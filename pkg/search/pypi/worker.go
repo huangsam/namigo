@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/internal/model/extern"
 	"github.com/huangsam/namigo/internal/util"
 )
 
@@ -26,7 +27,7 @@ func apiWorker(
 			*errorCount++
 			continue
 		}
-		var detailRes PyPIAPIDetailResponse
+		var detailRes extern.PyPIAPIDetailResponse
 		if err := json.Unmarshal(bd, &detailRes); err != nil {
 			*errorCount++
 			continue

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/internal/model/extern"
 	"github.com/huangsam/namigo/internal/util"
 )
 
@@ -23,7 +24,7 @@ func SearchByAPI(name string, max int) ([]model.PyPIPackage, error) {
 		return []model.PyPIPackage{}, err
 	}
 
-	var listingRes PyPIAPIListingResponse
+	var listingRes extern.PyPIAPIListingResponse
 	if err := json.Unmarshal(bl, &listingRes); err != nil {
 		return []model.PyPIPackage{}, err
 	}

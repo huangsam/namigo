@@ -5,6 +5,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/internal/model/extern"
 )
 
 // docWorker runs serial logic for NPM search.
@@ -34,7 +35,7 @@ func docWorker(doc *goquery.Document, result *[]model.NPMPackage, maxResults int
 }
 
 // apiWorker runs serial logic for NPM query.
-func apiWorker(listingRes *NPMAPIListingResponse, name string) ([]model.NPMPackage, error) {
+func apiWorker(listingRes *extern.NPMAPIListingResponse, name string) ([]model.NPMPackage, error) {
 	res := []model.NPMPackage{}
 	for _, object := range listingRes.Objects {
 		pkg := object.Package.Name
