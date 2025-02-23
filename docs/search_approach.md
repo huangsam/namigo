@@ -1,4 +1,4 @@
-# Search Approach
+# Search approach
 
 This document outlines a methodology for searching and discovering information
 related to online presence and software package availability.
