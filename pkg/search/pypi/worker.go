@@ -39,7 +39,7 @@ func worker(
 		if len(author) == 0 {
 			author = model.NoAuthor
 		}
-		mu.Lock()
+		mu.Lock() // Critical section
 		if len(*result) < maxResults {
 			*result = append(*result, model.PyPIPackage{Name: pkg, Description: description, Author: author})
 		}

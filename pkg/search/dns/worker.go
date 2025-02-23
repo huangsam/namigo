@@ -22,7 +22,7 @@ func worker(
 		if err != nil {
 			*errorCount++
 		}
-		mu.Lock()
+		mu.Lock() // Critical section
 		if len(*result) < maxResults {
 			*result = append(*result, model.DNSRecord{FQDN: domain, IPList: ips})
 		}
