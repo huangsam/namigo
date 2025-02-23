@@ -3,8 +3,8 @@ package model
 import "net"
 
 const (
-	NoAuthor      = "No author"
-	NoDescription = "No description"
+	NoAuthor      = "No author"      // Fallback for author
+	NoDescription = "No description" // Fallback for description
 )
 
 type GoPackageResult struct {
