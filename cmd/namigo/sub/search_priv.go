@@ -23,7 +23,7 @@ func displayResults(results any, formatter search.Formatter, mode model.OutputMo
 		if len(res) > 0 {
 			displayResultsByTypeMode(res, formatter, mode)
 		}
-	case []model.DNSResult:
+	case []model.DNSRecordResult:
 		if len(res) > 0 {
 			displayResultsByTypeMode(res, formatter, mode)
 		}

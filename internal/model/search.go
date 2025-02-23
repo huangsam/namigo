@@ -25,7 +25,7 @@ type PyPIPackageResult struct {
 	Author      string // Package author
 }
 
-type DNSResult struct {
+type DNSRecordResult struct {
 	FQDN   string   // Fully qualified domain name
 	IPList []net.IP // Associated IP addresses
 }

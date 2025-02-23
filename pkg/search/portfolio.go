@@ -18,7 +18,7 @@ type Portfolio struct {
 		Golang []model.GoPackageResult
 		NPM    []model.NPMPackageResult
 		PyPI   []model.PyPIPackageResult
-		DNS    []model.DNSResult
+		DNS    []model.DNSRecordResult
 	}
 	Errs struct {
 		Golang error

@@ -36,7 +36,7 @@ func main() {
 					},
 					{
 						Name:   "dns",
-						Usage:  "Search for DNS",
+						Usage:  "Search for DNS records",
 						Action: sub.SearchDNSAction,
 					},
 				},

@@ -77,7 +77,7 @@ func (f *PyPIFormatter) Label() string {
 type DNSFormatter struct{}
 
 func (f *DNSFormatter) Result(result any) string {
-	res := result.(model.DNSResult)
+	res := result.(model.DNSRecordResult)
 	var desc string
 	if len(res.IPList) > MaxIPLength {
 		desc = fmt.Sprintf("The first %d IPs are %v", MaxIPLength, res.IPList[0:3])
