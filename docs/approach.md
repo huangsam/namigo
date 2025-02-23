@@ -1,5 +1,10 @@
 # Data Approach
 
+This document outlines a data gathering and analysis approach for investigating
+online presence and software package information. It covers DNS, email address
+verification, and software package metadata from popular repositories for
+Go, JavaScript, Python, Rust, and Java.
+
 ## DNS
 
 - **`dig`:**
