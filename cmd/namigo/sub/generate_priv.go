@@ -24,7 +24,7 @@ func getInput(c *cli.Context, flag, prompt string) (string, error) {
 
 // getInputHelper prompts the user for input.
 func getInputHelper(prompt string) string {
-	fmt.Print(prompt)
+	fmt.Printf("%s: ", prompt)
 	reader := bufio.NewReader(os.Stdin)
 	response, err := reader.ReadString('\n')
 	if err != nil {

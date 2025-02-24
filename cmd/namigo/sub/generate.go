@@ -18,19 +18,19 @@ type PromptData struct {
 
 // GeneratePromptAction generates a prompt for AI chatbots.
 func GeneratePromptAction(c *cli.Context) error {
-	purpose, err := getInput(c, "purpose", "👋 Enter project purpose: ")
+	purpose, err := getInput(c, "purpose", "👋 Enter project purpose")
 	if err != nil {
 		return err
 	}
-	theme, err := getInput(c, "theme", "👋 Enter project theme: ")
+	theme, err := getInput(c, "theme", "👋 Enter project theme")
 	if err != nil {
 		return err
 	}
-	demographics, err := getInput(c, "demographics", "👋 Enter target demographics: ")
+	demographics, err := getInput(c, "demographics", "👋 Enter target demographics")
 	if err != nil {
 		return err
 	}
-	interests, err := getInput(c, "interests", "👋 Enter target interests: ")
+	interests, err := getInput(c, "interests", "👋 Enter target interests")
 	if err != nil {
 		return err
 	}
