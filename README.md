@@ -45,20 +45,23 @@ bash scripts/lint.sh
 ### Running binary
 
 ```shell
+# Install binary
+go install github.com/huangsam/namigo/cmd/namigo@latest
+
 # Get help
-./bin/namigo help
+namigo help
 
 # Generate a prompt to get names from AI
-./bin/namigo generate prompt
+namigo generate prompt
 
 # Search for package matches
-./bin/namigo search package 'hello'
+namigo search package 'hello'
 
 # Search for DNS matches
-./bin/namigo search dns 'hello'
+namigo search dns 'hello'
 
 # Search for email matches
-./bin/namigo search email 'hello'
+namigo search email 'hello'
 ```
 
 ## Code structure
