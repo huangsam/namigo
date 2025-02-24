@@ -18,9 +18,9 @@ on building.
 
 ## Design docs
 
-[Click here](docs/generate_approach.md) to learn more about the generate implementation.
+[Click here](docs/generate_approach.md) to learn about the `generate` implementation.
 
-[Click here](docs/search_approach.md) to learn more about the search implementation.
+[Click here](docs/search_approach.md) to learn about the `search` implementation.
 
 ## Getting started
 
