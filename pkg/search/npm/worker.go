@@ -22,7 +22,7 @@ func docWorker(doc *goquery.Document, maxResults int) []model.NPMPackage {
 		if len(description) == 0 {
 			description = model.NoDescription
 		} else {
-			description = strings.Trim(description, " \n\t")
+			description = strings.TrimSpace(description)
 		}
 
 		result = append(result, model.NPMPackage{Name: pkg, Description: description})
@@ -40,7 +40,7 @@ func apiWorker(listRes *extern.NPMAPIListResponse) ([]model.NPMPackage, error) {
 		if len(description) == 0 {
 			description = model.NoDescription
 		} else {
-			description = strings.Trim(description, " \n\t")
+			description = strings.TrimSpace(description)
 		}
 
 		result = append(result, model.NPMPackage{Name: pkg, Description: description})

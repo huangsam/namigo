@@ -21,7 +21,7 @@ func docWorker(doc *goquery.Document, maxResults int, name string) []model.GoPac
 			return
 		}
 
-		description := strings.Trim(section.Find("p").Text(), " \n")
+		description := strings.TrimSpace(section.Find("p").Text())
 		if len(description) == 0 {
 			description = model.NoDescription
 		}
