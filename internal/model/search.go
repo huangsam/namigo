@@ -14,15 +14,14 @@ type GoPackage struct {
 }
 
 type NPMPackage struct {
-	Name         string // Package name
-	Description  string // Package description
-	IsExactMatch bool   // Package is exact match
+	Name        string // Package name
+	Description string // Package description
 }
 
 type PyPIPackage struct {
 	Name        string // Package name
-	Description string // Package description
 	Author      string // Package author
+	Description string // Package description
 }
 
 type DNSRecord struct {

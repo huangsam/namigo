@@ -24,11 +24,10 @@ func TestGoFormatter_Format(t *testing.T) {
 func TestNPMFormatter_Format(t *testing.T) {
 	formatter := &search.NPMFormatter{}
 	result := model.NPMPackage{
-		Name:         "example-npm-package",
-		IsExactMatch: true,
-		Description:  "This is an example NPM package used for testing purposes.",
+		Name:        "example-npm-package",
+		Description: "This is an example NPM package used for testing purposes.",
 	}
-	expected := "📦 [NPM] example-npm-package [exact=true] ->\n\tThis is an example NPM package used for testing purposes."
+	expected := "📦 [NPM] example-npm-package ->\n\tThis is an example NPM package used for testing purposes."
 	if got := formatter.Format(result); got != expected {
 		t.Errorf("NPMFormatter.Format() = %v, want %v", got, expected)
 	}

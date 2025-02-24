@@ -51,7 +51,7 @@ func (f *NPMFormatter) Format(result any) string {
 	if len(desc) > MaxLineLength {
 		desc = fmt.Sprintf("%.80s...", desc)
 	}
-	return fmt.Sprintf("📦 [%s] %s [exact=%v] ->\n\t%s", f.Label(), res.Name, res.IsExactMatch, desc)
+	return fmt.Sprintf("📦 [%s] %s ->\n\t%s", f.Label(), res.Name, desc)
 }
 
 func (f *NPMFormatter) Label() string {

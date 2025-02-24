@@ -37,5 +37,5 @@ func SearchByAPI(name string, max int) ([]model.NPMPackage, error) {
 		return []model.NPMPackage{}, err
 	}
 
-	return apiWorker(&listRes, name)
+	return apiWorker(&listRes)
 }

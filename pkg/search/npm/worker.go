@@ -17,8 +17,6 @@ func docWorker(doc *goquery.Document, result *[]model.NPMPackage, maxResults int
 
 		pkg := section.Find("h3").Text()
 
-		match := section.Find("span#pkg-list-exact-match").Text()
-
 		description := section.Find("p").Text()
 		if len(description) == 0 {
 			description = model.NoDescription
@@ -27,15 +25,14 @@ func docWorker(doc *goquery.Document, result *[]model.NPMPackage, maxResults int
 		}
 
 		*result = append(*result, model.NPMPackage{
-			Name:         pkg,
-			Description:  description,
-			IsExactMatch: len(match) > 0,
+			Name:        pkg,
+			Description: description,
 		})
 	})
 }
 
 // apiWorker runs serial logic for NPM search.
-func apiWorker(listRes *extern.NPMAPIListResponse, name string) ([]model.NPMPackage, error) {
+func apiWorker(listRes *extern.NPMAPIListResponse) ([]model.NPMPackage, error) {
 	res := []model.NPMPackage{}
 	for _, object := range listRes.Objects {
 		pkg := object.Package.Name
@@ -48,9 +45,8 @@ func apiWorker(listRes *extern.NPMAPIListResponse, name string) ([]model.NPMPack
 		}
 
 		res = append(res, model.NPMPackage{
-			Name:         pkg,
-			Description:  description,
-			IsExactMatch: pkg == name,
+			Name:        pkg,
+			Description: description,
 		})
 	}
 	return res, nil
