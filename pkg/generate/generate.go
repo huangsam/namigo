@@ -4,13 +4,11 @@ package generate
 import (
 	"strings"
 	"text/template"
-
-	"github.com/huangsam/namigo/internal/model"
 )
 
 // GeneratePrompt generates the prompt for AI chatbots to generate names.
 func GeneratePrompt(purpose, demographics, interests, theme string) (string, error) {
-	data := model.PromptData{
+	data := promptData{
 		Purpose:      purpose,
 		Demographics: demographics,
 		Interests:    interests,

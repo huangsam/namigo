@@ -3,6 +3,14 @@ package generate
 // promptName is a name for the template below.
 const promptName = "name_brainstorm_with_json"
 
+// promptData is the input for the prompt template.
+type promptData struct {
+	Purpose      string
+	Demographics string
+	Interests    string
+	Theme        string
+}
+
 // promptTemplate is a Go template for prompting.
 const promptTemplate = `Given the following parameters:
 
