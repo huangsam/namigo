@@ -6,6 +6,12 @@ import (
 	"net/http"
 )
 
+// RequestBuilder builds a HTTP request for client.
+type RequestBuilder func() (*http.Request, error)
+
+// ResponseHandler handles side effects for a response.
+type ResponseHandler func(*http.Response) error
+
 // RESTAPIQuery accesses an API endpoint and returns bytes.
 func RESTAPIQuery(c *http.Client, builder RequestBuilder) ([]byte, error) {
 	req, err := builder()

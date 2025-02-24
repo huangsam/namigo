@@ -6,6 +6,12 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// DocumentGenerator generates a goquery Document.
+type DocumentGenerator interface {
+	// Execute generates the document.
+	Execute() (*goquery.Document, error)
+}
+
 // DocumentPipeline implements the DocumentExecutor interface.
 type DocumentPipeline struct {
 	httpClient       *http.Client      // HTTP client
