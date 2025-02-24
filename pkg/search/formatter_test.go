@@ -16,7 +16,7 @@ func TestGoFormatter_FormatResult(t *testing.T) {
 		Description: "This is an example Go package used for testing purposes.",
 	}
 	expected := "📦 [Golang] example-go-package (github.com/example/go-package) ->\n\tThis is an example Go package used for testing purposes."
-	if got := formatter.FormatResult(result); got != expected {
+	if got := formatter.Format(result); got != expected {
 		t.Errorf("GoFormatter.FormatResult() = %v, want %v", got, expected)
 	}
 }
@@ -29,7 +29,7 @@ func TestNPMFormatter_FormatResult(t *testing.T) {
 		Description:  "This is an example NPM package used for testing purposes.",
 	}
 	expected := "📦 [NPM] example-npm-package [exact=true] ->\n\tThis is an example NPM package used for testing purposes."
-	if got := formatter.FormatResult(result); got != expected {
+	if got := formatter.Format(result); got != expected {
 		t.Errorf("NPMFormatter.FormatResult() = %v, want %v", got, expected)
 	}
 }
@@ -42,7 +42,7 @@ func TestPyPIFormatter_FormatResult(t *testing.T) {
 		Description: "This is an example PyPI package used for testing purposes.",
 	}
 	expected := "📦 [PyPI] example-pypi-package by example-author ->\n\tThis is an example PyPI package used for testing purposes."
-	if got := formatter.FormatResult(result); got != expected {
+	if got := formatter.Format(result); got != expected {
 		t.Errorf("PyPIFormatter.FormatResult() = %v, want %v", got, expected)
 	}
 }
@@ -59,7 +59,7 @@ func TestDNSFormatter_FormatResult(t *testing.T) {
 		},
 	}
 	expected := "🌎 [DNS] example.com w/ 4 IPs ->\n\tThe first 3 IPs are [192.168.1.1 192.168.1.2 192.168.1.3]"
-	if got := formatter.FormatResult(result); got != expected {
+	if got := formatter.Format(result); got != expected {
 		t.Errorf("DNSFormatter.FormatResult() = %v, want %v", got, expected)
 	}
 }
@@ -71,7 +71,7 @@ func TestEmailFormatter_FormatResult(t *testing.T) {
 		HasValidDomain: false,
 	}
 	expected := "📨 [Email] example@example.com ->\n\tvalid-syntax=true, valid-domain=false"
-	if got := formatter.FormatResult(result); got != expected {
+	if got := formatter.Format(result); got != expected {
 		t.Errorf("EmailFormatter.FormatResult() = %v, want %v", got, expected)
 	}
 }

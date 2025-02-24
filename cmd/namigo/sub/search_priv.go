@@ -9,7 +9,7 @@ import (
 )
 
 // displayResults prints results.
-func displayResults(results any, formatter search.Formatter, format model.OutputFormat) {
+func displayResults(results any, formatter search.ResultFormatter, format model.OutputFormat) {
 	switch res := results.(type) {
 	case []model.GoPackage:
 		if len(res) > 0 {
@@ -35,7 +35,7 @@ func displayResults(results any, formatter search.Formatter, format model.Output
 }
 
 // displayResultsHelper prints results by data type and output mode.
-func displayResultsHelper[T any](results []T, formatter search.Formatter, format model.OutputFormat) {
+func displayResultsHelper[T any](results []T, formatter search.ResultFormatter, format model.OutputFormat) {
 	switch format {
 	case model.JSONFormat:
 		type wrapper struct {
@@ -51,7 +51,7 @@ func displayResultsHelper[T any](results []T, formatter search.Formatter, format
 		fmt.Printf("%s\n", data)
 	case model.TextFormat:
 		for _, r := range results {
-			fmt.Println(formatter.FormatResult(r))
+			fmt.Println(formatter.Format(r))
 		}
 	}
 }

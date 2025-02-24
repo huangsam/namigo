@@ -17,10 +17,10 @@ const (
 	MaxIPLength   = 3  // Maximum IP length
 )
 
-// Formatter is an interface to format results for different labels.
-type Formatter interface {
-	// FormatResult formats a single result.
-	FormatResult(result any) string
+// ResultFormatter formats results as strings.
+type ResultFormatter interface {
+	// Format formats a single result.
+	Format(result any) string
 
 	// Label returns the canonical label for an entity.
 	Label() string
@@ -29,7 +29,7 @@ type Formatter interface {
 // GoFormatter formats Go package.
 type GoFormatter struct{}
 
-func (f *GoFormatter) FormatResult(result any) string {
+func (f *GoFormatter) Format(result any) string {
 	res := result.(model.GoPackage)
 	desc := res.Description
 	if len(desc) > MaxLineLength {
@@ -45,7 +45,7 @@ func (f *GoFormatter) Label() string {
 // NPMFormatter formats NPM package.
 type NPMFormatter struct{}
 
-func (f *NPMFormatter) FormatResult(result any) string {
+func (f *NPMFormatter) Format(result any) string {
 	res := result.(model.NPMPackage)
 	desc := res.Description
 	if len(desc) > MaxLineLength {
@@ -61,7 +61,7 @@ func (f *NPMFormatter) Label() string {
 // PyPIFormatter formats PyPI package.
 type PyPIFormatter struct{}
 
-func (f *PyPIFormatter) FormatResult(result any) string {
+func (f *PyPIFormatter) Format(result any) string {
 	res := result.(model.PyPIPackage)
 	desc := res.Description
 	if len(desc) > MaxLineLength {
@@ -77,7 +77,7 @@ func (f *PyPIFormatter) Label() string {
 // DNSFormatter formats DNS record.
 type DNSFormatter struct{}
 
-func (f *DNSFormatter) FormatResult(result any) string {
+func (f *DNSFormatter) Format(result any) string {
 	res := result.(model.DNSRecord)
 	var desc string
 	if len(res.IPList) > MaxIPLength {
@@ -95,7 +95,7 @@ func (f *DNSFormatter) Label() string {
 // EmailFormatter formats Email record.
 type EmailFormatter struct{}
 
-func (f *EmailFormatter) FormatResult(result any) string {
+func (f *EmailFormatter) Format(result any) string {
 	res := result.(model.EmailRecord)
 	return fmt.Sprintf("📨 [%s] %s ->\n\tvalid-syntax=%v, valid-domain=%v", f.Label(), res.Addr, res.HasValidSyntax, res.HasValidDomain)
 }
