@@ -16,7 +16,7 @@ func main() {
 		Commands: []*cli.Command{
 			{ // Lots of goodies to come. Stay tuned!
 				Name:        "generate",
-				Usage:       "Generate names with the power of AI",
+				Usage:       "Generate names with AI",
 				Flags:       []cli.Flag{},
 				Subcommands: []*cli.Command{},
 				Action: func(ctx *cli.Context) error {
