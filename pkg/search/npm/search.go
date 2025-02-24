@@ -19,9 +19,7 @@ func SearchByScrape(name string, max int) ([]model.NPMPackage, error) {
 		return []model.NPMPackage{}, err
 	}
 
-	result := []model.NPMPackage{}
-	docWorker(doc, &result, max)
-	return result, nil
+	return docWorker(doc, max), nil
 }
 
 // SearchByAPI searches for NPM packages by querying registry.npmjs.com.

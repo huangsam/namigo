@@ -8,9 +8,10 @@ import (
 )
 
 // docWorker runs serial logic for Golang search.
-func docWorker(doc *goquery.Document, result *[]model.GoPackage, maxResults int, name string) {
+func docWorker(doc *goquery.Document, maxResults int, name string) []model.GoPackage {
+	result := []model.GoPackage{}
 	doc.Find(".SearchSnippet").Each(func(i int, section *goquery.Selection) {
-		if len(*result) >= maxResults {
+		if len(result) >= maxResults {
 			return
 		}
 
@@ -25,10 +26,11 @@ func docWorker(doc *goquery.Document, result *[]model.GoPackage, maxResults int,
 			description = model.NoDescription
 		}
 
-		*result = append(*result, model.GoPackage{
+		result = append(result, model.GoPackage{
 			Name:        pkg,
 			Path:        path,
 			Description: description,
 		})
 	})
+	return result
 }

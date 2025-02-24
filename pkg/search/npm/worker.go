@@ -9,9 +9,10 @@ import (
 )
 
 // docWorker runs serial logic for NPM search.
-func docWorker(doc *goquery.Document, result *[]model.NPMPackage, maxResults int) {
+func docWorker(doc *goquery.Document, maxResults int) []model.NPMPackage {
+	result := []model.NPMPackage{}
 	doc.Find("main section").Each(func(i int, section *goquery.Selection) {
-		if len(*result) >= maxResults {
+		if len(result) >= maxResults {
 			return
 		}
 
@@ -24,16 +25,14 @@ func docWorker(doc *goquery.Document, result *[]model.NPMPackage, maxResults int
 			description = strings.Trim(description, " \n\t")
 		}
 
-		*result = append(*result, model.NPMPackage{
-			Name:        pkg,
-			Description: description,
-		})
+		result = append(result, model.NPMPackage{Name: pkg, Description: description})
 	})
+	return result
 }
 
 // apiWorker runs serial logic for NPM search.
 func apiWorker(listRes *extern.NPMAPIListResponse) ([]model.NPMPackage, error) {
-	res := []model.NPMPackage{}
+	result := []model.NPMPackage{}
 	for _, object := range listRes.Objects {
 		pkg := object.Package.Name
 
@@ -44,10 +43,7 @@ func apiWorker(listRes *extern.NPMAPIListResponse) ([]model.NPMPackage, error) {
 			description = strings.Trim(description, " \n\t")
 		}
 
-		res = append(res, model.NPMPackage{
-			Name:        pkg,
-			Description: description,
-		})
+		result = append(result, model.NPMPackage{Name: pkg, Description: description})
 	}
-	return res, nil
+	return result, nil
 }
