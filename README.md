@@ -42,6 +42,9 @@ bash scripts/lint.sh
 
 # Search for DNS matches
 ./bin/namigo search dns 'hello'
+
+# Search for email matches
+./bin/namigo search email 'hello'
 ```
 
 ## Code structure
