@@ -11,22 +11,22 @@ import (
 
 // GeneratePromptAction generates a prompt for AI chatbot users.
 func GeneratePromptAction(c *cli.Context) error {
-	purpose, err := getInput(c, "purpose", "👋 Enter the project purpose: ")
+	purpose, err := getInput(c, "purpose", "👋 Enter project purpose: ")
 	if err != nil {
 		return err
 	}
 
-	demographics, err := getInput(c, "demographics", "👋 Enter the audience demographics: ")
+	demographics, err := getInput(c, "demographics", "👋 Enter target demographics: ")
 	if err != nil {
 		return err
 	}
 
-	interests, err := getInput(c, "audience", "👋 Enter the audience interests: ")
+	interests, err := getInput(c, "audience", "👋 Enter target interests: ")
 	if err != nil {
 		return err
 	}
 
-	theme, err := getInput(c, "theme", "👋 Enter the project theme: ")
+	theme, err := getInput(c, "theme", "👋 Enter project theme: ")
 	if err != nil {
 		return err
 	}

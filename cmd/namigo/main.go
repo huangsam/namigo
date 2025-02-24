@@ -27,11 +27,11 @@ func main() {
 							},
 							&cli.StringFlag{
 								Name:  "demographics",
-								Usage: "Target audience demographics",
+								Usage: "Target demographics",
 							},
 							&cli.StringFlag{
 								Name:  "interests",
-								Usage: "Target audience interests",
+								Usage: "Target interests",
 							},
 							&cli.StringFlag{
 								Name:  "theme",
