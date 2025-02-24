@@ -13,14 +13,21 @@ Your naming pal, written in Go 🐶
 
 Finding the right name for projects or packages is often harder than it seems.
 Namigo solves this "naming block" by providing a simple tool to quickly search
-for available names across package repositories and DNS, letting you focus
-on building.
+for available names across package repositories and DNS, letting you focus on
+building. By automating the search process, Namigo saves you time and
+effort, ensuring that you can find the perfect name without the usual hassle.
 
-## Design docs
+Additionally, Namigo can generate new names via AI prompts to chatbots, offering
+creative and unique suggestions. This feature leverages the power of artificial
+intelligence to provide you with a variety of name options that you might not have
+considered. Whether you need a name for a new project, package, or domain, Namigo
+is your go-to naming pal.
 
-[Click here](docs/generate_approach.md) to learn about the `generate` implementation.
+## Design
 
 [Click here](docs/search_approach.md) to learn about the `search` implementation.
+
+[Click here](docs/generate_approach.md) to learn about the `generate` implementation.
 
 ## Getting started
 
