@@ -6,7 +6,7 @@ import (
 	"text/template"
 )
 
-// GeneratePrompt generates the prompt for AI chatbots to generate names.
+// GeneratePrompt generates the prompt for AI chatbots.
 func GeneratePrompt(purpose, demographics, interests, theme string) (string, error) {
 	data := promptData{
 		Purpose:      purpose,
