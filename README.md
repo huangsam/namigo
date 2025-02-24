@@ -7,8 +7,6 @@ Your naming pal, written in Go 🐶
 
 > It's a dog. It's a friend. It's a Namigo!
 
-[Click here](docs/search_approach.md) to learn more about the search implementation.
-
 <img src="./images/namigo.jpeg" alt="Namigo" width="250px" />
 
 ## Motivation
@@ -17,6 +15,12 @@ Finding the right name for projects or packages is often harder than it seems.
 Namigo solves this "naming block" by providing a simple tool to quickly search
 for available names across package repositories and DNS, letting you focus
 on building.
+
+## Design docs
+
+[Click here](docs/generate_approach.md) to learn more about the generate implementation.
+
+[Click here](docs/search_approach.md) to learn more about the search implementation.
 
 ## Getting started
 
