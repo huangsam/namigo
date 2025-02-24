@@ -17,6 +17,12 @@ var (
 )
 
 // SearchByProbe searches for email records via nameserver lookups.
+//
+// Please note that end-to-end email validation would involve APIs with pricing
+// tiers like Abstract does; their free plan limits requests to 1 per second.
+// To learn more:
+//
+// https://docs.abstractapi.com/email-validation
 func SearchByProbe(name string, max int) ([]model.EmailRecord, error) {
 	result := []model.EmailRecord{}
 	for _, domain := range domains {
