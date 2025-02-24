@@ -19,7 +19,7 @@ func main() {
 				Subcommands: []*cli.Command{
 					{
 						Name:  "prompt",
-						Usage: "Generate prompt for AI agents",
+						Usage: "Generate prompt for AI chatbots",
 						Flags: []cli.Flag{
 							&cli.StringFlag{
 								Name:  "purpose",
