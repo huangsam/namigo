@@ -8,14 +8,6 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// PromptData is the input for the prompt template.
-type PromptData struct {
-	Purpose      string
-	Demographics string
-	Interests    string
-	Theme        string
-}
-
 // GeneratePromptAction generates a prompt for AI chatbots.
 func GeneratePromptAction(c *cli.Context) error {
 	purpose, err := getInput(c, "purpose", "👋 Enter project purpose")

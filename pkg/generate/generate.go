@@ -7,7 +7,7 @@ import (
 )
 
 // GeneratePrompt generates the prompt for AI chatbots.
-func GeneratePrompt(purpose, demographics, interests, theme string) (string, error) {
+func GeneratePrompt(purpose, theme, demographics, interests string) (string, error) {
 	data := promptData{
 		Purpose:      purpose,
 		Demographics: demographics,
