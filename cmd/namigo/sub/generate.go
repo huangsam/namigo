@@ -16,7 +16,7 @@ type PromptData struct {
 	Theme        string
 }
 
-// GeneratePromptAction generates a prompt for AI chatbot users.
+// GeneratePromptAction generates a prompt for AI chatbots.
 func GeneratePromptAction(c *cli.Context) error {
 	purpose, err := getInput(c, "purpose", "👋 Enter project purpose: ")
 	if err != nil {
