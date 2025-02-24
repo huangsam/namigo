@@ -26,16 +26,16 @@ func main() {
 								Usage: "Project purpose",
 							},
 							&cli.StringFlag{
+								Name:  "theme",
+								Usage: "Project theme",
+							},
+							&cli.StringFlag{
 								Name:  "demographics",
 								Usage: "Target demographics",
 							},
 							&cli.StringFlag{
 								Name:  "interests",
 								Usage: "Target interests",
-							},
-							&cli.StringFlag{
-								Name:  "theme",
-								Usage: "Project theme",
 							},
 						},
 						Action: sub.GeneratePromptAction,
