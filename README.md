@@ -41,6 +41,9 @@ bash scripts/lint.sh
 # Get help
 ./bin/namigo help
 
+# Generate a prompt to get names from AI
+./bin/namigo generate prompt
+
 # Search for package matches
 ./bin/namigo search package 'hello'
 

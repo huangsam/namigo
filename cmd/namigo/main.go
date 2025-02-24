@@ -16,11 +16,24 @@ func main() {
 			{ // Lots of goodies to come. Stay tuned!
 				Name:  "generate",
 				Usage: "Generate names with AI",
-				Flags: []cli.Flag{},
 				Subcommands: []*cli.Command{
 					{
-						Name:   "prompt",
-						Usage:  "Generate prompt for AI agents",
+						Name:  "prompt",
+						Usage: "Generate prompt for AI agents",
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:  "purpose",
+								Usage: "Project purpose",
+							},
+							&cli.StringFlag{
+								Name:  "audience",
+								Usage: "Project audience",
+							},
+							&cli.StringFlag{
+								Name:  "theme",
+								Usage: "Project theme",
+							},
+						},
 						Action: sub.GeneratePromptAction,
 					},
 				},
