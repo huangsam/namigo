@@ -24,7 +24,9 @@ func apiWorker(
 	for pkg := range taskChan {
 		bd, err := util.RESTAPIQuery(client, APIDetail(pkg))
 		if err != nil {
+			mu.Lock() // Critical section
 			*errorCount++
+			mu.Unlock()
 			continue
 		}
 		var detailRes extern.PyPIAPIDetailResponse
