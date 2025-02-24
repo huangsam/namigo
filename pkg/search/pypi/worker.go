@@ -29,6 +29,7 @@ func apiWorker(
 			mu.Unlock()
 			continue
 		}
+
 		var detailRes extern.PyPIAPIDetailResponse
 		if err := json.Unmarshal(bd, &detailRes); err != nil {
 			mu.Lock() // Critical section
@@ -36,14 +37,17 @@ func apiWorker(
 			mu.Unlock()
 			continue
 		}
+
 		description := detailRes.Info.Summary
 		if len(description) == 0 {
 			description = model.NoDescription
 		}
+
 		author := detailRes.Info.Author
 		if len(author) == 0 {
 			author = model.NoAuthor
 		}
+
 		mu.Lock() // Critical section
 		if len(*result) < maxResults {
 			*result = append(*result, model.PyPIPackage{Name: pkg, Description: description, Author: author})
