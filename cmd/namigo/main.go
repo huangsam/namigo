@@ -21,11 +21,23 @@ func main() {
 						Name:  "max",
 						Usage: "Max number of results to display",
 						Value: 10,
+						Action: func(ctx *cli.Context, i int) error {
+							if i < 0 {
+								return fmt.Errorf("max %d is negative", i)
+							}
+							return nil
+						},
 					},
 					&cli.StringFlag{
 						Name:  "format",
 						Usage: "Output format: text/json",
 						Value: "text",
+						Action: func(ctx *cli.Context, s string) error {
+							if s != "text" && s != "json" {
+								return fmt.Errorf("format %s is invalid", s)
+							}
+							return nil
+						},
 					},
 				},
 				Subcommands: []*cli.Command{
