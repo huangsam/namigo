@@ -24,6 +24,7 @@ func netWorker(
 			*errors = append(*errors, err)
 			mu.Unlock()
 		}
+
 		mu.Lock() // Critical section
 		if len(*result) < maxResults {
 			*result = append(*result, model.DNSRecord{FQDN: domain, IPList: ips})
