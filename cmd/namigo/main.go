@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -15,12 +14,15 @@ func main() {
 		Usage: "Your naming pal, written in Go 🐶",
 		Commands: []*cli.Command{
 			{ // Lots of goodies to come. Stay tuned!
-				Name:        "generate",
-				Usage:       "Generate names with AI",
-				Flags:       []cli.Flag{},
-				Subcommands: []*cli.Command{},
-				Action: func(ctx *cli.Context) error {
-					return errors.New("nothing implemented yet")
+				Name:  "generate",
+				Usage: "Generate names with AI",
+				Flags: []cli.Flag{},
+				Subcommands: []*cli.Command{
+					{
+						Name:   "prompt",
+						Usage:  "Generate prompt for AI agents",
+						Action: sub.GeneratePromptAction,
+					},
 				},
 			},
 			{
