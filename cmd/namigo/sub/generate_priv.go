@@ -10,7 +10,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// getInput prompts the user for input.
+// getInput gets input for prompt generation.
 func getInput(c *cli.Context, flag, prompt string) (string, error) {
 	value := c.String(flag)
 	if value == "" {
