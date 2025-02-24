@@ -17,7 +17,7 @@ func apiWorker(
 	wg *sync.WaitGroup,
 	mu *sync.Mutex,
 	result *[]model.PyPIPackage,
-	errorCount *int,
+	errors *[]error,
 	maxResults int,
 ) {
 	defer wg.Done()
@@ -25,13 +25,15 @@ func apiWorker(
 		bd, err := util.RESTAPIQuery(client, APIDetail(pkg))
 		if err != nil {
 			mu.Lock() // Critical section
-			*errorCount++
+			*errors = append(*errors, err)
 			mu.Unlock()
 			continue
 		}
 		var detailRes extern.PyPIAPIDetailResponse
 		if err := json.Unmarshal(bd, &detailRes); err != nil {
-			*errorCount++
+			mu.Lock() // Critical section
+			*errors = append(*errors, err)
+			mu.Unlock()
 			continue
 		}
 		description := detailRes.Info.Summary

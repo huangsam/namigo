@@ -20,18 +20,18 @@ func SearchByProbe(name string, max int) ([]model.DNSRecord, error) {
 	}()
 
 	result := []model.DNSRecord{}
-	errorCount := 0
+	errors := []error{}
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 
 	for i := 0; i < 4; i++ {
 		wg.Add(1)
-		go netWorker(domainChan, &wg, &mu, &result, &errorCount, max)
+		go netWorker(domainChan, &wg, &mu, &result, &errors, max)
 	}
 
 	wg.Wait()
-	if len(result) == 0 && errorCount > 0 {
-		return result, fmt.Errorf("no results with %d errors", errorCount)
+	if len(result) == 0 && len(errors) > 0 {
+		return result, fmt.Errorf("no results with %d errors", len(errors))
 	}
 	return result, nil
 }

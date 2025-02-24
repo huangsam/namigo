@@ -13,7 +13,7 @@ func netWorker(
 	wg *sync.WaitGroup,
 	mu *sync.Mutex,
 	result *[]model.DNSRecord,
-	errorCount *int,
+	errors *[]error,
 	maxResults int,
 ) {
 	defer wg.Done()
@@ -21,7 +21,7 @@ func netWorker(
 		ips, err := net.LookupIP(domain)
 		if err != nil {
 			mu.Lock() // Critical section
-			*errorCount++
+			*errors = append(*errors, err)
 			mu.Unlock()
 		}
 		mu.Lock() // Critical section

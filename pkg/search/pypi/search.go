@@ -40,18 +40,18 @@ func SearchByAPI(name string, max int) ([]model.PyPIPackage, error) {
 	}()
 
 	result := []model.PyPIPackage{}
-	errorCount := 0
+	errors := []error{}
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 
 	for i := 0; i < goroutineCount; i++ {
 		wg.Add(1)
-		go apiWorker(client, taskChan, &wg, &mu, &result, &errorCount, max)
+		go apiWorker(client, taskChan, &wg, &mu, &result, &errors, max)
 	}
 
 	wg.Wait()
-	if len(result) == 0 && errorCount > 0 {
-		return result, fmt.Errorf("no results with %d errors", errorCount)
+	if len(result) == 0 && len(errors) > 0 {
+		return result, fmt.Errorf("no results with %d errors", len(errors))
 	}
 	return result, nil
 }
