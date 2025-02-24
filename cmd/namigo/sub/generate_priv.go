@@ -17,7 +17,7 @@ Project Purpose: {{.Purpose}}
 Audience: {{.Audience}}
 Theme: {{.Theme}}
 
-Please generate a few possible names for a side business / project.
+Generate 3-5 possible names for a side business / project.
 
 For each of the names generated, please provide the following:
 
@@ -29,6 +29,20 @@ For each of the names generated, please provide the following:
 Format the output as a JSON array of objects, stack ranked based on your
 assessment of their suitability. Provide a suitability score in each JSON
 array element.
+
+The JSON output should adhere to the following structure:
+
+[
+  {
+    "name": "Generated Name",
+    "explanation": "Explanation of fit...",
+    "firstImpressions": "First impressions...",
+    "pros": ["Pro 1", "Pro 2"],
+    "cons": ["Con 1", "Con 2"],
+    "additionalThoughts": "Any other thoughts...",
+    "suitabilityScore": 1-5
+  }
+]
 `
 
 // getInput prompts the user for input.
