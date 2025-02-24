@@ -14,7 +14,7 @@ import (
 func getInput(c *cli.Context, flag, prompt string) (string, error) {
 	value := c.String(flag)
 	if value == "" {
-		value = promptUser(prompt)
+		value = getInputHelper(prompt)
 		if value == "" {
 			return "", errors.New(flag + " is required")
 		}
@@ -22,8 +22,8 @@ func getInput(c *cli.Context, flag, prompt string) (string, error) {
 	return value, nil
 }
 
-// promptUser prompts the user for input.
-func promptUser(prompt string) string {
+// getInputHelper prompts the user for input.
+func getInputHelper(prompt string) string {
 	fmt.Print(prompt)
 	reader := bufio.NewReader(os.Stdin)
 	response, err := reader.ReadString('\n')
