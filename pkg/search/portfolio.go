@@ -1,6 +1,7 @@
 package search
 
 import (
+	"reflect"
 	"sync"
 
 	"github.com/huangsam/namigo/internal/model"
@@ -19,6 +20,7 @@ type PortfolioResults struct {
 	NPM    []model.NPMPackage
 	PyPI   []model.PyPIPackage
 	DNS    []model.DNSRecord
+	Email  []model.EmailRecord
 }
 
 type PortfolioErrors struct {
@@ -26,6 +28,7 @@ type PortfolioErrors struct {
 	NPM    error
 	PyPI   error
 	DNS    error
+	Email  error
 }
 
 type PortfolioFormatters struct {
@@ -33,6 +36,7 @@ type PortfolioFormatters struct {
 	NPM    NPMFormatter
 	PyPI   PyPIFormatter
 	DNS    DNSFormatter
+	Email  EmailFormatter
 }
 
 // NewPortfolio creates a new portfolio instance.
@@ -42,10 +46,28 @@ func NewPortfolio() *Portfolio {
 
 // Size returns the number of results collected.
 func (p *Portfolio) Size() int {
-	return (len(p.Res.NPM) +
-		len(p.Res.Golang) +
-		len(p.Res.PyPI) +
-		len(p.Res.DNS))
+	totalSize := 0
+	v := reflect.ValueOf(p.Res)
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+		if field.Kind() == reflect.Slice {
+			totalSize += field.Len()
+		}
+	}
+	return totalSize
+}
+
+// Errors returns all errors found.
+func (p *Portfolio) Errors() []error {
+	errs := []error{}
+	v := reflect.ValueOf(p.Err)
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+		if field.Interface() != nil {
+			errs = append(errs, field.Interface().(error))
+		}
+	}
+	return errs
 }
 
 // Run invokes a goroutine and increments internal WaitGroup counter.
@@ -62,22 +84,4 @@ func (p *Portfolio) Done() {
 // Wait blocks the main thread until all goroutines complete.
 func (p *Portfolio) Wait() {
 	p.wg.Wait()
-}
-
-// Errors returns all errors found.
-func (p *Portfolio) Errors() []error {
-	errs := []error{}
-	if p.Err.Golang != nil {
-		errs = append(errs, p.Err.Golang)
-	}
-	if p.Err.NPM != nil {
-		errs = append(errs, p.Err.NPM)
-	}
-	if p.Err.PyPI != nil {
-		errs = append(errs, p.Err.PyPI)
-	}
-	if p.Err.DNS != nil {
-		errs = append(errs, p.Err.DNS)
-	}
-	return errs
 }

@@ -63,3 +63,15 @@ func TestDNSFormatter_FormatResult(t *testing.T) {
 		t.Errorf("DNSFormatter.FormatResult() = %v, want %v", got, expected)
 	}
 }
+func TestEmailFormatter_FormatResult(t *testing.T) {
+	formatter := &search.EmailFormatter{}
+	result := model.EmailRecord{
+		Addr:           "example@example.com",
+		HasValidSyntax: true,
+		HasValidDomain: false,
+	}
+	expected := "📨 [Email] example@example.com ->\n\tvalid-syntax=true, valid-domain=false"
+	if got := formatter.FormatResult(result); got != expected {
+		t.Errorf("EmailFormatter.FormatResult() = %v, want %v", got, expected)
+	}
+}

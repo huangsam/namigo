@@ -16,7 +16,7 @@ type GoPackage struct {
 type NPMPackage struct {
 	Name         string // Package name
 	Description  string // Package description
-	IsExactMatch bool   // Is exact match?
+	IsExactMatch bool   // Package is exact match
 }
 
 type PyPIPackage struct {
@@ -28,4 +28,10 @@ type PyPIPackage struct {
 type DNSRecord struct {
 	FQDN   string   // Fully qualified domain name
 	IPList []net.IP // Associated IP addresses
+}
+
+type EmailRecord struct {
+	Addr           string // Email address
+	HasValidSyntax bool   // Email address has valid syntax
+	HasValidDomain bool   // Email address has valid domain
 }

@@ -11,6 +11,7 @@ const (
 	NPMLabel    = "NPM"    // Label for NPM packages
 	PyPILabel   = "PyPI"   // Label for PyPI packages
 	DNSLabel    = "DNS"    // Label for DNS records
+	EmailLabel  = "Email"  // Label for email records
 
 	MaxLineLength = 80 // Maximum line length
 	MaxIPLength   = 3  // Maximum IP length
@@ -89,4 +90,16 @@ func (f *DNSFormatter) FormatResult(result any) string {
 
 func (f *DNSFormatter) Label() string {
 	return DNSLabel
+}
+
+// EmailFormatter formats Email record.
+type EmailFormatter struct{}
+
+func (f *EmailFormatter) FormatResult(result any) string {
+	res := result.(model.EmailRecord)
+	return fmt.Sprintf("📨 [%s] %s ->\n\tvalid-syntax=%v, valid-domain=%v", f.Label(), res.Addr, res.HasValidSyntax, res.HasValidDomain)
+}
+
+func (f *EmailFormatter) Label() string {
+	return EmailLabel
 }

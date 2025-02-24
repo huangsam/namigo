@@ -20,7 +20,9 @@ func netWorker(
 	for domain := range domainChan {
 		ips, err := net.LookupIP(domain)
 		if err != nil {
+			mu.Lock() // Critical section
 			*errorCount++
+			mu.Unlock()
 		}
 		mu.Lock() // Critical section
 		if len(*result) < maxResults {

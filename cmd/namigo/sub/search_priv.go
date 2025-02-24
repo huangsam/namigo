@@ -27,6 +27,10 @@ func displayResults(results any, formatter search.Formatter, format model.Output
 		if len(res) > 0 {
 			displayResultsHelper(res, formatter, format)
 		}
+	case []model.EmailRecord:
+		if len(res) > 0 {
+			displayResultsHelper(res, formatter, format)
+		}
 	}
 }
 
@@ -50,4 +54,17 @@ func displayResultsHelper[T any](results []T, formatter search.Formatter, format
 			fmt.Println(formatter.FormatResult(r))
 		}
 	}
+}
+
+// validatePortfolio checks for any errors.
+func validatePortfolio(ptf *search.Portfolio) error {
+	if errs := ptf.Errors(); len(errs) > 0 {
+		for _, err := range errs {
+			fmt.Printf("💀 Error: %s\n", err)
+		}
+		return ErrPorftolioFailure
+	} else if ptf.Size() == 0 {
+		return ErrPorftolioEmpty
+	}
+	return nil
 }

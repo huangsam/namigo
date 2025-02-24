@@ -39,6 +39,11 @@ func main() {
 						Usage:  "Search for DNS records",
 						Action: sub.SearchDNSAction,
 					},
+					{
+						Name:   "email",
+						Usage:  "Search for email records",
+						Action: sub.SearchEmailAction,
+					},
 				},
 			},
 		},
