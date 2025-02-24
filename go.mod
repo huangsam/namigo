@@ -3,12 +3,12 @@ module github.com/huangsam/namigo
 go 1.24
 
 require (
+	github.com/AfterShip/email-verifier v1.4.1
 	github.com/PuerkitoBio/goquery v1.10.2
 	github.com/urfave/cli/v2 v2.27.5
 )
 
 require (
-	github.com/AfterShip/email-verifier v1.4.1 // indirect
 	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.6 // indirect
 	github.com/hbollon/go-edlib v1.6.0 // indirect
