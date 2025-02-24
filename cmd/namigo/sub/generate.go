@@ -8,16 +8,6 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// promptTemplate is a Go template for prompting
-const promptTemplate = `Given the following parameters:
-
-Project Purpose: {{.Purpose}}
-Audience: {{.Audience}}
-Theme: {{.Theme}}
-
-Please generate a few possible names for a side business / project.
-`
-
 // GeneratePromptAction generates a prompt for AI chatbot users.
 func GeneratePromptAction(c *cli.Context) error {
 	purpose, err := getInput(c, "purpose", "👋 Enter the project purpose: ")
