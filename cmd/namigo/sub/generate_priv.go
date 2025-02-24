@@ -14,9 +14,9 @@ import (
 const promptTemplate = `Given the following parameters:
 
 Project Purpose: {{.Purpose}}
+Project Theme: {{.Theme}}
 Target Demographics: {{.Demographics}}
 Target Interests: {{.Interests}}
-Theme: {{.Theme}}
 
 Generate 3-5 possible names for a side business / project.
 
