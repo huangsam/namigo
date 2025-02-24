@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -13,6 +14,15 @@ func main() {
 		Name:  "namigo",
 		Usage: "Your naming pal, written in Go 🐶",
 		Commands: []*cli.Command{
+			{ // Lots of goodies to come. Stay tuned!
+				Name:        "generate",
+				Usage:       "Generate names with the power of AI",
+				Flags:       []cli.Flag{},
+				Subcommands: []*cli.Command{},
+				Action: func(ctx *cli.Context) error {
+					return errors.New("nothing implemented yet")
+				},
+			},
 			{
 				Name:  "search",
 				Usage: "Search for terms across entities",
