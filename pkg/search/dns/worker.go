@@ -31,7 +31,7 @@ func netWorker(
 		}
 		mu.Unlock()
 		if len(*result) >= maxResults {
-			return
+			break
 		}
 	}
 }
