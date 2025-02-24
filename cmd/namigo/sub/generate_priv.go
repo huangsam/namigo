@@ -14,7 +14,8 @@ import (
 const promptTemplate = `Given the following parameters:
 
 Project Purpose: {{.Purpose}}
-Audience: {{.Audience}}
+Target Demographics: {{.Demographics}}
+Target Interests: {{.Interests}}
 Theme: {{.Theme}}
 
 Generate 3-5 possible names for a side business / project.
@@ -28,7 +29,7 @@ For each of the names generated, please provide the following:
 
 Format the output as a JSON array of objects, stack ranked based on your
 assessment of their suitability. Provide a suitability score in each JSON
-array element.
+array element, anywhere between 1.0 and 5.0.
 
 The JSON output should adhere to the following structure:
 
@@ -40,7 +41,7 @@ The JSON output should adhere to the following structure:
     "pros": ["Pro 1", "Pro 2"],
     "cons": ["Con 1", "Con 2"],
     "additionalThoughts": "Any other thoughts...",
-    "suitabilityScore": 1-5
+    "suitabilityScore": 1.0
   }
 ]
 `

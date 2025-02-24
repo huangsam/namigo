@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"text/template"
+	"time"
 
 	"github.com/urfave/cli/v2"
 )
@@ -15,7 +16,12 @@ func GeneratePromptAction(c *cli.Context) error {
 		return err
 	}
 
-	audience, err := getInput(c, "audience", "👋 Enter the project audience: ")
+	demographics, err := getInput(c, "demographics", "👋 Enter the audience demographics: ")
+	if err != nil {
+		return err
+	}
+
+	interests, err := getInput(c, "audience", "👋 Enter the audience interests: ")
 	if err != nil {
 		return err
 	}
@@ -26,13 +32,15 @@ func GeneratePromptAction(c *cli.Context) error {
 	}
 
 	data := struct {
-		Purpose  string
-		Audience string
-		Theme    string
+		Purpose      string
+		Demographics string
+		Interests    string
+		Theme        string
 	}{
-		Purpose:  purpose,
-		Audience: audience,
-		Theme:    theme,
+		Purpose:      purpose,
+		Demographics: demographics,
+		Interests:    interests,
+		Theme:        theme,
 	}
 
 	tmpl, err := template.New("prompt").Parse(promptTemplate)
@@ -45,9 +53,9 @@ func GeneratePromptAction(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	content := strings.Trim(builder.String(), " \t\n")
-	fmt.Printf("🍺 Final result ->\n\n%s\n\n", content)
-	fmt.Println("🎉 Copy into the AI of your choice, and see the names come!")
+	time.Sleep(250 * time.Millisecond)
+	fmt.Printf("🍺 Final result ->\n\n%s\n\n", strings.TrimSpace(builder.String()))
+	fmt.Println("🎉 Copy into the AI of your choice!")
 
 	return nil
 }

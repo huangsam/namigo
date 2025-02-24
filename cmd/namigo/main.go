@@ -26,8 +26,12 @@ func main() {
 								Usage: "Project purpose",
 							},
 							&cli.StringFlag{
-								Name:  "audience",
-								Usage: "Project audience",
+								Name:  "demographics",
+								Usage: "Target audience demographics",
+							},
+							&cli.StringFlag{
+								Name:  "interests",
+								Usage: "Target audience interests",
 							},
 							&cli.StringFlag{
 								Name:  "theme",
