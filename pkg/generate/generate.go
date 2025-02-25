@@ -10,9 +10,9 @@ import (
 func GeneratePrompt(purpose, theme, demographics, interests string, size, length int) (string, error) {
 	data := promptData{
 		Purpose:      purpose,
+		Theme:        theme,
 		Demographics: demographics,
 		Interests:    interests,
-		Theme:        theme,
 		MaxSize:      size,
 		MaxLength:    length,
 	}
