@@ -23,10 +23,10 @@ var (
 // To learn more:
 //
 // https://docs.abstractapi.com/email-validation
-func SearchByProbe(name string, max int) ([]model.EmailRecord, error) {
+func SearchByProbe(name string, count int) ([]model.EmailRecord, error) {
 	result := []model.EmailRecord{}
 	for _, domain := range domains {
-		if len(result) >= max {
+		if len(result) >= count {
 			break
 		}
 		email := fmt.Sprintf("%s@%s", name, domain)

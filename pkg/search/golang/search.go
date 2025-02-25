@@ -9,7 +9,7 @@ import (
 )
 
 // SearchByScrape searches for Go packages by scraping pkg.go.dev.
-func SearchByScrape(name string, max int) ([]model.GoPackage, error) {
+func SearchByScrape(name string, count int) ([]model.GoPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 	pipeline := util.NewDocumentPipeline(client, ScrapeList(name))
 	doc, err := pipeline.Execute()
@@ -17,5 +17,5 @@ func SearchByScrape(name string, max int) ([]model.GoPackage, error) {
 		return []model.GoPackage{}, err
 	}
 
-	return docWorker(doc, max, name), nil
+	return docWorker(doc, count, name), nil
 }

@@ -9,17 +9,20 @@ type promptData struct {
 	Demographics string
 	Interests    string
 	Theme        string
+	MaxCount     int
+	MaxLength    int
 }
 
 // promptTemplate is a Go template for prompting.
 const promptTemplate = `Given the following parameters:
 
-Project Purpose: {{.Purpose}}
-Project Theme: {{.Theme}}
-Target Demographics: {{.Demographics}}
-Target Interests: {{.Interests}}
+- Project Purpose: {{.Purpose}}
+- Project Theme: {{.Theme}}
+- Target Demographics: {{.Demographics}}
+- Target Interests: {{.Interests}}
 
-Generate 3-5 possible names for a side business / project.
+Generate up to {{.MaxCount}} names for a side business / project. All names
+should have at most {{.MaxLength}} characters.
 
 For each of the names generated, please provide the following:
 
@@ -30,7 +33,7 @@ For each of the names generated, please provide the following:
 
 Format the output as a JSON array of objects, stack ranked based on your
 assessment of their suitability. Provide a suitability score in each JSON
-array element, anywhere between 1.0 and 5.0.
+array element, anywhere between 1.0 and 10.0.
 
 The JSON output should adhere to the following structure:
 

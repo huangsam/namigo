@@ -20,7 +20,7 @@ func SearchPackageAction(c *cli.Context) error {
 	if len(searchTerm) == 0 {
 		return ErrMissingSearchTerm
 	}
-	maxResults := c.Int("max")
+	maxResults := c.Int("count")
 	outputFormat := model.GetOutputFormat(c.String("format"))
 
 	ptf := search.NewPortfolio()
@@ -75,7 +75,7 @@ func SearchDNSAction(c *cli.Context) error {
 	if len(searchTerm) == 0 {
 		return ErrMissingSearchTerm
 	}
-	maxResults := c.Int("max")
+	maxResults := c.Int("count")
 	outputFormat := model.GetOutputFormat(c.String("format"))
 
 	ptf := search.NewPortfolio()
@@ -104,7 +104,7 @@ func SearchEmailAction(c *cli.Context) error {
 	if len(searchTerm) == 0 {
 		return ErrMissingSearchTerm
 	}
-	maxResults := c.Int("max")
+	maxResults := c.Int("count")
 	outputFormat := model.GetOutputFormat(c.String("format"))
 
 	ptf := search.NewPortfolio()

@@ -11,7 +11,7 @@ import (
 )
 
 // SearchByScrape searches for NPM packages by scraping www.npmjs.com.
-func SearchByScrape(name string, max int) ([]model.NPMPackage, error) {
+func SearchByScrape(name string, count int) ([]model.NPMPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 	pipeline := util.NewDocumentPipeline(client, ScrapeList(name))
 	doc, err := pipeline.Execute()
@@ -19,13 +19,13 @@ func SearchByScrape(name string, max int) ([]model.NPMPackage, error) {
 		return []model.NPMPackage{}, err
 	}
 
-	return docWorker(doc, max), nil
+	return docWorker(doc, count), nil
 }
 
 // SearchByAPI searches for NPM packages by querying registry.npmjs.com.
-func SearchByAPI(name string, max int) ([]model.NPMPackage, error) {
+func SearchByAPI(name string, count int) ([]model.NPMPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
-	bl, err := util.RESTAPIQuery(client, APIList(name, max))
+	bl, err := util.RESTAPIQuery(client, APIList(name, count))
 	if err != nil {
 		return []model.NPMPackage{}, err
 	}

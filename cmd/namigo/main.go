@@ -37,6 +37,28 @@ func main() {
 								Name:  "interests",
 								Usage: "Target interests",
 							},
+							&cli.IntFlag{
+								Name:  "count",
+								Usage: "Maximum count of names",
+								Value: 10,
+								Action: func(ctx *cli.Context, i int) error {
+									if i <= 0 {
+										return fmt.Errorf("count %d is invalid", i)
+									}
+									return nil
+								},
+							},
+							&cli.IntFlag{
+								Name:  "length",
+								Usage: "Maximum length for each name",
+								Value: 20,
+								Action: func(ctx *cli.Context, i int) error {
+									if i <= 0 {
+										return fmt.Errorf("length %d is invalid", i)
+									}
+									return nil
+								},
+							},
 						},
 						Action: sub.GeneratePromptAction,
 					},
@@ -47,19 +69,19 @@ func main() {
 				Usage: "Search for terms across entities",
 				Flags: []cli.Flag{
 					&cli.IntFlag{
-						Name:  "max",
-						Usage: "Max number of results to display",
+						Name:  "count",
+						Usage: "Maximum count of results",
 						Value: 10,
 						Action: func(ctx *cli.Context, i int) error {
-							if i < 0 {
-								return fmt.Errorf("max %d is negative", i)
+							if i <= 0 {
+								return fmt.Errorf("count %d is invalid", i)
 							}
 							return nil
 						},
 					},
 					&cli.StringFlag{
 						Name:  "format",
-						Usage: "Output format: text/json",
+						Usage: "Output format can be text or json",
 						Value: "text",
 						Action: func(ctx *cli.Context, s string) error {
 							if s != "text" && s != "json" {

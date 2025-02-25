@@ -8,7 +8,7 @@ import (
 )
 
 // SearchByProbe searches for DNS records via nameserver lookups.
-func SearchByProbe(name string, max int) ([]model.DNSRecord, error) {
+func SearchByProbe(name string, count int) ([]model.DNSRecord, error) {
 	domains := []string{"com", "org", "net", "io", "tech", "ai", "me", "shop"}
 	domainChan := make(chan string)
 
@@ -26,7 +26,7 @@ func SearchByProbe(name string, max int) ([]model.DNSRecord, error) {
 
 	for i := 0; i < 4; i++ {
 		wg.Add(1)
-		go netWorker(domainChan, &wg, &mu, &result, &errors, max)
+		go netWorker(domainChan, &wg, &mu, &result, &errors, count)
 	}
 
 	wg.Wait()

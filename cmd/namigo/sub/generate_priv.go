@@ -10,11 +10,11 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// getInput gets input for prompt generation.
-func getInput(c *cli.Context, flag, prompt string) (string, error) {
+// getString gets string from CLI or manual input.
+func getString(c *cli.Context, flag, prompt string) (string, error) {
 	value := c.String(flag)
 	if value == "" {
-		value = getInputHelper(prompt)
+		value = getStringHelper(prompt)
 		if value == "" {
 			return "", errors.New(flag + " is required")
 		}
@@ -22,8 +22,8 @@ func getInput(c *cli.Context, flag, prompt string) (string, error) {
 	return value, nil
 }
 
-// getInputHelper prompts the user for input.
-func getInputHelper(prompt string) string {
+// getStringHelper prompts the user for input.
+func getStringHelper(prompt string) string {
 	fmt.Printf("%s: ", prompt)
 	reader := bufio.NewReader(os.Stdin)
 	response, err := reader.ReadString('\n')
