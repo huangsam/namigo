@@ -20,7 +20,7 @@ func SearchPackageAction(c *cli.Context) error {
 	if len(searchTerm) == 0 {
 		return ErrMissingSearchTerm
 	}
-	maxResults := c.Int("count")
+	maxSize := c.Int("size")
 	outputFormat := model.GetOutputFormat(c.String("format"))
 
 	ptf := search.NewPortfolio()
@@ -28,7 +28,7 @@ func SearchPackageAction(c *cli.Context) error {
 	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
 		fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.Golang.Label())
-		if searchResults, err := golang.SearchByScrape(searchTerm, maxResults); err == nil {
+		if searchResults, err := golang.SearchByScrape(searchTerm, maxSize); err == nil {
 			ptf.Res.Golang = searchResults
 		} else {
 			ptf.Err.Golang = err
@@ -38,7 +38,7 @@ func SearchPackageAction(c *cli.Context) error {
 	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
 		fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.NPM.Label())
-		if searchResults, err := npm.SearchByAPI(searchTerm, maxResults); err == nil {
+		if searchResults, err := npm.SearchByAPI(searchTerm, maxSize); err == nil {
 			ptf.Res.NPM = searchResults
 		} else {
 			ptf.Err.NPM = err
@@ -48,7 +48,7 @@ func SearchPackageAction(c *cli.Context) error {
 	ptf.Run(func(ptf *search.Portfolio) {
 		defer ptf.Done()
 		fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.PyPI.Label())
-		if searchResults, err := pypi.SearchByAPI(searchTerm, maxResults); err == nil {
+		if searchResults, err := pypi.SearchByAPI(searchTerm, maxSize); err == nil {
 			ptf.Res.PyPI = searchResults
 		} else {
 			ptf.Err.PyPI = err
@@ -75,13 +75,13 @@ func SearchDNSAction(c *cli.Context) error {
 	if len(searchTerm) == 0 {
 		return ErrMissingSearchTerm
 	}
-	maxResults := c.Int("count")
+	maxSize := c.Int("size")
 	outputFormat := model.GetOutputFormat(c.String("format"))
 
 	ptf := search.NewPortfolio()
 
 	fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.DNS.Label())
-	if searchResults, err := dns.SearchByProbe(searchTerm, maxResults); err == nil {
+	if searchResults, err := dns.SearchByProbe(searchTerm, maxSize); err == nil {
 		ptf.Res.DNS = searchResults
 	} else {
 		ptf.Err.DNS = err
@@ -104,13 +104,13 @@ func SearchEmailAction(c *cli.Context) error {
 	if len(searchTerm) == 0 {
 		return ErrMissingSearchTerm
 	}
-	maxResults := c.Int("count")
+	maxSize := c.Int("size")
 	outputFormat := model.GetOutputFormat(c.String("format"))
 
 	ptf := search.NewPortfolio()
 
 	fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.Email.Label())
-	if searchResults, err := email.SearchByProbe(searchTerm, maxResults); err == nil {
+	if searchResults, err := email.SearchByProbe(searchTerm, maxSize); err == nil {
 		ptf.Res.Email = searchResults
 	} else {
 		ptf.Err.Email = err

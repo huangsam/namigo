@@ -9,7 +9,7 @@ type promptData struct {
 	Demographics string
 	Interests    string
 	Theme        string
-	MaxCount     int
+	MaxSize      int
 	MaxLength    int
 }
 
@@ -21,7 +21,7 @@ const promptTemplate = `Given the following parameters:
 - Target Demographics: {{.Demographics}}
 - Target Interests: {{.Interests}}
 
-Generate up to {{.MaxCount}} names for a side business / project. All names
+Generate up to {{.MaxSize}} names for a side business / project. All names
 should have at most {{.MaxLength}} characters.
 
 For each of the names generated, please provide the following:

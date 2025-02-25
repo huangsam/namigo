@@ -7,10 +7,10 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// checkCountFlag checks for valid count flag.
-func checkCountFlag(ctx *cli.Context, i int) error {
+// checkSizeFlag checks for valid size flag.
+func checkSizeFlag(ctx *cli.Context, i int) error {
 	if i <= 0 {
-		return fmt.Errorf("count %d is invalid", i)
+		return fmt.Errorf("size %d is invalid", i)
 	}
 	return nil
 }

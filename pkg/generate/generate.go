@@ -7,13 +7,13 @@ import (
 )
 
 // GeneratePrompt generates the prompt for AI chatbots.
-func GeneratePrompt(purpose, theme, demographics, interests string, count, length int) (string, error) {
+func GeneratePrompt(purpose, theme, demographics, interests string, size, length int) (string, error) {
 	data := promptData{
 		Purpose:      purpose,
 		Demographics: demographics,
 		Interests:    interests,
 		Theme:        theme,
-		MaxCount:     count,
+		MaxSize:      size,
 		MaxLength:    length,
 	}
 	tmpl, err := template.New(promptName).Parse(promptTemplate)

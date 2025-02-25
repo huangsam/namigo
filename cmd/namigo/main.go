@@ -39,14 +39,14 @@ func main() {
 								Usage: "Target interests",
 							},
 							&cli.IntFlag{
-								Name:   "count",
-								Usage:  "Maximum count of names",
+								Name:   "size",
+								Usage:  "Max size for generated names",
 								Value:  10,
-								Action: checkCountFlag,
+								Action: checkSizeFlag,
 							},
 							&cli.IntFlag{
 								Name:   "length",
-								Usage:  "Maximum length for each name",
+								Usage:  "Max length for each generated name",
 								Value:  20,
 								Action: checkLengthFlag,
 							},
@@ -60,10 +60,10 @@ func main() {
 				Usage: "Search for terms across entities",
 				Flags: []cli.Flag{
 					&cli.IntFlag{
-						Name:   "count",
-						Usage:  "Maximum count of results",
+						Name:   "size",
+						Usage:  "Max size for search results",
 						Value:  10,
-						Action: checkCountFlag,
+						Action: checkSizeFlag,
 					},
 					&cli.StringFlag{
 						Name:   "format",

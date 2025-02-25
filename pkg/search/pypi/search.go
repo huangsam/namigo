@@ -16,7 +16,7 @@ import (
 const goroutineCount = 4
 
 // SearchByAPI searches for PyPI packages by querying pypi.org.
-func SearchByAPI(name string, count int) ([]model.PyPIPackage, error) {
+func SearchByAPI(name string, size int) ([]model.PyPIPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 
 	bl, err := util.RESTAPIQuery(client, APIList())
@@ -46,7 +46,7 @@ func SearchByAPI(name string, count int) ([]model.PyPIPackage, error) {
 
 	for i := 0; i < goroutineCount; i++ {
 		wg.Add(1)
-		go apiWorker(client, taskChan, &wg, &mu, &result, &errors, count)
+		go apiWorker(client, taskChan, &wg, &mu, &result, &errors, size)
 	}
 
 	wg.Wait()

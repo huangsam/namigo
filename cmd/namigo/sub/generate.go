@@ -26,10 +26,10 @@ func GeneratePromptAction(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	maxResults := c.Int("count")
+	maxSize := c.Int("size")
 	maxLength := c.Int("length")
 
-	prompt, err := generate.GeneratePrompt(purpose, theme, demographics, interests, maxResults, maxLength)
+	prompt, err := generate.GeneratePrompt(purpose, theme, demographics, interests, maxSize, maxLength)
 	if err != nil {
 		return err
 	}
