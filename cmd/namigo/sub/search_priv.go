@@ -56,8 +56,8 @@ func displayResultsHelper[T any](results []T, formatter search.ResultFormatter, 
 	}
 }
 
-// validatePortfolio checks for any errors.
-func validatePortfolio(ptf *search.Portfolio) error {
+// checkPortfolio checks for any errors.
+func checkPortfolio(ptf *search.Portfolio) error {
 	if errs := ptf.Errors(); len(errs) > 0 {
 		for _, err := range errs {
 			fmt.Printf("💀 Error: %s\n", err)

@@ -56,7 +56,7 @@ func SearchPackageAction(c *cli.Context) error {
 	})
 
 	ptf.Wait()
-	if err := validatePortfolio(ptf); err != nil {
+	if err := checkPortfolio(ptf); err != nil {
 		return err
 	}
 
@@ -87,7 +87,7 @@ func SearchDNSAction(c *cli.Context) error {
 		ptf.Err.DNS = err
 	}
 
-	if err := validatePortfolio(ptf); err != nil {
+	if err := checkPortfolio(ptf); err != nil {
 		return err
 	}
 
@@ -116,7 +116,7 @@ func SearchEmailAction(c *cli.Context) error {
 		ptf.Err.Email = err
 	}
 
-	if err := validatePortfolio(ptf); err != nil {
+	if err := checkPortfolio(ptf); err != nil {
 		return err
 	}
 
