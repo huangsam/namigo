@@ -3,18 +3,20 @@ package model
 // OutputFormat represents the output mode.
 type OutputFormat int
 
-// Output formats.
 const (
 	TextFormat OutputFormat = iota
 	JSONFormat
+
+	TextValue = "text"
+	JSONValue = "json"
 )
 
 // GetOutputFormat returns an OutputMode instance.
 func GetOutputFormat(format string) OutputFormat {
 	switch format {
-	case "text":
+	case TextValue:
 		return TextFormat
-	case "json":
+	case JSONValue:
 		return JSONFormat
 	default:
 		return TextFormat

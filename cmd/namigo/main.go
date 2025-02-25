@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/huangsam/namigo/cmd/namigo/sub"
+	"github.com/huangsam/namigo/internal/model"
 	"github.com/urfave/cli/v2"
 )
 
@@ -38,26 +39,16 @@ func main() {
 								Usage: "Target interests",
 							},
 							&cli.IntFlag{
-								Name:  "count",
-								Usage: "Maximum count of names",
-								Value: 10,
-								Action: func(ctx *cli.Context, i int) error {
-									if i <= 0 {
-										return fmt.Errorf("count %d is invalid", i)
-									}
-									return nil
-								},
+								Name:   "count",
+								Usage:  "Maximum count of names",
+								Value:  10,
+								Action: checkCountFlag,
 							},
 							&cli.IntFlag{
-								Name:  "length",
-								Usage: "Maximum length for each name",
-								Value: 20,
-								Action: func(ctx *cli.Context, i int) error {
-									if i <= 0 {
-										return fmt.Errorf("length %d is invalid", i)
-									}
-									return nil
-								},
+								Name:   "length",
+								Usage:  "Maximum length for each name",
+								Value:  20,
+								Action: checkLengthFlag,
 							},
 						},
 						Action: sub.GeneratePromptAction,
@@ -69,26 +60,16 @@ func main() {
 				Usage: "Search for terms across entities",
 				Flags: []cli.Flag{
 					&cli.IntFlag{
-						Name:  "count",
-						Usage: "Maximum count of results",
-						Value: 10,
-						Action: func(ctx *cli.Context, i int) error {
-							if i <= 0 {
-								return fmt.Errorf("count %d is invalid", i)
-							}
-							return nil
-						},
+						Name:   "count",
+						Usage:  "Maximum count of results",
+						Value:  10,
+						Action: checkCountFlag,
 					},
 					&cli.StringFlag{
-						Name:  "format",
-						Usage: "Output format can be text or json",
-						Value: "text",
-						Action: func(ctx *cli.Context, s string) error {
-							if s != "text" && s != "json" {
-								return fmt.Errorf("format %s is invalid", s)
-							}
-							return nil
-						},
+						Name:   "format",
+						Usage:  fmt.Sprintf("Output format can be %s or %s", model.TextValue, model.JSONValue),
+						Value:  model.TextValue,
+						Action: checkFormatFlag,
 					},
 				},
 				Subcommands: []*cli.Command{
