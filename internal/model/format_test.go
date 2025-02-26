@@ -10,11 +10,11 @@ func TestGetOutputFormat(t *testing.T) {
 	tests := []struct {
 		name     string
 		format   string
-		expected model.OutputFormat
+		expected model.FormatOption
 	}{
-		{"Text format", "text", model.TextFormat},
-		{"JSON format", "json", model.JSONFormat},
-		{"Default format", "unknown", model.TextFormat},
+		{"Text format", "text", model.TextOption},
+		{"JSON format", "json", model.JSONOption},
+		{"Default format", "unknown", model.TextOption},
 	}
 
 	for _, tt := range tests {

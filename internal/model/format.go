@@ -1,34 +1,34 @@
 package model
 
-// OutputFormat represents the output mode.
-type OutputFormat int
+// FormatOption represents the output mode.
+type FormatOption int
 
 const (
-	TextFormat OutputFormat = iota
-	JSONFormat
+	TextOption FormatOption = iota
+	JSONOption
 
 	TextValue = "text"
 	JSONValue = "json"
 )
 
 // GetOutputFormat returns an OutputMode instance.
-func GetOutputFormat(format string) OutputFormat {
+func GetOutputFormat(format string) FormatOption {
 	switch format {
 	case TextValue:
-		return TextFormat
+		return TextOption
 	case JSONValue:
-		return JSONFormat
+		return JSONOption
 	default:
-		return TextFormat
+		return TextOption
 	}
 }
 
 // String returns the string representation of the output mode.
-func (o OutputFormat) String() string {
+func (o FormatOption) String() string {
 	switch o {
-	case TextFormat:
+	case TextOption:
 		return "PlainText"
-	case JSONFormat:
+	case JSONOption:
 		return "JSON"
 	default:
 		return "Unknown"
