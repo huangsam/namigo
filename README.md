@@ -47,3 +47,5 @@ namigo search email 'hello'
 Here is a screencast to see them in action:
 
 [![asciicast](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m.svg)](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m)
+
+Want to help make Namigo even better? Check out our [contribution guidelines](./CONTRIBUTING.md).
