@@ -26,13 +26,12 @@ changelog:
   use: github
   filters:
     exclude:
-      - "^Refactor"
+      - "^Remove"
       - "^Rename"
-      - "^Simplify"
       - "^Update"
-      - comments
-      - line break
-      - tests
+      - comment
+      - test
+      - unused
 
 # https://goreleaser.com/customization/release/
 release:
