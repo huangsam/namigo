@@ -26,9 +26,8 @@ changelog:
   use: github
   filters:
     exclude:
-      - "^(Refactor|Normalize|Migrate)"
-      - "^(Remove|Rename)"
-      - "^Update"
+      - "^(Refactor|Update|Rename)" # common chore
+      - "^(Migrate|Normalize|Reformat|Remove|Shorten)" # uncommon chore
       - comment
       - test
       - unused
