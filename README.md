@@ -25,12 +25,11 @@ is your go-to naming pal.
 
 ## Getting started
 
+Here are some commands to get started:
+
 ```shell
 # Install binary
 go install github.com/huangsam/namigo/cmd/namigo@latest
-
-# Get help
-namigo help
 
 # Generate a prompt to get names from AI
 namigo generate prompt
@@ -44,5 +43,7 @@ namigo search dns 'hello'
 # Search for email matches
 namigo search email 'hello'
 ```
+
+Here is a screenshot to see them in action:
 
 [![asciicast](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m.svg)](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m)
