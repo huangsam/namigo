@@ -64,6 +64,8 @@ namigo search dns 'hello'
 namigo search email 'hello'
 ```
 
+[![asciicast](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m.svg)](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m)
+
 ## Code structure
 
 This codebase closely resembles [golang-standards/project-layout].
