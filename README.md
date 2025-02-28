@@ -44,6 +44,6 @@ namigo search dns 'hello'
 namigo search email 'hello'
 ```
 
-Here is a screenshot to see them in action:
+Here is a screencast to see them in action:
 
 [![asciicast](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m.svg)](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m)
