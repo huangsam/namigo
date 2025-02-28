@@ -1,0 +1,26 @@
+# https://goreleaser.com/customization/
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - main: ./cmd/namigo
+    id: namigo
+    binary: namigo
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    flags:
+      - -trimpath
+
+release:
+  github:
+    owner: huangsam
+    name: namigo
+  name_template: "v{{ .Version }}"
