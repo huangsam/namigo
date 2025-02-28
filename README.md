@@ -23,12 +23,6 @@ intelligence to provide you with a variety of name options that you might not ha
 considered. Whether you need a name for a new project, package, or domain, Namigo
 is your go-to naming pal.
 
-## Design
-
-[Click here](docs/search_approach.md) to learn about the `search` implementation.
-
-[Click here](docs/generate_approach.md) to learn about the `generate` implementation.
-
 ## Getting started
 
 ```shell

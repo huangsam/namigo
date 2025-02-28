@@ -5,6 +5,12 @@ This document outlines the process for contributing to the project, including
 guidelines for code structure, commands, and more. Please follow these guidelines
 to ensure a smooth and efficient collaboration.
 
+## Design
+
+[Click here](docs/search_approach.md) to learn about the `search` implementation.
+
+[Click here](docs/generate_approach.md) to learn about the `generate` implementation.
+
 ## Commands
 
 ```shell
