@@ -1,11 +1,12 @@
-# https://goreleaser.com/customization/
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 version: 2
 
+# https://goreleaser.com/customization/hooks/
 before:
   hooks:
     - go mod tidy
 
+# https://goreleaser.com/customization/builds/
 builds:
   - main: ./cmd/namigo
     id: namigo
@@ -19,6 +20,21 @@ builds:
     flags:
       - -trimpath
 
+# https://goreleaser.com/customization/changelog/
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - "^Refactor"
+      - "^Rename"
+      - "^Simplify"
+      - "^Update"
+      - comments
+      - line break
+      - tests
+
+# https://goreleaser.com/customization/release/
 release:
   github:
     owner: huangsam
