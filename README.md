@@ -32,19 +32,6 @@ is your go-to naming pal.
 ## Getting started
 
 ```shell
-# Run build
-bash scripts/build.sh
-
-# Run tests
-bash scripts/test.sh
-
-# Run linters
-bash scripts/lint.sh
-```
-
-### Running binary
-
-```shell
 # Install binary
 go install github.com/huangsam/namigo/cmd/namigo@latest
 
@@ -65,15 +52,3 @@ namigo search email 'hello'
 ```
 
 [![asciicast](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m.svg)](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m)
-
-## Code structure
-
-This codebase closely resembles [golang-standards/project-layout].
-
-The TLDR is:
-
-- `cmd` has entry points
-- `pkg` has business logic
-- `internal` has helpers
-
-[golang-standards/project-layout]: https://github.com/golang-standards/project-layout
