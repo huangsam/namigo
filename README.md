@@ -29,8 +29,10 @@ project, package, domain, or email address, Namigo is your go-to naming pal.
 Here are some commands to get started:
 
 ```shell
-# Install binary
+# Install binary with `go install`
 go install github.com/huangsam/namigo/cmd/namigo@latest
+
+# Another option is https://github.com/huangsam/namigo/releases
 
 # Generate a prompt to get names from AI
 namigo generate prompt
