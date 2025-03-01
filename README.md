@@ -26,14 +26,20 @@ project, package, domain, or email address, Namigo is your go-to naming pal.
 
 ## Getting started
 
-Here are some commands to get started:
+Installing the CLI:
 
 ```shell
-# Install binary with `go install`
+# With `go install`
 go install github.com/huangsam/namigo/cmd/namigo@latest
 
-# Another option is https://github.com/huangsam/namigo/releases
+# With https://github.com/huangsam/namigo/releases
+# Access the link with the browser of your choice
+# Choose the binary that suits your system's OS and architecture
+```
 
+Prompting and searching with CLI:
+
+```shell
 # Generate a prompt to get names from AI
 namigo generate prompt
 
@@ -47,7 +53,7 @@ namigo search dns 'hello'
 namigo search email 'hello'
 ```
 
-Here is a screencast to see them in action:
+Here is a screencast to see the CLI in action:
 
 [![asciicast](./images/screencast.svg)](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m)
 
