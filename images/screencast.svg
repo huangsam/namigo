@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1196.1133328600001" height="373.33324000000005" font-family="Consolas, Menlo, 'Bitstream Vera Sans Mono', monospace, 'Powerline Symbols'" font-size="14px">
+  <style>
+    .br { font-weight: bold }
+    .fa { fill-opacity: 0.5 }
+    .it { font-style: italic }
+    .un { text-decoration: underline }
+  </style>
+
+  <rect width="100%" height="100%" style="fill: #121314" rx="4" ry="4"></rect>
+
+  <svg x="8.42333333" y="9.333331000000001" class="default-text-fill">
+    <g style="shape-rendering: optimizeSpeed">
+
+        <rect x="168.4666666" y="335.99991600000004" width="8.42333333" height="18.666662000000002" style="fill: #d9d9d9"></rect>
+
+
+    </g>
+
+    <text style="fill: #cccccc">
+      <tspan y="18.666662000000002">
+        <tspan dy="1em" x="0.0">
+          🌎
+        </tspan><tspan x="25.269999990000002">
+          [DNS] netflix.com w/ 6 IPs -&gt;
+        </tspan>
+      </tspan><tspan y="37.333324000000005">
+        <tspan dy="1em" x="67.38666664">
+          The first 3 IPs are [52.38.7.83 44.242.13.161 44.240.158.19]
+        </tspan>
+      </tspan><tspan y="55.99998600000001">
+        <tspan dy="1em" x="0.0">
+          🌎
+        </tspan><tspan x="25.269999990000002">
+          [DNS] netflix.net w/ 18 IPs -&gt;
+        </tspan>
+      </tspan><tspan y="74.66664800000001">
+        <tspan dy="1em" x="67.38666664">
+          The first 3 IPs are [18.236.7.30 34.218.19.240 44.226.113.145]
+        </tspan>
+      </tspan><tspan y="93.33331000000001">
+        <tspan dy="1em" x="0.0">
+          🌎
+        </tspan><tspan x="25.269999990000002">
+          [DNS] netflix.io w/ 9 IPs -&gt;
+        </tspan>
+      </tspan><tspan y="111.99997200000001">
+        <tspan dy="1em" x="67.38666664">
+          The first 3 IPs are [46.137.171.215 34.252.74.1 107.20.175.192]
+        </tspan>
+      </tspan><tspan y="130.66663400000002">
+        <tspan dy="1em" x="0.0">
+          🌎
+        </tspan><tspan x="25.269999990000002">
+          [DNS] netflix.org w/ 18 IPs -&gt;
+        </tspan>
+      </tspan><tspan y="149.33329600000002">
+        <tspan dy="1em" x="67.38666664">
+          The first 3 IPs are [52.31.48.193 34.252.74.1 46.137.171.215]
+        </tspan>
+      </tspan><tspan y="167.99995800000002">
+        <tspan dy="1em" x="0.0">
+          🌎
+        </tspan><tspan x="25.269999990000002">
+          [DNS] netflix.shop w/ 1 IPs -&gt;
+        </tspan>
+      </tspan><tspan y="186.66662000000002">
+        <tspan dy="1em" x="67.38666664">
+          The IPs are [23.227.38.65]
+        </tspan>
+      </tspan><tspan y="205.33328200000003">
+        <tspan dy="1em" x="0.0">
+          🌎
+        </tspan><tspan x="25.269999990000002">
+          [DNS] netflix.me w/ 1 IPs -&gt;
+        </tspan>
+      </tspan><tspan y="223.99994400000003">
+        <tspan dy="1em" x="67.38666664">
+          The IPs are [75.119.195.99]
+        </tspan>
+      </tspan><tspan y="242.66660600000003">
+        <tspan dy="1em" x="0.0">
+          🌎
+        </tspan><tspan x="25.269999990000002">
+          [DNS] netflix.tech w/ 1 IPs -&gt;
+        </tspan>
+      </tspan><tspan y="261.33326800000003">
+        <tspan dy="1em" x="67.38666664">
+          The IPs are [91.195.241.232]
+        </tspan>
+      </tspan><tspan y="279.99993">
+        <tspan dy="1em" x="0.0">
+          🌎
+        </tspan><tspan x="25.269999990000002">
+          [DNS] netflix.ai w/ 18 IPs -&gt;
+        </tspan>
+      </tspan><tspan y="298.66659200000004">
+        <tspan dy="1em" x="67.38666664">
+          The first 3 IPs are [18.236.7.30 44.226.113.145 34.218.19.240]
+        </tspan>
+      </tspan><tspan y="317.333254">
+        <tspan dy="1em" x="0.0">
+          ╭
+        </tspan><tspan x="8.42333333">
+          ─
+        </tspan><tspan x="16.84666666" style="fill: #00D700">
+          samhuang 
+        </tspan><tspan x="92.65666663" style="fill: #4E4E4E">
+          at 
+        </tspan><tspan x="117.92666662" style="fill: #0087FF">
+          Sam&#39;s M3 Max 
+        </tspan><tspan x="227.42999991" style="fill: #4E4E4E">
+          in 
+        </tspan><tspan x="252.6999999" class="br" style="fill: #FFFF00">
+          ~/Playground/projects/namigo
+        </tspan><tspan x="496.97666647" style="fill: #4E4E4E">
+          on
+        </tspan><tspan x="522.24666646" style="fill: #EEEEEE">
+          main
+        </tspan><tspan x="555.93999978" style="fill: #00D700">
+          ✔
+        </tspan>
+      </tspan><tspan y="335.99991600000004">
+        <tspan dy="1em" x="0.0">
+          ╰
+        </tspan><tspan x="8.42333333">
+          ─
+        </tspan><tspan x="16.84666666">
+          ± namigo search pa
+        </tspan>
+      </tspan>
+    </text>
+  </svg>
+
+  <g transform="translate(-40 -40)">
+    <svg x="50%" y="50%" width="80" height="80">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000.0 1000.0" style="filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.4))">
+  <defs>
+    <mask id="small-triangle-mask">
+      <rect width="100%" height="100%" fill="white"></rect>
+      <polygon points="700.0 500.0, 400.00000000000006 326.7949192431122, 399.9999999999999 673.2050807568877" fill="black">
+      </polygon>
+    </mask>
+  </defs>
+  <polygon points="1000.0 500.0, 250.0000000000001 66.98729810778059, 249.99999999999977 933.0127018922192" mask="url(#small-triangle-mask)" fill="white">
+  </polygon>
+  <polyline points="673.2050807568878 400.0, 326.7949192431123 600.0" stroke="white" stroke-width="90">
+  </polyline>
+</svg>
+    </svg>
+  </g>
+</svg>
