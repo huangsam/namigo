@@ -1,10 +1,13 @@
 # Welcome to Namigo! 🐶
 
-Welcome to the Namigo project! We appreciate your interest in contributing.
+Welcome to the Namigo project! Thanks for your interest in contributing.
 This document outlines the process for contributing to the project, including
 guidelines for reporting issues, submitting pull requests, and coding style.
 
-## Reporting Issues
+Additionally, you will find information on the design documents and the overall
+code structure to help you get started with understanding the project.
+
+## Reporting issues
 
 If you find a bug or have a feature request, please open an issue on GitHub. When reporting a bug, please include:
 
@@ -14,7 +17,7 @@ If you find a bug or have a feature request, please open an issue on GitHub. Whe
 * The actual behavior
 * Your operating system and version
 
-## Pull Request Process
+## Pull request process
 
 1.  Fork the repository
 2.  Create a feature branch (`git checkout -b feature/my-feature`)
@@ -30,17 +33,18 @@ Please ensure your pull request adheres to the following:
 * Update documentation as needed
 * Follow the coding style guidelines
 
-## Development Setup
+## Design docs
 
-To set up your development environment:
+[Click here](docs/search_approach.md) to learn about the `search` implementation.
 
-```shell
-# Run build
-bash scripts/build.sh
+[Click here](docs/generate_approach.md) to learn about the `generate` implementation.
 
-# Run tests
-bash scripts/test.sh
+## Code structure
 
-# Run linters
-bash scripts/lint.sh
-```
+This codebase closely resembles [golang-standards/project-layout](https://github.com/golang-standards/project-layout).
+
+The TLDR is:
+
+- `cmd` has entry points
+- `pkg` has business logic
+- `internal` has helpers
