@@ -1,20 +1,4 @@
-package generate
-
-// promptName is a name for the template below.
-const promptName = "name_brainstorm_with_json"
-
-// promptData is the input for the prompt template.
-type promptData struct {
-	Purpose      string // Project purpose
-	Theme        string // Project theme
-	Demographics string // Target demographics
-	Interests    string // Target interests
-	MaxSize      int    // Maximum number of names to generate
-	MaxLength    int    // Maximum length of each name
-}
-
-// promptTemplate is a Go template for prompting.
-const promptTemplate = `Given the following parameters:
+Given the following parameters:
 
 - Project Purpose: {{.Purpose}}
 - Project Theme: {{.Theme}}
@@ -48,4 +32,3 @@ The JSON output should adhere to the following structure:
         "suitabilityScore": 1.0
     }
 ]
-`
