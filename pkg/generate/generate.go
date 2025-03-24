@@ -3,12 +3,19 @@ package generate
 
 import (
 	_ "embed"
+	"errors"
 	"strings"
 	"text/template"
 )
 
+// ErrNegativeInput happens when negative input occurs
+var ErrNegativeInput = errors.New("negative input")
+
 // promptName is a name for the template below.
 const promptName = "name_brainstorm_with_json"
+
+//go:embed project.template
+var promptTemplate string
 
 // promptData is the input for the prompt template.
 type promptData struct {
@@ -20,11 +27,11 @@ type promptData struct {
 	MaxLength    int    // Maximum length of each name
 }
 
-//go:embed project.template
-var promptTemplate string
-
 // GeneratePrompt generates the prompt for AI chatbots.
 func GeneratePrompt(purpose, theme, demographics, interests string, size, length int) (string, error) {
+	if size < 0 || length < 0 {
+		return "", ErrNegativeInput
+	}
 	data := promptData{
 		Purpose:      purpose,
 		Theme:        theme,
