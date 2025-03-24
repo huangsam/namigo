@@ -16,9 +16,8 @@ func SearchByScrape(name string, size int) ([]model.NPMPackage, error) {
 	pipeline := util.NewDocumentPipeline(client, ScrapeList(name))
 	doc, err := pipeline.Execute()
 	if err != nil {
-		return []model.NPMPackage{}, err
+		return nil, err
 	}
-
 	return docWorker(doc, size), nil
 }
 
@@ -27,12 +26,12 @@ func SearchByAPI(name string, size int) ([]model.NPMPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 	bl, err := util.RESTAPIQuery(client, APIList(name, size))
 	if err != nil {
-		return []model.NPMPackage{}, err
+		return nil, err
 	}
 
 	var listRes extern.NPMAPIListResponse
 	if err := json.Unmarshal(bl, &listRes); err != nil {
-		return []model.NPMPackage{}, err
+		return nil, err
 	}
 
 	return apiWorker(&listRes)

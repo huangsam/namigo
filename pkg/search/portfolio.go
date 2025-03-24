@@ -48,7 +48,7 @@ func NewPortfolio() *Portfolio {
 func (p *Portfolio) Size() int {
 	totalSize := 0
 	v := reflect.ValueOf(p.Res)
-	for i := 0; i < v.NumField(); i++ {
+	for i := range v.NumField() {
 		field := v.Field(i)
 		if field.Kind() == reflect.Slice {
 			totalSize += field.Len()
@@ -61,7 +61,7 @@ func (p *Portfolio) Size() int {
 func (p *Portfolio) Errors() []error {
 	errs := []error{}
 	v := reflect.ValueOf(p.Err)
-	for i := 0; i < v.NumField(); i++ {
+	for i := range v.NumField() {
 		field := v.Field(i)
 		if field.Interface() != nil {
 			errs = append(errs, field.Interface().(error))

@@ -7,6 +7,8 @@ import (
 	"github.com/huangsam/namigo/internal/model"
 )
 
+const goroutineCount = 4
+
 // SearchByProbe searches for DNS records via nameserver lookups.
 func SearchByProbe(name string, size int) ([]model.DNSRecord, error) {
 	domains := []string{"com", "org", "net", "io", "tech", "ai", "me", "shop"}
@@ -24,7 +26,7 @@ func SearchByProbe(name string, size int) ([]model.DNSRecord, error) {
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 
-	for i := 0; i < 4; i++ {
+	for range goroutineCount {
 		wg.Add(1)
 		go netWorker(domainChan, &wg, &mu, &result, &errors, size)
 	}

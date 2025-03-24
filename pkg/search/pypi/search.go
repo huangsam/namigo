@@ -21,12 +21,12 @@ func SearchByAPI(name string, size int) ([]model.PyPIPackage, error) {
 
 	bl, err := util.RESTAPIQuery(client, APIList())
 	if err != nil {
-		return []model.PyPIPackage{}, err
+		return nil, err
 	}
 
 	var listRes extern.PyPIAPIListResponse
 	if err := json.Unmarshal(bl, &listRes); err != nil {
-		return []model.PyPIPackage{}, err
+		return nil, err
 	}
 
 	taskChan := make(chan string)
@@ -44,7 +44,7 @@ func SearchByAPI(name string, size int) ([]model.PyPIPackage, error) {
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 
-	for i := 0; i < goroutineCount; i++ {
+	for range goroutineCount {
 		wg.Add(1)
 		go apiWorker(client, taskChan, &wg, &mu, &result, &errors, size)
 	}

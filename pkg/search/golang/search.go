@@ -14,8 +14,7 @@ func SearchByScrape(name string, size int) ([]model.GoPackage, error) {
 	pipeline := util.NewDocumentPipeline(client, ScrapeList(name))
 	doc, err := pipeline.Execute()
 	if err != nil {
-		return []model.GoPackage{}, err
+		return nil, err
 	}
-
 	return docWorker(doc, size, name), nil
 }
