@@ -1,9 +1,11 @@
 package sub
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
+	"github.com/huangsam/namigo/internal/cmd"
 	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/pkg/search"
 	"github.com/huangsam/namigo/pkg/search/dns"
@@ -13,6 +15,8 @@ import (
 	"github.com/huangsam/namigo/pkg/search/pypi"
 	"github.com/urfave/cli/v2"
 )
+
+var ErrMissingSearchTerm = errors.New("missing search term")
 
 // SearchPackageAction searches for packages.
 func SearchPackageAction(c *cli.Context) error {
@@ -56,15 +60,15 @@ func SearchPackageAction(c *cli.Context) error {
 	})
 
 	ptf.Wait()
-	if err := checkPortfolio(ptf); err != nil {
+	if err := cmd.CheckPortfolio(ptf); err != nil {
 		return err
 	}
 
 	fmt.Printf("🍺 Prepare %s results\n\n", outputFormat)
 	time.Sleep(500 * time.Millisecond)
-	displayResults(ptf.Res.Golang, &ptf.Fmt.Golang, outputFormat)
-	displayResults(ptf.Res.NPM, &ptf.Fmt.NPM, outputFormat)
-	displayResults(ptf.Res.PyPI, &ptf.Fmt.PyPI, outputFormat)
+	cmd.DisplayResults(ptf.Res.Golang, &ptf.Fmt.Golang, outputFormat)
+	cmd.DisplayResults(ptf.Res.NPM, &ptf.Fmt.NPM, outputFormat)
+	cmd.DisplayResults(ptf.Res.PyPI, &ptf.Fmt.PyPI, outputFormat)
 
 	return nil
 }
@@ -87,13 +91,13 @@ func SearchDNSAction(c *cli.Context) error {
 		ptf.Err.DNS = err
 	}
 
-	if err := checkPortfolio(ptf); err != nil {
+	if err := cmd.CheckPortfolio(ptf); err != nil {
 		return err
 	}
 
 	fmt.Printf("🍺 Prepare %s results\n\n", outputFormat)
 	time.Sleep(500 * time.Millisecond)
-	displayResults(ptf.Res.DNS, &ptf.Fmt.DNS, outputFormat)
+	cmd.DisplayResults(ptf.Res.DNS, &ptf.Fmt.DNS, outputFormat)
 
 	return nil
 }
@@ -116,13 +120,13 @@ func SearchEmailAction(c *cli.Context) error {
 		ptf.Err.Email = err
 	}
 
-	if err := checkPortfolio(ptf); err != nil {
+	if err := cmd.CheckPortfolio(ptf); err != nil {
 		return err
 	}
 
 	fmt.Printf("🍺 Prepare %s results\n\n", outputFormat)
 	time.Sleep(500 * time.Millisecond)
-	displayResults(ptf.Res.Email, &ptf.Fmt.Email, outputFormat)
+	cmd.DisplayResults(ptf.Res.Email, &ptf.Fmt.Email, outputFormat)
 
 	return nil
 }
