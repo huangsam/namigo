@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-root="$(git rev-parse --show-toplevel)"
+root="$(pwd)"
 cmd="namigo"
 
 go build -o "$root/bin/$cmd" "github.com/huangsam/namigo/cmd/$cmd"
