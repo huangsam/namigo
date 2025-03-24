@@ -14,13 +14,11 @@ import (
 func apiWorker(
 	client *http.Client,
 	taskChan chan string,
-	wg *sync.WaitGroup,
 	mu *sync.Mutex,
 	result *[]model.PyPIPackage,
 	errors *[]error,
 	maxResults int,
 ) {
-	defer wg.Done()
 	for pkg := range taskChan {
 		bd, err := util.RESTAPIQuery(client, APIDetail(pkg))
 		if err != nil {

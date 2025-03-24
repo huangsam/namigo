@@ -10,13 +10,11 @@ import (
 // netWorker runs concurrent logic for DNS search.
 func netWorker(
 	domainChan chan string,
-	wg *sync.WaitGroup,
 	mu *sync.Mutex,
 	result *[]model.DNSRecord,
 	errors *[]error,
 	maxResults int,
 ) {
-	defer wg.Done()
 	for domain := range domainChan {
 		ips, err := net.LookupIP(domain)
 		if err != nil {

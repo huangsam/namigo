@@ -28,7 +28,10 @@ func SearchByProbe(name string, size int) ([]model.DNSRecord, error) {
 
 	for range goroutineCount {
 		wg.Add(1)
-		go netWorker(domainChan, &wg, &mu, &result, &errors, size)
+		go func() {
+			defer wg.Done()
+			netWorker(domainChan, &mu, &result, &errors, size)
+		}()
 	}
 
 	wg.Wait()

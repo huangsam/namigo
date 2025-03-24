@@ -46,7 +46,10 @@ func SearchByAPI(name string, size int) ([]model.PyPIPackage, error) {
 
 	for range goroutineCount {
 		wg.Add(1)
-		go apiWorker(client, taskChan, &wg, &mu, &result, &errors, size)
+		go func() {
+			defer wg.Done()
+			apiWorker(client, taskChan, &mu, &result, &errors, size)
+		}()
 	}
 
 	wg.Wait()
