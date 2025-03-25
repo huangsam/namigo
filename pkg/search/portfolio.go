@@ -100,14 +100,14 @@ func size(p *SearchPortfolio) int {
 func display(
 	key model.SearchRecordKey,
 	results []model.SearchRecord,
-	formatter SearchRecordLine,
-	format FormatOption,
+	line SearchRecordLine,
+	option FormatOption,
 ) {
 	label := key.String()
 	if len(results) == 0 {
 		return
 	}
-	switch format {
+	switch option {
 	case JSONOption:
 		type wrapper struct {
 			Label   string               `json:"label"`
@@ -115,13 +115,13 @@ func display(
 		}
 		data, err := json.MarshalIndent(&wrapper{Label: label, Results: results}, "", "  ")
 		if err != nil {
-			fmt.Printf("Cannot print %s for %s: %v\n", format, label, err)
+			fmt.Printf("Cannot print %s for %s: %v\n", option, label, err)
 			return
 		}
 		fmt.Printf("%s\n", data)
 	case TextOption:
 		for _, r := range results {
-			fmt.Println(formatter.Format(r))
+			fmt.Println(line.Format(r))
 		}
 	}
 }
