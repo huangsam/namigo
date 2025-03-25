@@ -45,15 +45,6 @@ func NewSearchPortfolio(option FormatOption) *SearchPortfolio {
 	}
 }
 
-// Size returns the number of results collected.
-func (p *SearchPortfolio) Size() int {
-	total := 0
-	for _, records := range p.resultMap {
-		total += len(records)
-	}
-	return total
-}
-
 // Register invokes a goroutine and increments internal WaitGroup counter.
 func (p *SearchPortfolio) Register(f SearchResultFunc) {
 	p.callers = append(p.callers, f)
@@ -78,16 +69,37 @@ func (p *SearchPortfolio) Run() error {
 	if len(p.errors) > 0 {
 		return ErrPorftolioFailure
 	}
-	if p.Size() == 0 {
+	if size(p) == 0 {
 		return ErrPorftolioEmpty
 	}
 	return nil
 }
 
-// displayResults displays results based on the specified parameters.
-func displayResults[T model.SearchRecord](
+// Display prints results across all results
+func (p *SearchPortfolio) Display() {
+	fmt.Printf("🍺 Prepare %s results\n\n", p.option)
+	time.Sleep(resultDelay)
+	for key := range p.resultMap {
+		results := p.resultMap[key]
+		line := p.lineMap[key] // assume that it exists
+		option := p.option
+		display(key, results, line, option)
+	}
+}
+
+// size returns the number of results collected.
+func size(p *SearchPortfolio) int {
+	total := 0
+	for _, records := range p.resultMap {
+		total += len(records)
+	}
+	return total
+}
+
+// display prints results based on the specified parameters.
+func display(
 	key model.SearchRecordKey,
-	results []T,
+	results []model.SearchRecord,
 	formatter SearchRecordLine,
 	format FormatOption,
 ) {
@@ -98,8 +110,8 @@ func displayResults[T model.SearchRecord](
 	switch format {
 	case JSONOption:
 		type wrapper struct {
-			Label   string `json:"label"`
-			Results []T    `json:"results"`
+			Label   string               `json:"label"`
+			Results []model.SearchRecord `json:"results"`
 		}
 		data, err := json.MarshalIndent(&wrapper{Label: label, Results: results}, "", "  ")
 		if err != nil {
@@ -111,17 +123,5 @@ func displayResults[T model.SearchRecord](
 		for _, r := range results {
 			fmt.Println(formatter.Format(r))
 		}
-	}
-}
-
-// Display displays results across all results
-func (p *SearchPortfolio) Display() {
-	fmt.Printf("🍺 Prepare %s results\n\n", p.option)
-	time.Sleep(resultDelay)
-	for key := range p.resultMap {
-		results := p.resultMap[key]
-		line := p.lineMap[key] // assume that it exists
-		option := p.option
-		displayResults(key, results, line, option)
 	}
 }
