@@ -35,8 +35,8 @@ func (k SearchRecordKey) String() string {
 	}
 }
 
-// SearchRecord is an union type for all search Record values
-type SearchRecord interface{ Record() }
+// SearchRecord is an union type for all search record values
+type SearchRecord interface{ record() }
 
 type GoPackage struct {
 	Name        string // Package name
@@ -44,14 +44,14 @@ type GoPackage struct {
 	Description string // Package description
 }
 
-func (*GoPackage) Record() {}
+func (*GoPackage) record() {}
 
 type NPMPackage struct {
 	Name        string // Package name
 	Description string // Package description
 }
 
-func (*NPMPackage) Record() {}
+func (*NPMPackage) record() {}
 
 type PyPIPackage struct {
 	Name        string // Package name
@@ -59,14 +59,14 @@ type PyPIPackage struct {
 	Description string // Package description
 }
 
-func (*PyPIPackage) Record() {}
+func (*PyPIPackage) record() {}
 
 type DNSRecord struct {
 	FQDN   string   // Fully qualified domain name
 	IPList []net.IP // Associated IP addresses
 }
 
-func (*DNSRecord) Record() {}
+func (*DNSRecord) record() {}
 
 type EmailRecord struct {
 	Addr           string // Email address
@@ -74,7 +74,7 @@ type EmailRecord struct {
 	HasValidDomain bool   // Email address has valid domain
 }
 
-func (*EmailRecord) Record() {}
+func (*EmailRecord) record() {}
 
 type SearchResult struct {
 	Key     SearchRecordKey
