@@ -1,87 +1,127 @@
 package search
 
 import (
-	"reflect"
+	"encoding/json"
+	"errors"
+	"fmt"
 	"sync"
+	"time"
 
 	"github.com/huangsam/namigo/internal/model"
 )
 
-// Portfolio has entity helpers and task helpers.
-type Portfolio struct {
-	Res PortfolioResults
-	Err PortfolioErrors
-	Fmt PortfolioFormatters
-	wg  *sync.WaitGroup
+const resultDelay = 500 * time.Millisecond
+
+var (
+	ErrPorftolioEmpty   = errors.New("portfolio collection empty")
+	ErrPorftolioFailure = errors.New("portfolio collection failure")
+)
+
+type SearchResultFunc func(*SearchPortfolio) (model.SearchResult, error)
+
+// SearchPortfolio has entity helpers and task helpers.
+type SearchPortfolio struct {
+	resultMap map[model.SearchRecordKey][]model.SearchRecord
+	lineMap   map[model.SearchRecordKey]SearchRecordLine
+	option    FormatOption
+	callers   []SearchResultFunc
+	errors    []error
 }
 
-type PortfolioResults struct {
-	Golang []model.GoPackage
-	NPM    []model.NPMPackage
-	PyPI   []model.PyPIPackage
-	DNS    []model.DNSRecord
-	Email  []model.EmailRecord
-}
-
-type PortfolioErrors struct {
-	Golang error
-	NPM    error
-	PyPI   error
-	DNS    error
-	Email  error
-}
-
-type PortfolioFormatters struct {
-	Golang GoFormatter
-	NPM    NPMFormatter
-	PyPI   PyPIFormatter
-	DNS    DNSFormatter
-	Email  EmailFormatter
-}
-
-// NewPortfolio creates a new portfolio instance.
-func NewPortfolio() *Portfolio {
-	return &Portfolio{wg: &sync.WaitGroup{}}
+// NewSearchPortfolio creates a new portfolio instance.
+func NewSearchPortfolio(option FormatOption) *SearchPortfolio {
+	return &SearchPortfolio{
+		resultMap: map[model.SearchRecordKey][]model.SearchRecord{},
+		lineMap: map[model.SearchRecordKey]SearchRecordLine{
+			model.GoKey:    &GoLine{},
+			model.NPMKey:   &NPMLine{},
+			model.PyPIKey:  &PyPILine{},
+			model.DNSKey:   &DNSLine{},
+			model.EmailKey: &EmailLine{},
+		},
+		option:  option,
+		callers: []SearchResultFunc{},
+		errors:  []error{},
+	}
 }
 
 // Size returns the number of results collected.
-func (p *Portfolio) Size() int {
-	totalSize := 0
-	v := reflect.ValueOf(p.Res)
-	for i := range v.NumField() {
-		field := v.Field(i)
-		if field.Kind() == reflect.Slice {
-			totalSize += field.Len()
+func (p *SearchPortfolio) Size() int {
+	total := 0
+	for _, records := range p.resultMap {
+		total += len(records)
+	}
+	return total
+}
+
+// Register invokes a goroutine and increments internal WaitGroup counter.
+func (p *SearchPortfolio) Register(f SearchResultFunc) {
+	p.callers = append(p.callers, f)
+}
+
+// Run blocks the main thread until all goroutines complete.
+func (p *SearchPortfolio) Run() error {
+	var wg sync.WaitGroup
+	for _, caller := range p.callers {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			if result, err := caller(p); err != nil {
+				p.errors = append(p.errors, err)
+			} else {
+				p.resultMap[result.Key] = result.Records
+			}
+		}()
+	}
+	wg.Wait()
+
+	if len(p.errors) > 0 {
+		return ErrPorftolioFailure
+	}
+	if p.Size() == 0 {
+		return ErrPorftolioEmpty
+	}
+	return nil
+}
+
+// displayResults displays results based on the specified parameters.
+func displayResults[T model.SearchRecord](
+	key model.SearchRecordKey,
+	results []T,
+	formatter SearchRecordLine,
+	format FormatOption,
+) {
+	label := key.String()
+	if len(results) == 0 {
+		return
+	}
+	switch format {
+	case JSONOption:
+		type wrapper struct {
+			Label   string `json:"label"`
+			Results []T    `json:"results"`
+		}
+		data, err := json.MarshalIndent(&wrapper{Label: label, Results: results}, "", "  ")
+		if err != nil {
+			fmt.Printf("Cannot print %s for %s: %v\n", format, label, err)
+			return
+		}
+		fmt.Printf("%s\n", data)
+	case TextOption:
+		for _, r := range results {
+			fmt.Println(formatter.Format(r))
 		}
 	}
-	return totalSize
 }
 
-// Errors returns all errors found.
-func (p *Portfolio) Errors() []error {
-	errs := []error{}
-	v := reflect.ValueOf(p.Err)
-	for i := range v.NumField() {
-		field := v.Field(i)
-		if field.Interface() != nil {
-			errs = append(errs, field.Interface().(error))
-		}
+// Display displays results across all results
+func (p *SearchPortfolio) Display() {
+	fmt.Printf("🍺 Prepare %s results\n\n", p.option)
+	time.Sleep(resultDelay)
+	for key := range p.resultMap {
+		results := p.resultMap[key]
+		line := p.lineMap[key] // assume that it exists
+		option := p.option
+		displayResults(key, results, line, option)
 	}
-	return errs
-}
-
-// Run invokes a goroutine and increments internal WaitGroup counter.
-func (p *Portfolio) Run(f func(ptf *Portfolio)) {
-	p.wg.Add(1)
-	go f(p)
-}
-
-// Done decrements internal WaitGroup counter.
-func (p *Portfolio) Done() {
-	p.wg.Done()
-}
-
-// Wait blocks the main thread until all goroutines complete.
-func (p *Portfolio) Wait() {
-	p.wg.Wait()
 }

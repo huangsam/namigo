@@ -3,9 +3,7 @@ package sub
 import (
 	"errors"
 	"fmt"
-	"time"
 
-	"github.com/huangsam/namigo/internal/cmd"
 	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/pkg/search"
 	"github.com/huangsam/namigo/pkg/search/dns"
@@ -25,50 +23,56 @@ func SearchPackageAction(c *cli.Context) error {
 		return ErrMissingSearchTerm
 	}
 	maxSize := c.Int("size")
-	outputFormat := model.GetOutputFormat(c.String("format"))
+	outputFormat := search.GetFormatOption(c.String("format"))
 
-	ptf := search.NewPortfolio()
+	ptf := search.NewSearchPortfolio(outputFormat)
 
-	ptf.Run(func(ptf *search.Portfolio) {
-		defer ptf.Done()
-		fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.Golang.Label())
-		if searchResults, err := golang.SearchByScrape(searchTerm, maxSize); err == nil {
-			ptf.Res.Golang = searchResults
-		} else {
-			ptf.Err.Golang = err
+	ptf.Register(func(sp *search.SearchPortfolio) (model.SearchResult, error) {
+		key := model.GoKey
+		fmt.Printf("🔍 Search for %s results\n", key)
+		values, err := golang.SearchByScrape(searchTerm, maxSize)
+		if err != nil {
+			return model.SearchResult{}, err
 		}
+		records := []model.SearchRecord{}
+		for _, value := range values {
+			records = append(records, &value)
+		}
+		return model.SearchResult{Key: key, Records: records}, nil
 	})
 
-	ptf.Run(func(ptf *search.Portfolio) {
-		defer ptf.Done()
-		fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.NPM.Label())
-		if searchResults, err := npm.SearchByAPI(searchTerm, maxSize); err == nil {
-			ptf.Res.NPM = searchResults
-		} else {
-			ptf.Err.NPM = err
+	ptf.Register(func(sp *search.SearchPortfolio) (model.SearchResult, error) {
+		key := model.NPMKey
+		fmt.Printf("🔍 Search for %s results\n", key)
+		values, err := npm.SearchByAPI(searchTerm, maxSize)
+		if err != nil {
+			return model.SearchResult{}, err
 		}
+		records := []model.SearchRecord{}
+		for _, value := range values {
+			records = append(records, &value)
+		}
+		return model.SearchResult{Key: key, Records: records}, nil
 	})
 
-	ptf.Run(func(ptf *search.Portfolio) {
-		defer ptf.Done()
-		fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.PyPI.Label())
-		if searchResults, err := pypi.SearchByAPI(searchTerm, maxSize); err == nil {
-			ptf.Res.PyPI = searchResults
-		} else {
-			ptf.Err.PyPI = err
+	ptf.Register(func(sp *search.SearchPortfolio) (model.SearchResult, error) {
+		key := model.PyPIKey
+		fmt.Printf("🔍 Search for %s results\n", key)
+		values, err := pypi.SearchByAPI(searchTerm, maxSize)
+		if err != nil {
+			return model.SearchResult{}, err
 		}
+		records := []model.SearchRecord{}
+		for _, value := range values {
+			records = append(records, &value)
+		}
+		return model.SearchResult{Key: key, Records: records}, nil
 	})
 
-	ptf.Wait()
-	if err := cmd.CheckPortfolio(ptf); err != nil {
+	if err := ptf.Run(); err != nil {
 		return err
 	}
-
-	fmt.Printf("🍺 Prepare %s results\n\n", outputFormat)
-	time.Sleep(500 * time.Millisecond)
-	cmd.DisplayResults(ptf.Res.Golang, &ptf.Fmt.Golang, outputFormat)
-	cmd.DisplayResults(ptf.Res.NPM, &ptf.Fmt.NPM, outputFormat)
-	cmd.DisplayResults(ptf.Res.PyPI, &ptf.Fmt.PyPI, outputFormat)
+	ptf.Display()
 
 	return nil
 }
@@ -80,24 +84,28 @@ func SearchDNSAction(c *cli.Context) error {
 		return ErrMissingSearchTerm
 	}
 	maxSize := c.Int("size")
-	outputFormat := model.GetOutputFormat(c.String("format"))
+	outputFormat := search.GetFormatOption(c.String("format"))
 
-	ptf := search.NewPortfolio()
+	ptf := search.NewSearchPortfolio(outputFormat)
 
-	fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.DNS.Label())
-	if searchResults, err := dns.SearchByProbe(searchTerm, maxSize); err == nil {
-		ptf.Res.DNS = searchResults
-	} else {
-		ptf.Err.DNS = err
-	}
+	ptf.Register(func(sp *search.SearchPortfolio) (model.SearchResult, error) {
+		key := model.DNSKey
+		fmt.Printf("🔍 Search for %s results\n", key)
+		values, err := dns.SearchByProbe(searchTerm, maxSize)
+		if err != nil {
+			return model.SearchResult{}, err
+		}
+		records := []model.SearchRecord{}
+		for _, value := range values {
+			records = append(records, &value)
+		}
+		return model.SearchResult{Key: key, Records: records}, nil
+	})
 
-	if err := cmd.CheckPortfolio(ptf); err != nil {
+	if err := ptf.Run(); err != nil {
 		return err
 	}
-
-	fmt.Printf("🍺 Prepare %s results\n\n", outputFormat)
-	time.Sleep(500 * time.Millisecond)
-	cmd.DisplayResults(ptf.Res.DNS, &ptf.Fmt.DNS, outputFormat)
+	ptf.Display()
 
 	return nil
 }
@@ -109,24 +117,28 @@ func SearchEmailAction(c *cli.Context) error {
 		return ErrMissingSearchTerm
 	}
 	maxSize := c.Int("size")
-	outputFormat := model.GetOutputFormat(c.String("format"))
+	outputFormat := search.GetFormatOption(c.String("format"))
 
-	ptf := search.NewPortfolio()
+	ptf := search.NewSearchPortfolio(outputFormat)
 
-	fmt.Printf("🔍 Search for %s results\n", ptf.Fmt.Email.Label())
-	if searchResults, err := email.SearchByProbe(searchTerm, maxSize); err == nil {
-		ptf.Res.Email = searchResults
-	} else {
-		ptf.Err.Email = err
-	}
+	ptf.Register(func(sp *search.SearchPortfolio) (model.SearchResult, error) {
+		key := model.EmailKey
+		fmt.Printf("🔍 Search for %s results\n", key)
+		values, err := email.SearchByProbe(searchTerm, maxSize)
+		if err != nil {
+			return model.SearchResult{}, err
+		}
+		records := []model.SearchRecord{}
+		for _, value := range values {
+			records = append(records, &value)
+		}
+		return model.SearchResult{Key: key, Records: records}, nil
+	})
 
-	if err := cmd.CheckPortfolio(ptf); err != nil {
+	if err := ptf.Run(); err != nil {
 		return err
 	}
-
-	fmt.Printf("🍺 Prepare %s results\n\n", outputFormat)
-	time.Sleep(500 * time.Millisecond)
-	cmd.DisplayResults(ptf.Res.Email, &ptf.Fmt.Email, outputFormat)
+	ptf.Display()
 
 	return nil
 }

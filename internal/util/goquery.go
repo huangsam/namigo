@@ -41,7 +41,7 @@ func (dp *DocumentPipeline) Execute() (*goquery.Document, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
+	defer dismiss(res.Body.Close)
 	for _, handler := range dp.responseHandlers { // For multiple side effects
 		if err = handler(res); err != nil {
 			return nil, err

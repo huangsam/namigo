@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/huangsam/namigo/cmd/namigo/sub"
-	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/pkg/search"
 	"github.com/urfave/cli/v2"
 )
 
@@ -27,7 +27,7 @@ func checkLengthFlag(ctx *cli.Context, i int) error {
 
 // checkFormatFlag checks for valid format flag.
 func checkFormatFlag(ctx *cli.Context, s string) error {
-	if s != model.TextValue && s != model.JSONValue {
+	if s != search.TextValue && s != search.JSONValue {
 		return fmt.Errorf("format %s is invalid", s)
 	}
 	return nil
@@ -91,8 +91,8 @@ func main() {
 					},
 					&cli.StringFlag{
 						Name:   "format",
-						Usage:  fmt.Sprintf("Output format can be %s or %s", model.TextValue, model.JSONValue),
-						Value:  model.TextValue,
+						Usage:  fmt.Sprintf("Output format can be %s or %s", search.TextValue, search.JSONValue),
+						Value:  search.TextValue,
 						Action: checkFormatFlag,
 					},
 				},

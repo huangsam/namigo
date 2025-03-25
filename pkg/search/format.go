@@ -1,4 +1,4 @@
-package model
+package search
 
 // FormatOption represents the output mode.
 type FormatOption int
@@ -11,8 +11,8 @@ const (
 	JSONValue = "json"
 )
 
-// GetOutputFormat returns an OutputMode instance.
-func GetOutputFormat(format string) FormatOption {
+// GetFormatOption returns an FormatOption instance.
+func GetFormatOption(format string) FormatOption {
 	switch format {
 	case TextValue:
 		return TextOption
