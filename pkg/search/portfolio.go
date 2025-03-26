@@ -22,7 +22,7 @@ type SearchResultFunc func(*SearchPortfolio) (model.SearchResult, error)
 // SearchPortfolio has entity helpers and task helpers.
 type SearchPortfolio struct {
 	resultMap map[model.SearchKey][]model.SearchRecord
-	lineMap   map[model.SearchKey]SearchRecordLine
+	lineMap   map[model.SearchKey]SearchLine
 	option    FormatOption
 	funcs     []SearchResultFunc
 	errors    []error
@@ -32,7 +32,7 @@ type SearchPortfolio struct {
 func NewSearchPortfolio(format FormatOption) *SearchPortfolio {
 	return &SearchPortfolio{
 		resultMap: map[model.SearchKey][]model.SearchRecord{},
-		lineMap: map[model.SearchKey]SearchRecordLine{
+		lineMap: map[model.SearchKey]SearchLine{
 			model.GoKey:    &GoLine{},
 			model.NPMKey:   &NPMLine{},
 			model.PyPIKey:  &PyPILine{},

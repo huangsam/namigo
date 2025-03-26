@@ -11,8 +11,8 @@ const (
 	maxIPLength   = 3  // Maximum IP length
 )
 
-// SearchRecordLine formats search records as strings.
-type SearchRecordLine interface {
+// SearchLine formats search records as strings.
+type SearchLine interface {
 	// Format formats a single result.
 	Format(label string, result model.SearchRecord) string
 }
