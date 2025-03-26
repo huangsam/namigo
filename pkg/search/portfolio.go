@@ -21,11 +21,11 @@ type SearchResultFunc func(*SearchPortfolio) (model.SearchResult, error)
 
 // SearchPortfolio has entity helpers and task helpers.
 type SearchPortfolio struct {
-	resultMap map[model.SearchRecordKey][]model.SearchRecord
-	lineMap   map[model.SearchRecordKey]SearchRecordLine
-	option    FormatOption
-	callers   []SearchResultFunc
-	errors    []error
+	resultMap    map[model.SearchRecordKey][]model.SearchRecord
+	errorMap     map[model.SearchRecordKey]error
+	lineMap      map[model.SearchRecordKey]SearchRecordLine
+	formatOption FormatOption
+	resultFuncs  []SearchResultFunc
 }
 
 // NewSearchPortfolio creates a new portfolio instance.
@@ -39,37 +39,42 @@ func NewSearchPortfolio(option FormatOption) *SearchPortfolio {
 			model.DNSKey:   &DNSLine{},
 			model.EmailKey: &EmailLine{},
 		},
-		option:  option,
-		callers: []SearchResultFunc{},
-		errors:  []error{},
+		formatOption: option,
+		resultFuncs:  []SearchResultFunc{},
 	}
 }
 
 // Register invokes a goroutine and increments internal WaitGroup counter.
 func (p *SearchPortfolio) Register(f SearchResultFunc) {
-	p.callers = append(p.callers, f)
+	p.resultFuncs = append(p.resultFuncs, f)
 }
 
 // Run blocks the main thread until all goroutines complete.
 func (p *SearchPortfolio) Run() error {
 	var wg sync.WaitGroup
-	for _, caller := range p.callers {
+	var emu sync.Mutex
+	var rmu sync.Mutex
+	for _, resultFunc := range p.resultFuncs {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			if result, err := caller(p); err != nil {
-				p.errors = append(p.errors, err)
+			if result, err := resultFunc(p); err != nil {
+				emu.Lock() // Critical section
+				p.errorMap[result.Key] = err
+				emu.Unlock()
 			} else {
+				rmu.Lock() // Critical section
 				p.resultMap[result.Key] = result.Records
+				rmu.Unlock()
 			}
 		}()
 	}
 	wg.Wait()
 
-	if len(p.errors) > 0 {
+	if len(p.errorMap) > 0 {
 		return ErrPorftolioFailure
 	}
-	if size(p) == 0 {
+	if len(p.resultMap) == 0 {
 		return ErrPorftolioEmpty
 	}
 	return nil
@@ -77,23 +82,20 @@ func (p *SearchPortfolio) Run() error {
 
 // Display prints results across all results
 func (p *SearchPortfolio) Display() {
-	fmt.Printf("🍺 Prepare %s results\n\n", p.option)
+	fmt.Printf("🍺 Prepare %s results\n\n", p.formatOption)
 	time.Sleep(resultDelay)
 	for key := range p.resultMap {
 		results := p.resultMap[key]
 		line := p.lineMap[key] // assume that it exists
-		option := p.option
+		option := p.formatOption
 		display(key, results, line, option)
 	}
 }
 
-// size returns the number of results collected.
-func size(p *SearchPortfolio) int {
-	total := 0
-	for _, records := range p.resultMap {
-		total += len(records)
-	}
-	return total
+// jsonWrapper is a helper struct for JSON formatting.
+type jsonWrapper struct {
+	Label   string               `json:"label"`
+	Results []model.SearchRecord `json:"results"`
 }
 
 // display prints results based on the specified parameters.
@@ -109,11 +111,7 @@ func display(
 	}
 	switch option {
 	case JSONOption:
-		type wrapper struct {
-			Label   string               `json:"label"`
-			Results []model.SearchRecord `json:"results"`
-		}
-		data, err := json.MarshalIndent(&wrapper{Label: label, Results: results}, "", "  ")
+		data, err := json.MarshalIndent(&jsonWrapper{Label: label, Results: results}, "", "  ")
 		if err != nil {
 			fmt.Printf("Cannot print %s for %s: %v\n", option, label, err)
 			return
