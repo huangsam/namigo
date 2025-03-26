@@ -17,12 +17,13 @@ var (
 	ErrPorftolioFailure = errors.New("portfolio collection failure")
 )
 
+// SearchResultFunc is a function that returns search results.
 type SearchResultFunc func(*SearchPortfolio) (model.SearchResult, error)
 
 // SearchPortfolio has entity helpers and task helpers.
 type SearchPortfolio struct {
 	resultMap map[model.SearchKey][]model.SearchRecord
-	lineMap   map[model.SearchKey]SearchLine
+	lineMap   map[model.SearchKey]SearchLineFunc
 	option    FormatOption
 	funcs     []SearchResultFunc
 	errors    []error
@@ -32,12 +33,12 @@ type SearchPortfolio struct {
 func NewSearchPortfolio(format FormatOption) *SearchPortfolio {
 	return &SearchPortfolio{
 		resultMap: map[model.SearchKey][]model.SearchRecord{},
-		lineMap: map[model.SearchKey]SearchLine{
-			model.GoKey:    &GoLine{},
-			model.NPMKey:   &NPMLine{},
-			model.PyPIKey:  &PyPILine{},
-			model.DNSKey:   &DNSLine{},
-			model.EmailKey: &EmailLine{},
+		lineMap: map[model.SearchKey]SearchLineFunc{
+			model.GoKey:    GoLine,
+			model.NPMKey:   NPMLine,
+			model.PyPIKey:  PyPILine,
+			model.DNSKey:   DNSLine,
+			model.EmailKey: EmailLine,
 		},
 		option: format,
 		funcs:  []SearchResultFunc{},
@@ -84,9 +85,8 @@ func (p *SearchPortfolio) Run() error {
 func (p *SearchPortfolio) Display() {
 	fmt.Printf("🍺 Prepare %s results\n\n", p.option)
 	time.Sleep(resultDelay)
-	for key := range p.resultMap {
+	for key, records := range p.resultMap {
 		label := key.String()
-		records := p.resultMap[key]
 		line := p.lineMap[key] // assume that it exists
 		option := p.option
 		if len(records) == 0 {
@@ -94,15 +94,14 @@ func (p *SearchPortfolio) Display() {
 		}
 		switch option {
 		case JSONOption:
-			data, err := json.MarshalIndent(&model.SearchJSON{Label: label, Result: records}, "", "  ")
-			if err != nil {
-				fmt.Printf("Cannot print %s for %s: %v\n", option, key, err)
-				return
+			if b, err := json.MarshalIndent(&model.SearchJSON{Label: label, Result: records}, "", "  "); err != nil {
+				fmt.Printf("Cannot print %s for %s: %v\n", option, label, err)
+			} else {
+				fmt.Printf("%s\n", b)
 			}
-			fmt.Printf("%s\n", data)
 		case TextOption:
 			for _, record := range records {
-				fmt.Println(line.Format(label, record))
+				fmt.Println(line(label, record))
 			}
 		}
 	}
