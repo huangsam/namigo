@@ -88,7 +88,7 @@ func (p *SearchPortfolio) Display() {
 	time.Sleep(resultDelay)
 	for key, records := range p.resultMap {
 		label := key.String()
-		line := p.lineMap[key] // assume that it exists
+		line := p.lineMap[key] // Assume that this exists
 		option := p.option
 		if len(records) == 0 {
 			return
@@ -96,7 +96,7 @@ func (p *SearchPortfolio) Display() {
 		switch option {
 		case JSONOption:
 			if b, err := json.MarshalIndent(&model.SearchJSON{Label: label, Result: records}, "", "  "); err != nil {
-				fmt.Printf("Cannot print %s for %s: %v\n", option, label, err)
+				fmt.Printf("Cannot display %s: %s\n", label, err.Error())
 			} else {
 				fmt.Printf("%s\n", b)
 			}
