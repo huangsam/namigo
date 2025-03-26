@@ -85,35 +85,25 @@ func (p *SearchPortfolio) Display() {
 	fmt.Printf("🍺 Prepare %s results\n\n", p.option)
 	time.Sleep(resultDelay)
 	for key := range p.resultMap {
-		results := p.resultMap[key]
+		label := key.String()
+		records := p.resultMap[key]
 		line := p.lineMap[key] // assume that it exists
 		option := p.option
-		display(key, results, line, option)
-	}
-}
-
-// display prints results based on the specified parameters.
-func display(
-	key model.SearchKey,
-	records []model.SearchRecord,
-	line SearchRecordLine,
-	option FormatOption,
-) {
-	if len(records) == 0 {
-		return
-	}
-	label := key.String()
-	switch option {
-	case JSONOption:
-		data, err := json.MarshalIndent(&model.SearchJSON{Label: label, Result: records}, "", "  ")
-		if err != nil {
-			fmt.Printf("Cannot print %s for %s: %v\n", option, key, err)
+		if len(records) == 0 {
 			return
 		}
-		fmt.Printf("%s\n", data)
-	case TextOption:
-		for _, record := range records {
-			fmt.Println(line.Format(label, record))
+		switch option {
+		case JSONOption:
+			data, err := json.MarshalIndent(&model.SearchJSON{Label: label, Result: records}, "", "  ")
+			if err != nil {
+				fmt.Printf("Cannot print %s for %s: %v\n", option, key, err)
+				return
+			}
+			fmt.Printf("%s\n", data)
+		case TextOption:
+			for _, record := range records {
+				fmt.Println(line.Format(label, record))
+			}
 		}
 	}
 }
