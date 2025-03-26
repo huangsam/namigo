@@ -5,9 +5,8 @@ import (
 	"sync"
 
 	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/internal/util"
 )
-
-const goroutineCount = 4
 
 // SearchByProbe searches for DNS records via nameserver lookups.
 func SearchByProbe(name string, size int) ([]model.DNSRecord, error) {
@@ -24,17 +23,11 @@ func SearchByProbe(name string, size int) ([]model.DNSRecord, error) {
 	result := []model.DNSRecord{}
 	errors := []error{}
 	var mu sync.Mutex
-	var wg sync.WaitGroup
 
-	for range goroutineCount {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			netWorker(domainChan, &mu, &result, &errors, size)
-		}()
-	}
+	util.StartCommonWorkers(func() {
+		netWorker(domainChan, &mu, &result, &errors, size)
+	})
 
-	wg.Wait()
 	if len(result) == 0 && len(errors) > 0 {
 		return result, fmt.Errorf("no results with %d errors", len(errors))
 	}

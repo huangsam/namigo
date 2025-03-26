@@ -13,8 +13,6 @@ import (
 	"github.com/huangsam/namigo/internal/util"
 )
 
-const goroutineCount = 4
-
 // SearchByAPI searches for PyPI packages by querying pypi.org.
 func SearchByAPI(name string, size int) ([]model.PyPIPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
@@ -42,17 +40,11 @@ func SearchByAPI(name string, size int) ([]model.PyPIPackage, error) {
 	result := []model.PyPIPackage{}
 	errors := []error{}
 	var mu sync.Mutex
-	var wg sync.WaitGroup
 
-	for range goroutineCount {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			apiWorker(client, taskChan, &mu, &result, &errors, size)
-		}()
-	}
+	util.StartCommonWorkers(func() {
+		apiWorker(client, taskChan, &mu, &result, &errors, size)
+	})
 
-	wg.Wait()
 	if len(result) == 0 && len(errors) > 0 {
 		return result, fmt.Errorf("no results with %d errors", len(errors))
 	}
