@@ -42,6 +42,7 @@ func NewSearchPortfolio(format FormatOption) *SearchPortfolio {
 		},
 		option: format,
 		funcs:  []SearchResultFunc{},
+		errors: []error{},
 	}
 }
 
