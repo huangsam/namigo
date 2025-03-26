@@ -21,9 +21,9 @@ type SearchResultFunc func(*SearchPortfolio) (model.SearchResult, error)
 
 // SearchPortfolio has entity helpers and task helpers.
 type SearchPortfolio struct {
-	resultMap    map[model.SearchRecordKey][]model.SearchRecord
-	errorMap     map[model.SearchRecordKey]error
-	lineMap      map[model.SearchRecordKey]SearchRecordLine
+	resultMap    map[model.SearchKey][]model.SearchRecord
+	errorMap     map[model.SearchKey]error
+	lineMap      map[model.SearchKey]SearchRecordLine
 	formatOption FormatOption
 	resultFuncs  []SearchResultFunc
 }
@@ -31,8 +31,8 @@ type SearchPortfolio struct {
 // NewSearchPortfolio creates a new portfolio instance.
 func NewSearchPortfolio(option FormatOption) *SearchPortfolio {
 	return &SearchPortfolio{
-		resultMap: map[model.SearchRecordKey][]model.SearchRecord{},
-		lineMap: map[model.SearchRecordKey]SearchRecordLine{
+		resultMap: map[model.SearchKey][]model.SearchRecord{},
+		lineMap: map[model.SearchKey]SearchRecordLine{
 			model.GoKey:    &GoLine{},
 			model.NPMKey:   &NPMLine{},
 			model.PyPIKey:  &PyPILine{},
@@ -92,34 +92,28 @@ func (p *SearchPortfolio) Display() {
 	}
 }
 
-// jsonWrapper is a helper struct for JSON formatting.
-type jsonWrapper struct {
-	Label   string               `json:"label"`
-	Results []model.SearchRecord `json:"results"`
-}
-
 // display prints results based on the specified parameters.
 func display(
-	key model.SearchRecordKey,
-	results []model.SearchRecord,
+	key model.SearchKey,
+	records []model.SearchRecord,
 	line SearchRecordLine,
 	option FormatOption,
 ) {
-	label := key.String()
-	if len(results) == 0 {
+	if len(records) == 0 {
 		return
 	}
+	label := key.String()
 	switch option {
 	case JSONOption:
-		data, err := json.MarshalIndent(&jsonWrapper{Label: label, Results: results}, "", "  ")
+		data, err := json.MarshalIndent(&model.SearchJSON{Label: label, Result: records}, "", "  ")
 		if err != nil {
-			fmt.Printf("Cannot print %s for %s: %v\n", option, label, err)
+			fmt.Printf("Cannot print %s for %s: %v\n", option, key, err)
 			return
 		}
 		fmt.Printf("%s\n", data)
 	case TextOption:
-		for _, r := range results {
-			fmt.Println(line.Format(r))
+		for _, record := range records {
+			fmt.Println(line.Format(label, record))
 		}
 	}
 }

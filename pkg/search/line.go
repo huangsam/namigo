@@ -14,61 +14,49 @@ const (
 // SearchRecordLine formats search records as strings.
 type SearchRecordLine interface {
 	// Format formats a single result.
-	Format(result model.SearchRecord) string
+	Format(label string, result model.SearchRecord) string
 }
 
 // GoLine formats Go package.
 type GoLine struct{}
 
-func (l *GoLine) Format(result model.SearchRecord) string {
+func (l *GoLine) Format(label string, result model.SearchRecord) string {
 	res := result.(*model.GoPackage)
 	desc := res.Description
 	if len(desc) > maxLineLength {
 		desc = fmt.Sprintf("%.80s...", desc)
 	}
-	return fmt.Sprintf("📦 [%s] %s (%s) ->\n\t%s", l.Key(), res.Name, res.Path, desc)
-}
-
-func (l *GoLine) Key() model.SearchRecordKey {
-	return model.GoKey
+	return fmt.Sprintf("📦 [%s] %s (%s) ->\n\t%s", label, res.Name, res.Path, desc)
 }
 
 // NPMLine formats NPM package.
 type NPMLine struct{}
 
-func (l *NPMLine) Format(result model.SearchRecord) string {
+func (l *NPMLine) Format(label string, result model.SearchRecord) string {
 	res := result.(*model.NPMPackage)
 	desc := res.Description
 	if len(desc) > maxLineLength {
 		desc = fmt.Sprintf("%.80s...", desc)
 	}
-	return fmt.Sprintf("📦 [%s] %s ->\n\t%s", l.Key(), res.Name, desc)
-}
-
-func (l *NPMLine) Key() model.SearchRecordKey {
-	return model.NPMKey
+	return fmt.Sprintf("📦 [%s] %s ->\n\t%s", label, res.Name, desc)
 }
 
 // PyPILine formats PyPI package.
 type PyPILine struct{}
 
-func (l *PyPILine) Format(result model.SearchRecord) string {
+func (l *PyPILine) Format(label string, result model.SearchRecord) string {
 	res := result.(*model.PyPIPackage)
 	desc := res.Description
 	if len(desc) > maxLineLength {
 		desc = fmt.Sprintf("%.80s...", desc)
 	}
-	return fmt.Sprintf("📦 [%s] %s by %s ->\n\t%s", l.Key(), res.Name, res.Author, desc)
-}
-
-func (l *PyPILine) Key() model.SearchRecordKey {
-	return model.PyPIKey
+	return fmt.Sprintf("📦 [%s] %s by %s ->\n\t%s", label, res.Name, res.Author, desc)
 }
 
 // DNSLine formats DNS record.
 type DNSLine struct{}
 
-func (l *DNSLine) Format(result model.SearchRecord) string {
+func (l *DNSLine) Format(label string, result model.SearchRecord) string {
 	res := result.(*model.DNSRecord)
 	var desc string
 	if len(res.IPList) > maxIPLength {
@@ -76,21 +64,13 @@ func (l *DNSLine) Format(result model.SearchRecord) string {
 	} else {
 		desc = fmt.Sprintf("The IPs are %v", res.IPList)
 	}
-	return fmt.Sprintf("🌎 [%s] %s w/ %d IPs ->\n\t%v", l.Key(), res.FQDN, len(res.IPList), desc)
-}
-
-func (l *DNSLine) Key() model.SearchRecordKey {
-	return model.DNSKey
+	return fmt.Sprintf("🌎 [%s] %s w/ %d IPs ->\n\t%v", label, res.FQDN, len(res.IPList), desc)
 }
 
 // EmailLine formats Email record.
 type EmailLine struct{}
 
-func (l *EmailLine) Format(result model.SearchRecord) string {
+func (l *EmailLine) Format(label string, result model.SearchRecord) string {
 	res := result.(*model.EmailRecord)
-	return fmt.Sprintf("📨 [%s] %s ->\n\tvalid-syntax=%v, valid-domain=%v", l.Key(), res.Addr, res.HasValidSyntax, res.HasValidDomain)
-}
-
-func (l *EmailLine) Key() model.SearchRecordKey {
-	return model.EmailKey
+	return fmt.Sprintf("📨 [%s] %s ->\n\tvalid-syntax=%v, valid-domain=%v", label, res.Addr, res.HasValidSyntax, res.HasValidDomain)
 }

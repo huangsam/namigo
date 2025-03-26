@@ -7,10 +7,11 @@ const (
 	NoDescription = "No description" // Fallback for description
 )
 
-type SearchRecordKey int
+// SearchKey is an enum for search keys
+type SearchKey int
 
 const (
-	UnknownKey SearchRecordKey = iota
+	UnknownKey SearchKey = iota
 	GoKey
 	NPMKey
 	PyPIKey
@@ -18,7 +19,7 @@ const (
 	EmailKey
 )
 
-func (k SearchRecordKey) String() string {
+func (k SearchKey) String() string {
 	switch k {
 	case GoKey:
 		return "Golang"
@@ -76,7 +77,14 @@ type EmailRecord struct {
 
 func (*EmailRecord) record() {}
 
+// SearchResult is a collection of search records.
 type SearchResult struct {
-	Key     SearchRecordKey
+	Key     SearchKey
 	Records []SearchRecord
+}
+
+// SearchJSON is a JSON representation of search results.
+type SearchJSON struct {
+	Label  string         `json:"label"`
+	Result []SearchRecord `json:"result"`
 }
