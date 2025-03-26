@@ -21,15 +21,15 @@ type SearchResultFunc func(*SearchPortfolio) (model.SearchResult, error)
 
 // SearchPortfolio has entity helpers and task helpers.
 type SearchPortfolio struct {
-	resultMap    map[model.SearchKey][]model.SearchRecord
-	errorMap     map[model.SearchKey]error
-	lineMap      map[model.SearchKey]SearchRecordLine
-	formatOption FormatOption
-	resultFuncs  []SearchResultFunc
+	resultMap map[model.SearchKey][]model.SearchRecord
+	lineMap   map[model.SearchKey]SearchRecordLine
+	option    FormatOption
+	funcs     []SearchResultFunc
+	errors    []error
 }
 
 // NewSearchPortfolio creates a new portfolio instance.
-func NewSearchPortfolio(option FormatOption) *SearchPortfolio {
+func NewSearchPortfolio(format FormatOption) *SearchPortfolio {
 	return &SearchPortfolio{
 		resultMap: map[model.SearchKey][]model.SearchRecord{},
 		lineMap: map[model.SearchKey]SearchRecordLine{
@@ -39,14 +39,14 @@ func NewSearchPortfolio(option FormatOption) *SearchPortfolio {
 			model.DNSKey:   &DNSLine{},
 			model.EmailKey: &EmailLine{},
 		},
-		formatOption: option,
-		resultFuncs:  []SearchResultFunc{},
+		option: format,
+		funcs:  []SearchResultFunc{},
 	}
 }
 
 // Register invokes a goroutine and increments internal WaitGroup counter.
 func (p *SearchPortfolio) Register(f SearchResultFunc) {
-	p.resultFuncs = append(p.resultFuncs, f)
+	p.funcs = append(p.funcs, f)
 }
 
 // Run blocks the main thread until all goroutines complete.
@@ -54,13 +54,13 @@ func (p *SearchPortfolio) Run() error {
 	var wg sync.WaitGroup
 	var emu sync.Mutex
 	var rmu sync.Mutex
-	for _, resultFunc := range p.resultFuncs {
+	for _, fn := range p.funcs {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			if result, err := resultFunc(p); err != nil {
+			if result, err := fn(p); err != nil {
 				emu.Lock() // Critical section
-				p.errorMap[result.Key] = err
+				p.errors = append(p.errors, err)
 				emu.Unlock()
 			} else {
 				rmu.Lock() // Critical section
@@ -71,7 +71,7 @@ func (p *SearchPortfolio) Run() error {
 	}
 	wg.Wait()
 
-	if len(p.errorMap) > 0 {
+	if len(p.errors) > 0 {
 		return ErrPorftolioFailure
 	}
 	if len(p.resultMap) == 0 {
@@ -82,12 +82,12 @@ func (p *SearchPortfolio) Run() error {
 
 // Display prints results across all results
 func (p *SearchPortfolio) Display() {
-	fmt.Printf("🍺 Prepare %s results\n\n", p.formatOption)
+	fmt.Printf("🍺 Prepare %s results\n\n", p.option)
 	time.Sleep(resultDelay)
 	for key := range p.resultMap {
 		results := p.resultMap[key]
 		line := p.lineMap[key] // assume that it exists
-		option := p.formatOption
+		option := p.option
 		display(key, results, line, option)
 	}
 }
