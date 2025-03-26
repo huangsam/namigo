@@ -9,6 +9,8 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+const outputDelay = 500 * time.Millisecond
+
 // GeneratePromptAction generates a prompt for AI chatbots.
 func GeneratePromptAction(c *cli.Context) error {
 	purpose, err := util.GetString(c, "purpose", "👋 Enter project purpose")
@@ -37,9 +39,9 @@ func GeneratePromptAction(c *cli.Context) error {
 
 	fmt.Println("🍺 Prepare prompt")
 	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(outputDelay)
 	fmt.Println(prompt)
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(outputDelay)
 	fmt.Println()
 	fmt.Println("🎉 Copy into the AI of your choice!")
 
