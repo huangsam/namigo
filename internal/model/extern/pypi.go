@@ -19,5 +19,5 @@ type PyPIAPIDetailResponse struct {
 		Description string `json:"description"`
 		Summary     string `json:"summary"`
 		Version     string `json:"version"`
-	}
+	} `json:"info"`
 }
