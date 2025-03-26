@@ -4,26 +4,26 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/huangsam/namigo/internal/cmd"
+	"github.com/huangsam/namigo/internal/util"
 	"github.com/huangsam/namigo/pkg/generate"
 	"github.com/urfave/cli/v2"
 )
 
 // GeneratePromptAction generates a prompt for AI chatbots.
 func GeneratePromptAction(c *cli.Context) error {
-	purpose, err := cmd.GetString(c, "purpose", "👋 Enter project purpose")
+	purpose, err := util.GetString(c, "purpose", "👋 Enter project purpose")
 	if err != nil {
 		return err
 	}
-	theme, err := cmd.GetString(c, "theme", "👋 Enter project theme")
+	theme, err := util.GetString(c, "theme", "👋 Enter project theme")
 	if err != nil {
 		return err
 	}
-	demographics, err := cmd.GetString(c, "demographics", "👋 Enter target demographics")
+	demographics, err := util.GetString(c, "demographics", "👋 Enter target demographics")
 	if err != nil {
 		return err
 	}
-	interests, err := cmd.GetString(c, "interests", "👋 Enter target interests")
+	interests, err := util.GetString(c, "interests", "👋 Enter target interests")
 	if err != nil {
 		return err
 	}
