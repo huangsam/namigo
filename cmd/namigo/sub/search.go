@@ -34,9 +34,9 @@ func SearchPackageAction(c *cli.Context) error {
 		if err != nil {
 			return model.SearchResult{}, err
 		}
-		records := []model.SearchRecord{}
-		for _, value := range values {
-			records = append(records, &value)
+		records := make([]model.SearchRecord, len(values))
+		for i := range values {
+			records[i] = &values[i]
 		}
 		return model.SearchResult{Key: key, Records: records}, nil
 	})
@@ -48,9 +48,9 @@ func SearchPackageAction(c *cli.Context) error {
 		if err != nil {
 			return model.SearchResult{}, err
 		}
-		records := []model.SearchRecord{}
-		for _, value := range values {
-			records = append(records, &value)
+		records := make([]model.SearchRecord, len(values))
+		for i := range values {
+			records[i] = &values[i]
 		}
 		return model.SearchResult{Key: key, Records: records}, nil
 	})
@@ -62,9 +62,9 @@ func SearchPackageAction(c *cli.Context) error {
 		if err != nil {
 			return model.SearchResult{}, err
 		}
-		records := []model.SearchRecord{}
-		for _, value := range values {
-			records = append(records, &value)
+		records := make([]model.SearchRecord, len(values))
+		for i := range values {
+			records[i] = &values[i]
 		}
 		return model.SearchResult{Key: key, Records: records}, nil
 	})
@@ -95,9 +95,9 @@ func SearchDNSAction(c *cli.Context) error {
 		if err != nil {
 			return model.SearchResult{}, err
 		}
-		records := []model.SearchRecord{}
-		for _, value := range values {
-			records = append(records, &value)
+		records := make([]model.SearchRecord, len(values))
+		for i := range values {
+			records[i] = &values[i]
 		}
 		return model.SearchResult{Key: key, Records: records}, nil
 	})
@@ -128,9 +128,9 @@ func SearchEmailAction(c *cli.Context) error {
 		if err != nil {
 			return model.SearchResult{}, err
 		}
-		records := []model.SearchRecord{}
-		for _, value := range values {
-			records = append(records, &value)
+		records := make([]model.SearchRecord, len(values))
+		for i := range values {
+			records[i] = &values[i]
 		}
 		return model.SearchResult{Key: key, Records: records}, nil
 	})
