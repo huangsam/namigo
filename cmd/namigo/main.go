@@ -9,6 +9,12 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
+
 // checkSizeFlag checks for valid size flag.
 func checkSizeFlag(ctx *cli.Context, i int) error {
 	if i <= 0 {
@@ -112,6 +118,14 @@ func main() {
 						Usage:  "Search for email records",
 						Action: sub.SearchEmailAction,
 					},
+				},
+			},
+			{
+				Name:  "version",
+				Usage: "Print version information",
+				Action: func(ctx *cli.Context) error {
+					fmt.Printf("namigo %s, commit %s, built at %s\n", version, commit, date)
+					return nil
 				},
 			},
 		},
