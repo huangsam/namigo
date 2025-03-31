@@ -77,14 +77,14 @@ type EmailRecord struct {
 
 func (*EmailRecord) record() {}
 
-// SearchResult is a collection of search records.
+// SearchResult is a collection of search records with the original key.
 type SearchResult struct {
 	Key     SearchKey
 	Records []SearchRecord
 }
 
-// SearchJSON is a JSON representation of search results.
-type SearchJSON struct {
+// SearchRender is a collection of search results with a rendered label.
+type SearchRender struct {
 	Label  string         `json:"label"`
 	Result []SearchRecord `json:"result"`
 }

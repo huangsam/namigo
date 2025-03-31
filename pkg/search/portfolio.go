@@ -94,15 +94,15 @@ func (p *SearchPortfolio) Display() {
 			return
 		}
 		switch option {
-		case JSONOption:
-			if b, err := json.MarshalIndent(&model.SearchJSON{Label: label, Result: records}, "", "  "); err != nil {
-				fmt.Printf("Cannot display %s: %s\n", label, err.Error())
-			} else {
-				fmt.Printf("%s\n", b)
-			}
 		case TextOption:
 			for _, record := range records {
 				fmt.Println(line(label, record))
+			}
+		case JSONOption:
+			if b, err := json.MarshalIndent(&model.SearchRender{Label: label, Result: records}, "", "  "); err != nil {
+				fmt.Printf("Cannot display %s: %s\n", label, err.Error())
+			} else {
+				fmt.Printf("%s\n", b)
 			}
 		}
 	}

@@ -3,6 +3,8 @@ package search_test
 import (
 	"testing"
 
+	"slices"
+
 	"github.com/huangsam/namigo/pkg/search"
 )
 
@@ -23,5 +25,21 @@ func TestGetFormatOption(t *testing.T) {
 				t.Errorf("GetOutputMode(%v) = %v, want %v", tt.format, got, tt.expected)
 			}
 		})
+	}
+}
+
+func TestGetAllFormatOptionValues(t *testing.T) {
+	expected := []string{search.TextOption.Value, search.JSONOption.Value}
+	got := search.GetAllFormatOptionValues()
+
+	if len(got) != len(expected) {
+		t.Fatalf("GetAllFormatOptionValues() length = %d, want %d", len(got), len(expected))
+	}
+
+	for _, value := range expected {
+		found := slices.Contains(got, value)
+		if !found {
+			t.Errorf("GetAllFormatOptionValues() missing value: %v", value)
+		}
 	}
 }

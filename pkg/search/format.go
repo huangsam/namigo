@@ -1,36 +1,40 @@
 package search
 
 // FormatOption represents the output mode.
-type FormatOption int
+type FormatOption struct {
+	Name  string
+	Value string
+}
 
-const (
-	TextOption FormatOption = iota
-	JSONOption
-
-	TextValue = "text"
-	JSONValue = "json"
+var (
+	TextOption = FormatOption{Name: "PlainText", Value: "text"}
+	JSONOption = FormatOption{Name: "JSON", Value: "json"}
 )
 
-// GetFormatOption returns an FormatOption instance.
+var formatOptions = map[string]FormatOption{
+	TextOption.Value: TextOption,
+	JSONOption.Value: JSONOption,
+}
+
+// GetFormatOption returns a FormatOption instance.
 func GetFormatOption(format string) FormatOption {
-	switch format {
-	case TextValue:
-		return TextOption
-	case JSONValue:
-		return JSONOption
-	default:
-		return TextOption
+	option, ok := formatOptions[format]
+	if ok {
+		return option
 	}
+	return TextOption
+}
+
+// GetAllFormatOptionValues returns all available format option values.
+func GetAllFormatOptionValues() []string {
+	var values []string
+	for _, option := range formatOptions {
+		values = append(values, option.Value)
+	}
+	return values
 }
 
 // String returns the string representation of the output mode.
 func (o FormatOption) String() string {
-	switch o {
-	case TextOption:
-		return "PlainText"
-	case JSONOption:
-		return "JSON"
-	default:
-		return "Unknown"
-	}
+	return o.Name
 }

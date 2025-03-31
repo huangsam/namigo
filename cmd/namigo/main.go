@@ -31,14 +31,6 @@ func checkLengthFlag(ctx *cli.Context, i int) error {
 	return nil
 }
 
-// checkFormatFlag checks for valid format flag.
-func checkFormatFlag(ctx *cli.Context, s string) error {
-	if s != search.TextValue && s != search.JSONValue {
-		return fmt.Errorf("format %s is invalid", s)
-	}
-	return nil
-}
-
 func main() {
 	app := &cli.App{
 		Name:  "namigo",
@@ -96,10 +88,9 @@ func main() {
 						Action: checkSizeFlag,
 					},
 					&cli.StringFlag{
-						Name:   "format",
-						Usage:  fmt.Sprintf("Output format can be %s or %s", search.TextValue, search.JSONValue),
-						Value:  search.TextValue,
-						Action: checkFormatFlag,
+						Name:  "format",
+						Usage: fmt.Sprintf("Output format can be %v", search.GetAllFormatOptionValues()),
+						Value: search.TextOption.Value,
 					},
 				},
 				Subcommands: []*cli.Command{
