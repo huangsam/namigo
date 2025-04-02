@@ -8,7 +8,7 @@ import (
 
 const (
 	maxLineLength = 80 // Maximum line length
-	maxIPLength   = 3  // Maximum IP length
+	maxIPCount    = 3  // Maximum IP count
 )
 
 // SearchLineFunc formats search records as strings.
@@ -48,8 +48,8 @@ func PyPILine(label string, result model.SearchRecord) string {
 func DNSLine(label string, result model.SearchRecord) string {
 	res := result.(*model.DNSRecord)
 	var desc string
-	if len(res.IPList) > maxIPLength {
-		desc = fmt.Sprintf("The first %d IPs are %v", maxIPLength, res.IPList[:3])
+	if len(res.IPList) > maxIPCount {
+		desc = fmt.Sprintf("The first %d IPs are %v", maxIPCount, res.IPList[:3])
 	} else {
 		desc = fmt.Sprintf("The IPs are %v", res.IPList)
 	}
