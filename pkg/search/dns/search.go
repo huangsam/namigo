@@ -2,6 +2,7 @@ package dns
 
 import (
 	"fmt"
+	"net"
 	"sync"
 
 	"github.com/huangsam/namigo/internal/model"
@@ -25,7 +26,23 @@ func SearchByProbe(name string, size int) ([]model.DNSRecord, error) {
 	var mu sync.Mutex
 
 	util.StartCommonWorkers(func() {
-		netWorker(domainChan, &mu, &result, &errors, size)
+		for domain := range domainChan {
+			ips, err := net.LookupIP(domain)
+			if err != nil {
+				mu.Lock() // Critical section
+				errors = append(errors, err)
+				mu.Unlock()
+			}
+
+			mu.Lock() // Critical section
+			if len(result) < size {
+				result = append(result, model.DNSRecord{FQDN: domain, IPList: ips})
+			}
+			mu.Unlock()
+			if len(result) >= size {
+				break
+			}
+		}
 	})
 
 	if len(result) == 0 && len(errors) > 0 {

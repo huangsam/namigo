@@ -42,7 +42,42 @@ func SearchByAPI(name string, size int) ([]model.PyPIPackage, error) {
 	var mu sync.Mutex
 
 	util.StartCommonWorkers(func() {
-		apiWorker(client, taskChan, &mu, &result, &errors, size)
+		for pkg := range taskChan {
+			bd, err := util.RESTAPIQuery(client, APIDetail(pkg))
+			if err != nil {
+				mu.Lock() // Critical section
+				errors = append(errors, err)
+				mu.Unlock()
+				continue
+			}
+
+			var detailRes extern.PyPIAPIDetailResponse
+			if err := json.Unmarshal(bd, &detailRes); err != nil {
+				mu.Lock() // Critical section
+				errors = append(errors, err)
+				mu.Unlock()
+				continue
+			}
+
+			description := detailRes.Info.Summary
+			if len(description) == 0 {
+				description = model.NoDescription
+			}
+
+			author := detailRes.Info.Author
+			if len(author) == 0 {
+				author = model.NoAuthor
+			}
+
+			mu.Lock() // Critical section
+			if len(result) < size {
+				result = append(result, model.PyPIPackage{Name: pkg, Description: description, Author: author})
+			}
+			mu.Unlock()
+			if len(result) >= size {
+				break
+			}
+		}
 	})
 
 	if len(result) == 0 && len(errors) > 0 {

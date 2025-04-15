@@ -3,6 +3,7 @@ package npm
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/huangsam/namigo/internal/model"
@@ -23,5 +24,18 @@ func SearchByAPI(name string, size int) ([]model.NPMPackage, error) {
 		return nil, err
 	}
 
-	return apiWorker(&listRes)
+	result := []model.NPMPackage{}
+	for _, object := range listRes.Objects {
+		pkg := object.Package.Name
+
+		description := object.Package.Description
+		if len(description) == 0 {
+			description = model.NoDescription
+		} else {
+			description = strings.TrimSpace(description)
+		}
+
+		result = append(result, model.NPMPackage{Name: pkg, Description: description})
+	}
+	return result, nil
 }
