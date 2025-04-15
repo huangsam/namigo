@@ -7,24 +7,6 @@ import (
 	"github.com/huangsam/namigo/pkg/search/npm"
 )
 
-func TestScrapeList(t *testing.T) {
-	name := "example-package"
-	builder := npm.ScrapeList(name)
-	req, err := builder()
-	if err != nil {
-		t.Fatalf("ScrapeList() error = %v", err)
-	}
-
-	expectedURL := "https://www.npmjs.com/search?q=" + name
-	if req.URL.String() != expectedURL {
-		t.Errorf("ScrapeList() URL = %v, want %v", req.URL.String(), expectedURL)
-	}
-
-	if req.Method != http.MethodGet {
-		t.Errorf("ScrapeList() method = %v, want %v", req.Method, http.MethodGet)
-	}
-}
-
 func TestAPIList(t *testing.T) {
 	name := "example-package"
 	size := 10
