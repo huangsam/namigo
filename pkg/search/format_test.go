@@ -1,9 +1,8 @@
 package search_test
 
 import (
-	"testing"
-
 	"slices"
+	"testing"
 
 	"github.com/huangsam/namigo/pkg/search"
 )
