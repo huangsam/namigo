@@ -32,7 +32,7 @@ func GeneratePromptAction(c *cli.Context) error {
 	maxSize := c.Int("size")
 	maxLength := c.Int("length")
 
-	prompt, err := generate.GeneratePrompt(purpose, theme, demographics, interests, maxSize, maxLength)
+	prompt, err := generate.Prompt(purpose, theme, demographics, interests, maxSize, maxLength)
 	if err != nil {
 		return err
 	}

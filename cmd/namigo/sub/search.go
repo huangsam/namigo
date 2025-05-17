@@ -14,6 +14,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// ErrMissingSearchTerm is returned when the search term is missing.
 var ErrMissingSearchTerm = errors.New("missing search term")
 
 // SearchPackageAction searches for packages.
@@ -27,7 +28,7 @@ func SearchPackageAction(c *cli.Context) error {
 
 	ptf := search.NewSearchPortfolio(outputFormat)
 
-	ptf.Register(func(sp *search.SearchPortfolio) (model.SearchResult, error) {
+	ptf.Register(func() (model.SearchResult, error) {
 		key := model.GoKey
 		fmt.Printf("🔍 Search for %s results\n", key)
 		values, err := golang.SearchByScrape(searchTerm, maxSize)
@@ -41,7 +42,7 @@ func SearchPackageAction(c *cli.Context) error {
 		return model.SearchResult{Key: key, Records: records}, nil
 	})
 
-	ptf.Register(func(sp *search.SearchPortfolio) (model.SearchResult, error) {
+	ptf.Register(func() (model.SearchResult, error) {
 		key := model.NPMKey
 		fmt.Printf("🔍 Search for %s results\n", key)
 		values, err := npm.SearchByAPI(searchTerm, maxSize)
@@ -55,7 +56,7 @@ func SearchPackageAction(c *cli.Context) error {
 		return model.SearchResult{Key: key, Records: records}, nil
 	})
 
-	ptf.Register(func(sp *search.SearchPortfolio) (model.SearchResult, error) {
+	ptf.Register(func() (model.SearchResult, error) {
 		key := model.PyPIKey
 		fmt.Printf("🔍 Search for %s results\n", key)
 		values, err := pypi.SearchByAPI(searchTerm, maxSize)
@@ -88,7 +89,7 @@ func SearchDNSAction(c *cli.Context) error {
 
 	ptf := search.NewSearchPortfolio(outputFormat)
 
-	ptf.Register(func(sp *search.SearchPortfolio) (model.SearchResult, error) {
+	ptf.Register(func() (model.SearchResult, error) {
 		key := model.DNSKey
 		fmt.Printf("🔍 Search for %s results\n", key)
 		values, err := dns.SearchByProbe(searchTerm, maxSize)
@@ -121,7 +122,7 @@ func SearchEmailAction(c *cli.Context) error {
 
 	ptf := search.NewSearchPortfolio(outputFormat)
 
-	ptf.Register(func(sp *search.SearchPortfolio) (model.SearchResult, error) {
+	ptf.Register(func() (model.SearchResult, error) {
 		key := model.EmailKey
 		fmt.Printf("🔍 Search for %s results\n", key)
 		values, err := email.SearchByProbe(searchTerm, maxSize)

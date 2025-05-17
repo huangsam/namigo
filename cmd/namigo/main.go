@@ -1,3 +1,4 @@
+// Package main is the entry point for the namigo CLI application.
 package main
 
 import (
@@ -16,7 +17,7 @@ var (
 )
 
 // checkSizeFlag checks for valid size flag.
-func checkSizeFlag(ctx *cli.Context, i int) error {
+func checkSizeFlag(_ *cli.Context, i int) error {
 	if i <= 0 {
 		return fmt.Errorf("size %d is invalid", i)
 	}
@@ -24,7 +25,7 @@ func checkSizeFlag(ctx *cli.Context, i int) error {
 }
 
 // checkLengthFlag checks for valid length flag.
-func checkLengthFlag(ctx *cli.Context, i int) error {
+func checkLengthFlag(_ *cli.Context, i int) error {
 	if i <= 0 {
 		return fmt.Errorf("length %d is invalid", i)
 	}
@@ -114,7 +115,7 @@ func main() {
 			{
 				Name:  "version",
 				Usage: "Print version information",
-				Action: func(ctx *cli.Context) error {
+				Action: func(*cli.Context) error {
 					fmt.Printf("namigo %s, commit %s, built at %s\n", version, commit, date)
 					return nil
 				},

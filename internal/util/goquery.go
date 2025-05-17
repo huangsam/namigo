@@ -32,6 +32,7 @@ func NewDocumentPipeline(
 	}
 }
 
+// Execute executes the pipeline and returns the document.
 func (dp *DocumentPipeline) Execute() (*goquery.Document, error) {
 	req, err := dp.requestBuilder()
 	if err != nil {

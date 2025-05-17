@@ -13,27 +13,30 @@ import (
 const resultDelay = 500 * time.Millisecond
 
 var (
-	ErrPorftolioEmpty   = errors.New("portfolio collection empty")
+	// ErrPorftolioEmpty is returned when the portfolio is empty.
+	ErrPorftolioEmpty = errors.New("portfolio collection empty")
+
+	// ErrPorftolioFailure is returned when the portfolio fails.
 	ErrPorftolioFailure = errors.New("portfolio collection failure")
 )
 
-// SearchResultFunc is a function that returns search results.
-type SearchResultFunc func(*SearchPortfolio) (model.SearchResult, error)
+// ResultFunc is a function that returns search results.
+type ResultFunc func() (model.SearchResult, error)
 
-// SearchPortfolio has entity helpers and task helpers.
-type SearchPortfolio struct {
+// Portfolio has entity helpers and task helpers.
+type Portfolio struct {
 	resultMap map[model.SearchKey][]model.SearchRecord
-	lineMap   map[model.SearchKey]SearchLineFunc
+	lineMap   map[model.SearchKey]LineFunc
 	option    FormatOption
-	funcs     []SearchResultFunc
+	funcs     []ResultFunc
 	errors    []error
 }
 
 // NewSearchPortfolio creates a new portfolio instance.
-func NewSearchPortfolio(format FormatOption) *SearchPortfolio {
-	return &SearchPortfolio{
+func NewSearchPortfolio(format FormatOption) *Portfolio {
+	return &Portfolio{
 		resultMap: map[model.SearchKey][]model.SearchRecord{},
-		lineMap: map[model.SearchKey]SearchLineFunc{
+		lineMap: map[model.SearchKey]LineFunc{
 			model.GoKey:    GoLine,
 			model.NPMKey:   NPMLine,
 			model.PyPIKey:  PyPILine,
@@ -41,18 +44,18 @@ func NewSearchPortfolio(format FormatOption) *SearchPortfolio {
 			model.EmailKey: EmailLine,
 		},
 		option: format,
-		funcs:  []SearchResultFunc{},
+		funcs:  []ResultFunc{},
 		errors: []error{},
 	}
 }
 
 // Register invokes a goroutine and increments internal WaitGroup counter.
-func (p *SearchPortfolio) Register(f SearchResultFunc) {
+func (p *Portfolio) Register(f ResultFunc) {
 	p.funcs = append(p.funcs, f)
 }
 
 // Run blocks the main thread until all goroutines complete.
-func (p *SearchPortfolio) Run() error {
+func (p *Portfolio) Run() error {
 	var wg sync.WaitGroup
 	var emu sync.Mutex
 	var rmu sync.Mutex
@@ -60,7 +63,7 @@ func (p *SearchPortfolio) Run() error {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			if result, err := fn(p); err != nil {
+			if result, err := fn(); err != nil {
 				emu.Lock() // Critical section
 				p.errors = append(p.errors, err)
 				emu.Unlock()
@@ -83,7 +86,7 @@ func (p *SearchPortfolio) Run() error {
 }
 
 // Display prints results across all results
-func (p *SearchPortfolio) Display() {
+func (p *Portfolio) Display() {
 	fmt.Printf("🍺 Prepare %s results\n\n", p.option)
 	time.Sleep(resultDelay)
 	for key, records := range p.resultMap {

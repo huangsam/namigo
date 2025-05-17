@@ -3,19 +3,33 @@ package model
 import "net"
 
 const (
-	NoAuthor      = "No author"      // Fallback for author
-	NoDescription = "No description" // Fallback for description
+	// NoAuthor is a fallback for author
+	NoAuthor = "No author"
+
+	// NoDescription is a fallback for description
+	NoDescription = "No description"
 )
 
 // SearchKey is an enum for search keys
 type SearchKey int
 
 const (
+	// UnknownKey is a fallback for unknown search keys.
 	UnknownKey SearchKey = iota
+
+	// GoKey is a key for Go packages.
 	GoKey
+
+	// NPMKey is a key for NPM packages.
 	NPMKey
+
+	// PyPIKey is a key for PyPI packages.
 	PyPIKey
+
+	// DNSKey is a key for DNS records.
 	DNSKey
+
+	// EmailKey is a key for email records.
 	EmailKey
 )
 
@@ -36,9 +50,10 @@ func (k SearchKey) String() string {
 	}
 }
 
-// SearchRecord is an union type for all search record values
+// SearchRecord is an union type for all search record values.
 type SearchRecord interface{ record() }
 
+// GoPackage is a struct for Go package search results.
 type GoPackage struct {
 	Name        string // Package name
 	Path        string // Fully qualified package path
@@ -47,6 +62,7 @@ type GoPackage struct {
 
 func (*GoPackage) record() {}
 
+// NPMPackage is a struct for NPM package search results.
 type NPMPackage struct {
 	Name        string // Package name
 	Description string // Package description
@@ -54,6 +70,7 @@ type NPMPackage struct {
 
 func (*NPMPackage) record() {}
 
+// PyPIPackage is a struct for PyPI package search results.
 type PyPIPackage struct {
 	Name        string // Package name
 	Author      string // Package author
@@ -62,6 +79,7 @@ type PyPIPackage struct {
 
 func (*PyPIPackage) record() {}
 
+// DNSRecord is a struct for DNS search results.
 type DNSRecord struct {
 	FQDN   string   // Fully qualified domain name
 	IPList []net.IP // Associated IP addresses
@@ -69,6 +87,7 @@ type DNSRecord struct {
 
 func (*DNSRecord) record() {}
 
+// EmailRecord is a struct for email search results.
 type EmailRecord struct {
 	Addr           string // Email address
 	HasValidSyntax bool   // Email address has valid syntax

@@ -27,8 +27,8 @@ type promptData struct {
 	MaxLength    int    // Maximum length of each name
 }
 
-// GeneratePrompt generates the prompt for AI chatbots.
-func GeneratePrompt(purpose, theme, demographics, interests string, size, length int) (string, error) {
+// Prompt generates the prompt for AI chatbots.
+func Prompt(purpose, theme, demographics, interests string, size, length int) (string, error) {
 	if size < 0 || length < 0 {
 		return "", ErrNegativeInput
 	}

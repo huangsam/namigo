@@ -7,7 +7,10 @@ type FormatOption struct {
 }
 
 var (
+	// TextOption is the text output mode.
 	TextOption = FormatOption{Name: "PlainText", Value: "text"}
+
+	// JSONOption is the JSON output mode.
 	JSONOption = FormatOption{Name: "JSON", Value: "json"}
 )
 

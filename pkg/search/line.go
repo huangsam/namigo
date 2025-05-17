@@ -11,8 +11,8 @@ const (
 	maxIPCount    = 3  // Maximum IP count
 )
 
-// SearchLineFunc formats search records as strings.
-type SearchLineFunc func(label string, result model.SearchRecord) string
+// LineFunc formats search records as strings.
+type LineFunc func(label string, result model.SearchRecord) string
 
 // GoLine formats Go package.
 func GoLine(label string, result model.SearchRecord) string {

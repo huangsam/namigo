@@ -5,6 +5,8 @@ linters:
   enable:
     # https://github.com/go-critic/go-critic
     - gocritic
+    # https://github.com/mgechev/revive
+    - revive
     # https://github.com/mdempsky/unconvert
     - unconvert
     # https://github.com/mvdan/unparam

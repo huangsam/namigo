@@ -20,7 +20,7 @@ func SearchByScrape(name string, size int) ([]model.GoPackage, error) {
 	}
 
 	result := []model.GoPackage{}
-	doc.Find(".SearchSnippet").Each(func(i int, section *goquery.Selection) {
+	doc.Find(".SearchSnippet").Each(func(_ int, section *goquery.Selection) {
 		if len(result) >= size {
 			return
 		}
