@@ -7,8 +7,8 @@ set -eu
 mode="${1:-default}"
 
 selector=(
-    "github.com/huangsam/go-trial/pkg/..."
-    "github.com/huangsam/go-trial/internal/..."
+    "github.com/huangsam/namigo/pkg/..."
+    "github.com/huangsam/namigo/internal/..."
 )
 
 case "$mode" in
