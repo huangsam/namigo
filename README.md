@@ -55,6 +55,6 @@ namigo search email 'hello'
 
 Here is a screencast to see the CLI in action:
 
-[![asciicast](./images/screencast.svg)](https://asciinema.org/a/gL5bDUpU0KTM04p2LJI6m3n0m)
+![asciicast](./images/demo.gif)
 
 Want to help make Namigo even better? Check out our [contribution guidelines](./CONTRIBUTING.md).
