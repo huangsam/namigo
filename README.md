@@ -1,6 +1,7 @@
 # Namigo
 
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/huangsam/namigo/ci.yml)](https://github.com/huangsam/namigo/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/huangsam/namigo)](https://goreportcard.com/report/github.com/huangsam/namigo)
 [![License](https://img.shields.io/github/license/huangsam/namigo)](https://github.com/huangsam/namigo/blob/main/LICENSE)
 
 Your naming pal, written in Go 🐶
