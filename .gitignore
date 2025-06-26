@@ -27,5 +27,6 @@ go.work.sum
 # Added by goreleaser init:
 dist/
 
-# asciinema files
+# Local developer assets
+.idea/
 *.cast
