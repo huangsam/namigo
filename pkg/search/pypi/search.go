@@ -8,16 +8,16 @@ import (
 	"sync"
 	"time"
 
+	"github.com/huangsam/namigo/internal/core"
 	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/internal/model/extern"
-	"github.com/huangsam/namigo/internal/util"
 )
 
 // SearchByAPI searches for PyPI packages by querying pypi.org.
 func SearchByAPI(name string, size int) ([]model.PyPIPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
 
-	bl, err := util.RESTAPIQuery(client, APIList())
+	bl, err := core.RESTAPIQuery(client, APIList())
 	if err != nil {
 		return nil, err
 	}
@@ -41,9 +41,9 @@ func SearchByAPI(name string, size int) ([]model.PyPIPackage, error) {
 	errors := []error{}
 	var mu sync.Mutex
 
-	util.StartCommonWorkers(func() {
+	core.StartCommonWorkers(func() {
 		for pkg := range taskChan {
-			bd, err := util.RESTAPIQuery(client, APIDetail(pkg))
+			bd, err := core.RESTAPIQuery(client, APIDetail(pkg))
 			if err != nil {
 				mu.Lock() // Critical section
 				errors = append(errors, err)

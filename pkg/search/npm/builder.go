@@ -5,11 +5,11 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/huangsam/namigo/internal/util"
+	"github.com/huangsam/namigo/internal/core"
 )
 
 // APIList builds the request for NPM list view.
-func APIList(name string, size int) util.RequestBuilder {
+func APIList(name string, size int) core.RequestBuilder {
 	return func() (*http.Request, error) {
 		params := url.Values{}
 		params.Add("text", name)

@@ -6,15 +6,15 @@ import (
 	"strings"
 	"time"
 
+	"github.com/huangsam/namigo/internal/core"
 	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/internal/model/extern"
-	"github.com/huangsam/namigo/internal/util"
 )
 
 // SearchByAPI searches for NPM packages by querying registry.npmjs.com.
 func SearchByAPI(name string, size int) ([]model.NPMPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
-	bl, err := util.RESTAPIQuery(client, APIList(name, size))
+	bl, err := core.RESTAPIQuery(client, APIList(name, size))
 	if err != nil {
 		return nil, err
 	}

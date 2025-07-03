@@ -5,8 +5,8 @@ import (
 	"net"
 	"sync"
 
+	"github.com/huangsam/namigo/internal/core"
 	"github.com/huangsam/namigo/internal/model"
-	"github.com/huangsam/namigo/internal/util"
 )
 
 // SearchByProbe searches for DNS records via nameserver lookups.
@@ -25,7 +25,7 @@ func SearchByProbe(name string, size int) ([]model.DNSRecord, error) {
 	errors := []error{}
 	var mu sync.Mutex
 
-	util.StartCommonWorkers(func() {
+	core.StartCommonWorkers(func() {
 		for domain := range domainChan {
 			ips, err := net.LookupIP(domain)
 			if err != nil {

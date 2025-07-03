@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/huangsam/namigo/internal/util"
+	"github.com/huangsam/namigo/internal/core"
 )
 
 // ScrapeList builds the request for Go package list view.
-func ScrapeList(name string) util.RequestBuilder {
+func ScrapeList(name string) core.RequestBuilder {
 	return func() (*http.Request, error) {
 		encodedName := url.PathEscape(name)
 		params := url.Values{"q": []string{encodedName}, "m": []string{"package"}}
