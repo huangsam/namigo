@@ -24,6 +24,7 @@ builds:
 changelog:
   sort: asc
   use: github
+  format: "{{.SHA}}: {{.Message}} ({{.AuthorName}})"
   filters:
     exclude:
       - "^(Refactor|Update|Rename)" # common chore
