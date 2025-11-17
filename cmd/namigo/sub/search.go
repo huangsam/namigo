@@ -35,7 +35,7 @@ func (sr *SearchRunner) RunPackageSearch(searchTerm string, maxSize int, outputF
 
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.GoKey
-		fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
+		_, _ = fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
 		values, err := golang.SearchByScrape(searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
@@ -49,7 +49,7 @@ func (sr *SearchRunner) RunPackageSearch(searchTerm string, maxSize int, outputF
 
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.NPMKey
-		fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
+		_, _ = fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
 		values, err := npm.SearchByAPI(searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
@@ -63,7 +63,7 @@ func (sr *SearchRunner) RunPackageSearch(searchTerm string, maxSize int, outputF
 
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.PyPIKey
-		fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
+		_, _ = fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
 		values, err := pypi.SearchByAPI(searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
@@ -102,7 +102,7 @@ func (sr *SearchRunner) RunDNSSearch(searchTerm string, maxSize int, outputForma
 
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.DNSKey
-		fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
+		_, _ = fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
 		values, err := dns.SearchByProbe(searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
@@ -141,7 +141,7 @@ func (sr *SearchRunner) RunEmailSearch(searchTerm string, maxSize int, outputFor
 
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.EmailKey
-		fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
+		_, _ = fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
 		values, err := email.SearchByProbe(searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
