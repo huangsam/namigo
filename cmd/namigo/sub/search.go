@@ -3,6 +3,8 @@ package sub
 import (
 	"errors"
 	"fmt"
+	"io"
+	"os"
 
 	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/pkg/search"
@@ -17,20 +19,23 @@ import (
 // ErrMissingSearchTerm is returned when the search term is missing.
 var ErrMissingSearchTerm = errors.New("missing search term")
 
-// SearchPackageAction searches for packages.
-func SearchPackageAction(c *cli.Context) error {
-	searchTerm := c.Args().First()
-	if len(searchTerm) == 0 {
-		return ErrMissingSearchTerm
-	}
-	maxSize := c.Int("size")
-	outputFormat := search.GetFormatOption(c.String("format"))
+// SearchRunner encapsulates the logic for running searches.
+type SearchRunner struct {
+	output io.Writer
+}
 
+// NewSearchRunner creates a new SearchRunner instance.
+func NewSearchRunner(output io.Writer) *SearchRunner {
+	return &SearchRunner{output: output}
+}
+
+// RunPackageSearch executes a package search with the given parameters.
+func (sr *SearchRunner) RunPackageSearch(searchTerm string, maxSize int, outputFormat search.FormatOption) error {
 	ptf := search.NewSearchPortfolio(outputFormat)
 
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.GoKey
-		fmt.Printf("🔍 Search for %s results\n", key)
+		fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
 		values, err := golang.SearchByScrape(searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
@@ -44,7 +49,7 @@ func SearchPackageAction(c *cli.Context) error {
 
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.NPMKey
-		fmt.Printf("🔍 Search for %s results\n", key)
+		fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
 		values, err := npm.SearchByAPI(searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
@@ -58,8 +63,47 @@ func SearchPackageAction(c *cli.Context) error {
 
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.PyPIKey
-		fmt.Printf("🔍 Search for %s results\n", key)
+		fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
 		values, err := pypi.SearchByAPI(searchTerm, maxSize)
+		if err != nil {
+			return model.SearchResult{}, err
+		}
+		records := make([]model.SearchRecord, len(values))
+		for i := range values {
+			records[i] = &values[i]
+		}
+		return model.SearchResult{Key: key, Records: records}, nil
+	})
+
+	if err := ptf.Run(); err != nil {
+		return err
+	}
+	ptf.Display()
+
+	return nil
+}
+
+// SearchPackageAction searches for packages.
+func SearchPackageAction(c *cli.Context) error {
+	searchTerm := c.Args().First()
+	if len(searchTerm) == 0 {
+		return ErrMissingSearchTerm
+	}
+	maxSize := c.Int("size")
+	outputFormat := search.GetFormatOption(c.String("format"))
+
+	runner := NewSearchRunner(os.Stdout)
+	return runner.RunPackageSearch(searchTerm, maxSize, outputFormat)
+}
+
+// RunDNSSearch executes a DNS search with the given parameters.
+func (sr *SearchRunner) RunDNSSearch(searchTerm string, maxSize int, outputFormat search.FormatOption) error {
+	ptf := search.NewSearchPortfolio(outputFormat)
+
+	ptf.Register(func() (model.SearchResult, error) {
+		key := model.DNSKey
+		fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
+		values, err := dns.SearchByProbe(searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
 		}
@@ -87,12 +131,18 @@ func SearchDNSAction(c *cli.Context) error {
 	maxSize := c.Int("size")
 	outputFormat := search.GetFormatOption(c.String("format"))
 
+	runner := NewSearchRunner(os.Stdout)
+	return runner.RunDNSSearch(searchTerm, maxSize, outputFormat)
+}
+
+// RunEmailSearch executes an email search with the given parameters.
+func (sr *SearchRunner) RunEmailSearch(searchTerm string, maxSize int, outputFormat search.FormatOption) error {
 	ptf := search.NewSearchPortfolio(outputFormat)
 
 	ptf.Register(func() (model.SearchResult, error) {
-		key := model.DNSKey
-		fmt.Printf("🔍 Search for %s results\n", key)
-		values, err := dns.SearchByProbe(searchTerm, maxSize)
+		key := model.EmailKey
+		fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
+		values, err := email.SearchByProbe(searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
 		}
@@ -120,26 +170,6 @@ func SearchEmailAction(c *cli.Context) error {
 	maxSize := c.Int("size")
 	outputFormat := search.GetFormatOption(c.String("format"))
 
-	ptf := search.NewSearchPortfolio(outputFormat)
-
-	ptf.Register(func() (model.SearchResult, error) {
-		key := model.EmailKey
-		fmt.Printf("🔍 Search for %s results\n", key)
-		values, err := email.SearchByProbe(searchTerm, maxSize)
-		if err != nil {
-			return model.SearchResult{}, err
-		}
-		records := make([]model.SearchRecord, len(values))
-		for i := range values {
-			records[i] = &values[i]
-		}
-		return model.SearchResult{Key: key, Records: records}, nil
-	})
-
-	if err := ptf.Run(); err != nil {
-		return err
-	}
-	ptf.Display()
-
-	return nil
+	runner := NewSearchRunner(os.Stdout)
+	return runner.RunEmailSearch(searchTerm, maxSize, outputFormat)
 }
