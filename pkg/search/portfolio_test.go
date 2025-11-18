@@ -1,6 +1,7 @@
 package search
 
 import (
+	"bytes"
 	"errors"
 	"testing"
 
@@ -8,7 +9,8 @@ import (
 )
 
 func TestNewSearchPortfolio(t *testing.T) {
-	p := NewSearchPortfolio(TextOption)
+	var buf bytes.Buffer
+	p := NewSearchPortfolio(TextOption, &buf)
 	if p.option != TextOption {
 		t.Errorf("expected TextOption, got %v", p.option)
 	}
@@ -18,7 +20,8 @@ func TestNewSearchPortfolio(t *testing.T) {
 }
 
 func TestPortfolio_Register(t *testing.T) {
-	p := NewSearchPortfolio(TextOption)
+	var buf bytes.Buffer
+	p := NewSearchPortfolio(TextOption, &buf)
 	initialLen := len(p.funcs)
 	p.Register(func() (model.SearchResult, error) { return model.SearchResult{}, nil })
 	if len(p.funcs) != initialLen+1 {
@@ -27,7 +30,8 @@ func TestPortfolio_Register(t *testing.T) {
 }
 
 func TestPortfolio_Run_Success(t *testing.T) {
-	p := NewSearchPortfolio(TextOption)
+	var buf bytes.Buffer
+	p := NewSearchPortfolio(TextOption, &buf)
 	p.Register(func() (model.SearchResult, error) {
 		return model.SearchResult{Key: model.GoKey, Records: []model.SearchRecord{&model.GoPackage{Name: "test"}}}, nil
 	})
@@ -41,7 +45,8 @@ func TestPortfolio_Run_Success(t *testing.T) {
 }
 
 func TestPortfolio_Run_Error(t *testing.T) {
-	p := NewSearchPortfolio(TextOption)
+	var buf bytes.Buffer
+	p := NewSearchPortfolio(TextOption, &buf)
 	p.Register(func() (model.SearchResult, error) {
 		return model.SearchResult{}, errors.New("test error")
 	})
@@ -52,7 +57,8 @@ func TestPortfolio_Run_Error(t *testing.T) {
 }
 
 func TestPortfolio_Run_Empty(t *testing.T) {
-	p := NewSearchPortfolio(TextOption)
+	var buf bytes.Buffer
+	p := NewSearchPortfolio(TextOption, &buf)
 	err := p.Run()
 	if err != ErrPorftolioEmpty {
 		t.Errorf("expected ErrPorftolioEmpty, got %v", err)

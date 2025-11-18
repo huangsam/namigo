@@ -81,6 +81,11 @@ func TestSearchRunner_RunDNSSearch(t *testing.T) {
 				t.Errorf("RunDNSSearch() output missing search indicator, got: %v", output)
 			}
 
+			// Verify that display output was captured (this was previously going to stdout)
+			if !strings.Contains(output, "🍺 Prepare") {
+				t.Errorf("RunDNSSearch() output missing display message, got: %v", output)
+			}
+
 			// If there's an error, it could be network-related which is acceptable in tests
 			if err != nil {
 				t.Logf("RunDNSSearch() returned error (possibly network-related): %v", err)

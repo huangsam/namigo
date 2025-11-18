@@ -31,7 +31,7 @@ func NewSearchRunner(output io.Writer) *SearchRunner {
 
 // RunPackageSearch executes a package search with the given parameters.
 func (sr *SearchRunner) RunPackageSearch(searchTerm string, maxSize int, outputFormat search.FormatOption) error {
-	ptf := search.NewSearchPortfolio(outputFormat)
+	ptf := search.NewSearchPortfolio(outputFormat, sr.output)
 
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.GoKey
@@ -98,7 +98,7 @@ func SearchPackageAction(c *cli.Context) error {
 
 // RunDNSSearch executes a DNS search with the given parameters.
 func (sr *SearchRunner) RunDNSSearch(searchTerm string, maxSize int, outputFormat search.FormatOption) error {
-	ptf := search.NewSearchPortfolio(outputFormat)
+	ptf := search.NewSearchPortfolio(outputFormat, sr.output)
 
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.DNSKey
@@ -137,7 +137,7 @@ func SearchDNSAction(c *cli.Context) error {
 
 // RunEmailSearch executes an email search with the given parameters.
 func (sr *SearchRunner) RunEmailSearch(searchTerm string, maxSize int, outputFormat search.FormatOption) error {
-	ptf := search.NewSearchPortfolio(outputFormat)
+	ptf := search.NewSearchPortfolio(outputFormat, sr.output)
 
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.EmailKey
