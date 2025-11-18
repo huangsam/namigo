@@ -32,3 +32,4 @@ dist/
 .idea/
 *.cast
 .DS_Store
+/namigo
