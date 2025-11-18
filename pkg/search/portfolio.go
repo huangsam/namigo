@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"sync"
 	"time"
 
@@ -30,10 +31,11 @@ type Portfolio struct {
 	option    FormatOption
 	funcs     []ResultFunc
 	errors    []error
+	output    io.Writer
 }
 
 // NewSearchPortfolio creates a new portfolio instance.
-func NewSearchPortfolio(format FormatOption) *Portfolio {
+func NewSearchPortfolio(format FormatOption, output io.Writer) *Portfolio {
 	return &Portfolio{
 		resultMap: map[model.SearchKey][]model.SearchRecord{},
 		lineMap: map[model.SearchKey]LineFunc{
@@ -46,6 +48,7 @@ func NewSearchPortfolio(format FormatOption) *Portfolio {
 		option: format,
 		funcs:  []ResultFunc{},
 		errors: []error{},
+		output: output,
 	}
 }
 
@@ -87,7 +90,7 @@ func (p *Portfolio) Run() error {
 
 // Display prints results across all results
 func (p *Portfolio) Display() {
-	fmt.Printf("🍺 Prepare %s results\n\n", p.option)
+	_, _ = fmt.Fprintf(p.output, "🍺 Prepare %s results\n\n", p.option)
 	time.Sleep(resultDelay)
 	for key, records := range p.resultMap {
 		label := key.String()
@@ -99,13 +102,13 @@ func (p *Portfolio) Display() {
 		switch option {
 		case TextOption:
 			for _, record := range records {
-				fmt.Println(line(label, record))
+				_, _ = fmt.Fprintln(p.output, line(label, record))
 			}
 		case JSONOption:
 			if b, err := json.MarshalIndent(&model.SearchRender{Label: label, Result: records}, "", "  "); err != nil {
-				fmt.Printf("Cannot display %s: %s\n", label, err.Error())
+				_, _ = fmt.Fprintf(p.output, "Cannot display %s: %s\n", label, err.Error())
 			} else {
-				fmt.Printf("%s\n", b)
+				_, _ = fmt.Fprintf(p.output, "%s\n", b)
 			}
 		}
 	}

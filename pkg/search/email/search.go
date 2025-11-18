@@ -16,6 +16,14 @@ var (
 	domains  = []string{"gmail.com", "outlook.com", "yahoo.com"}
 )
 
+// Verifier is an interface for email verification.
+type Verifier interface {
+	Verify(email string) (*emailverifier.Result, error)
+}
+
+// LookupMXFunc is a function type for MX lookup.
+type LookupMXFunc func(string) ([]*net.MX, error)
+
 // SearchByProbe searches for email records via nameserver lookups.
 //
 // Please note that end-to-end email validation would involve APIs with pricing
@@ -24,6 +32,11 @@ var (
 //
 // https://docs.abstractapi.com/email-validation
 func SearchByProbe(name string, size int) ([]model.EmailRecord, error) {
+	return SearchByProbeWithDeps(name, size, verifier, net.LookupMX)
+}
+
+// SearchByProbeWithDeps searches for email records using dependencies.
+func SearchByProbeWithDeps(name string, size int, v Verifier, lookup LookupMXFunc) ([]model.EmailRecord, error) {
 	result := []model.EmailRecord{}
 	for _, domain := range domains {
 		if len(result) >= size {
@@ -32,13 +45,13 @@ func SearchByProbe(name string, size int) ([]model.EmailRecord, error) {
 		email := fmt.Sprintf("%s@%s", name, domain)
 
 		var hasValidSyntax bool
-		verifyRes, err := verifier.Verify(email)
+		verifyRes, err := v.Verify(email)
 		if err == nil && verifyRes.Syntax.Valid {
 			hasValidSyntax = true
 		}
 
 		var hasValidDomain bool
-		mxRecords, err := net.LookupMX(domain)
+		mxRecords, err := lookup(domain)
 		if err == nil && len(mxRecords) > 0 {
 			hasValidDomain = true
 		}

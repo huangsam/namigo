@@ -2,6 +2,7 @@ package golang_test
 
 import (
 	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
@@ -28,5 +29,35 @@ func TestScrapeList(t *testing.T) {
 
 	if req.Method != http.MethodGet {
 		t.Errorf("ScrapeList() method = %v, want %v", req.Method, http.MethodGet)
+	}
+}
+
+func TestSearchByScrape(t *testing.T) {
+	html := `
+	<html>
+	<body>
+		<div class="SearchSnippet">
+			<h2>testpackage (github.com/test/testpackage)</h2>
+			<p>A test package</p>
+		</div>
+	</body>
+	</html>`
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(html))
+	}))
+	defer server.Close()
+
+	builder := golang.ScrapeListWithBaseURL("test", server.URL)
+	result, err := golang.SearchByScrapeWithBuilder("test", 1, builder)
+	if err != nil {
+		t.Fatalf("SearchByScrapeWithBuilder() error = %v", err)
+	}
+
+	if len(result) != 1 {
+		t.Errorf("expected 1 result, got %d", len(result))
+	}
+	if result[0].Name != "testpackage" {
+		t.Errorf("expected name 'testpackage', got '%s'", result[0].Name)
 	}
 }
