@@ -7,6 +7,7 @@ import (
 
 	"github.com/huangsam/namigo/cmd/namigo/sub"
 	"github.com/huangsam/namigo/pkg/search"
+	"github.com/urfave/cli/v2"
 )
 
 func TestSearchRunner_RunPackageSearch(t *testing.T) {
@@ -131,11 +132,53 @@ func TestSearchRunner_RunEmailSearch(t *testing.T) {
 	}
 }
 
-func TestNewSearchRunner(t *testing.T) {
-	var buf bytes.Buffer
-	runner := sub.NewSearchRunner(&buf)
+func TestSearchPackageAction(t *testing.T) {
+	tests := []struct {
+		name    string
+		args    []string
+		wantErr bool
+		errMsg  string
+	}{
+		{
+			name:    "Missing search term",
+			args:    []string{},
+			wantErr: true,
+			errMsg:  "missing search term",
+		},
+		{
+			name:    "Valid search term",
+			args:    []string{"test"},
+			wantErr: false,
+		},
+	}
 
-	if runner == nil {
-		t.Error("NewSearchRunner() returned nil")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			app := &cli.App{
+				Commands: []*cli.Command{
+					{
+						Name:   "search",
+						Action: sub.SearchPackageAction,
+						Flags: []cli.Flag{
+							&cli.IntFlag{Name: "size", Value: 5},
+							&cli.StringFlag{Name: "format", Value: "text"},
+						},
+					},
+				},
+			}
+
+			args := append([]string{"namigo", "search"}, tt.args...)
+			err := app.Run(args)
+
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SearchPackageAction() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if tt.wantErr && err != nil {
+				if !strings.Contains(err.Error(), tt.errMsg) {
+					t.Errorf("SearchPackageAction() error message = %v, want containing %v", err.Error(), tt.errMsg)
+				}
+			}
+		})
 	}
 }
