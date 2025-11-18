@@ -14,11 +14,11 @@ import (
 // SearchByAPI searches for NPM packages by querying registry.npmjs.com.
 func SearchByAPI(name string, size int) ([]model.NPMPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
-	return SearchByAPIWithClient(name, size, client, APIList(name, size))
+	return SearchByAPIWithClient(client, APIList(name, size))
 }
 
 // SearchByAPIWithClient searches using a custom client and builder.
-func SearchByAPIWithClient(_ string, _ int, client *http.Client, builder core.RequestBuilder) ([]model.NPMPackage, error) {
+func SearchByAPIWithClient(client *http.Client, builder core.RequestBuilder) ([]model.NPMPackage, error) {
 	bl, err := core.RESTAPIQuery(client, builder)
 	if err != nil {
 		return nil, err
