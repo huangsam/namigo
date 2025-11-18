@@ -25,9 +25,8 @@ func GetStringFromReader(c *cli.Context, flag, prompt string, reader io.Reader) 
 		if !scanner.Scan() {
 			if err := scanner.Err(); err != nil {
 				return "", err
-			} else {
-				return "", errors.New("no input provided")
 			}
+			return "", errors.New("no input provided")
 		}
 		value = strings.TrimSpace(scanner.Text())
 		if value == "" {
