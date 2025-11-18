@@ -49,9 +49,9 @@ func TestSearchByAPIWithClient(t *testing.T) {
 		return http.NewRequest("GET", server.URL, nil)
 	}
 
-	result, err := npm.SearchByAPIWithClient(client, builder)
+	result, err := npm.SearchByAPIWithBuilder(client, builder)
 	if err != nil {
-		t.Fatalf("SearchByAPIWithClient() error = %v", err)
+		t.Fatalf("SearchByAPIWithBuilder() error = %v", err)
 	}
 
 	if len(result) != 1 {

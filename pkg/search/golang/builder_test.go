@@ -49,7 +49,8 @@ func TestSearchByScrape(t *testing.T) {
 	defer server.Close()
 
 	builder := golang.ScrapeListWithBaseURL("test", server.URL)
-	result, err := golang.SearchByScrapeWithBuilder("test", 1, builder)
+	client := server.Client()
+	result, err := golang.SearchByScrapeWithBuilder(client, "test", 1, builder)
 	if err != nil {
 		t.Fatalf("SearchByScrapeWithBuilder() error = %v", err)
 	}

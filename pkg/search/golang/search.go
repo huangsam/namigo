@@ -3,7 +3,6 @@ package golang
 import (
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/huangsam/namigo/internal/core"
@@ -11,13 +10,12 @@ import (
 )
 
 // SearchByScrape searches for Go packages by scraping pkg.go.dev.
-func SearchByScrape(name string, size int) ([]model.GoPackage, error) {
-	return SearchByScrapeWithBuilder(name, size, ScrapeList(name))
+func SearchByScrape(client *http.Client, name string, size int) ([]model.GoPackage, error) {
+	return SearchByScrapeWithBuilder(client, name, size, ScrapeList(name))
 }
 
 // SearchByScrapeWithBuilder searches using a custom request builder.
-func SearchByScrapeWithBuilder(name string, size int, builder core.RequestBuilder) ([]model.GoPackage, error) {
-	client := &http.Client{Timeout: 5 * time.Second}
+func SearchByScrapeWithBuilder(client *http.Client, name string, size int, builder core.RequestBuilder) ([]model.GoPackage, error) {
 	pipeline := core.NewDocumentPipeline(client, builder)
 	doc, err := pipeline.Execute()
 	if err != nil {

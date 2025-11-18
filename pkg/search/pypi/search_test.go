@@ -91,7 +91,7 @@ func TestSearchByAPI(t *testing.T) {
 		Transport: &testTransport{baseURL: server.URL},
 	}
 
-	results, err := SearchByAPIWithClient(client, "test", 2)
+	results, err := SearchByAPI(client, "test", 2)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -141,7 +141,7 @@ func TestSearchByAPI_NoResults(t *testing.T) {
 		Transport: &testTransport{baseURL: server.URL},
 	}
 
-	results, err := SearchByAPIWithClient(client, "test", 2)
+	results, err := SearchByAPI(client, "test", 2)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -163,7 +163,7 @@ func TestSearchByAPI_Error(t *testing.T) {
 		Transport: &testTransport{baseURL: server.URL},
 	}
 
-	_, err := SearchByAPIWithClient(client, "test", 2)
+	_, err := SearchByAPI(client, "test", 2)
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}

@@ -4,7 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/pkg/search"
@@ -21,12 +23,26 @@ var ErrMissingSearchTerm = errors.New("missing search term")
 
 // SearchRunner encapsulates the logic for running searches.
 type SearchRunner struct {
-	output io.Writer
+	output     io.Writer
+	httpClient *http.Client
 }
 
 // NewSearchRunner creates a new SearchRunner instance.
 func NewSearchRunner(output io.Writer) *SearchRunner {
-	return &SearchRunner{output: output}
+	return &SearchRunner{
+		output: output,
+		httpClient: &http.Client{
+			Timeout: 10 * time.Second, // Increased timeout for better reliability
+		},
+	}
+}
+
+// NewSearchRunnerWithClient creates a new SearchRunner with a custom HTTP client.
+func NewSearchRunnerWithClient(output io.Writer, httpClient *http.Client) *SearchRunner {
+	return &SearchRunner{
+		output:     output,
+		httpClient: httpClient,
+	}
 }
 
 // RunPackageSearch executes a package search with the given parameters.
@@ -36,7 +52,7 @@ func (sr *SearchRunner) RunPackageSearch(searchTerm string, maxSize int, outputF
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.GoKey
 		_, _ = fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
-		values, err := golang.SearchByScrape(searchTerm, maxSize)
+		values, err := golang.SearchByScrape(sr.httpClient, searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
 		}
@@ -50,7 +66,7 @@ func (sr *SearchRunner) RunPackageSearch(searchTerm string, maxSize int, outputF
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.NPMKey
 		_, _ = fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
-		values, err := npm.SearchByAPI(searchTerm, maxSize)
+		values, err := npm.SearchByAPI(sr.httpClient, searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
 		}
@@ -64,7 +80,7 @@ func (sr *SearchRunner) RunPackageSearch(searchTerm string, maxSize int, outputF
 	ptf.Register(func() (model.SearchResult, error) {
 		key := model.PyPIKey
 		_, _ = fmt.Fprintf(sr.output, "🔍 Search for %s results\n", key)
-		values, err := pypi.SearchByAPI(searchTerm, maxSize)
+		values, err := pypi.SearchByAPI(sr.httpClient, searchTerm, maxSize)
 		if err != nil {
 			return model.SearchResult{}, err
 		}

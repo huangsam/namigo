@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/huangsam/namigo/internal/core"
 	"github.com/huangsam/namigo/internal/model"
@@ -14,13 +13,7 @@ import (
 )
 
 // SearchByAPI searches for PyPI packages by querying pypi.org.
-func SearchByAPI(name string, size int) ([]model.PyPIPackage, error) {
-	client := &http.Client{Timeout: 5 * time.Second}
-	return SearchByAPIWithClient(client, name, size)
-}
-
-// SearchByAPIWithClient searches for PyPI packages using a custom HTTP client.
-func SearchByAPIWithClient(client *http.Client, name string, size int) ([]model.PyPIPackage, error) {
+func SearchByAPI(client *http.Client, name string, size int) ([]model.PyPIPackage, error) {
 	bl, err := core.RESTAPIQuery(client, APIList())
 	if err != nil {
 		return nil, err
