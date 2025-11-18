@@ -2,6 +2,7 @@ package sub_test
 
 import (
 	"bytes"
+	"net/http"
 	"strings"
 	"testing"
 
@@ -177,6 +178,118 @@ func TestSearchPackageAction(t *testing.T) {
 			if tt.wantErr && err != nil {
 				if !strings.Contains(err.Error(), tt.errMsg) {
 					t.Errorf("SearchPackageAction() error message = %v, want containing %v", err.Error(), tt.errMsg)
+				}
+			}
+		})
+	}
+}
+
+func TestNewSearchRunnerWithClient(t *testing.T) {
+	var buf bytes.Buffer
+	httpClient := &http.Client{}
+	runner := sub.NewSearchRunnerWithClient(&buf, httpClient)
+
+	if runner == nil {
+		t.Errorf("expected non-nil runner")
+	}
+}
+
+func TestSearchDNSAction(t *testing.T) {
+	tests := []struct {
+		name    string
+		args    []string
+		wantErr bool
+		errMsg  string
+	}{
+		{
+			name:    "Missing search term",
+			args:    []string{},
+			wantErr: true,
+			errMsg:  "missing search term",
+		},
+		{
+			name:    "Valid search term",
+			args:    []string{"example"},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			app := &cli.App{
+				Commands: []*cli.Command{
+					{
+						Name:   "dns",
+						Action: sub.SearchDNSAction,
+						Flags: []cli.Flag{
+							&cli.IntFlag{Name: "size", Value: 5},
+							&cli.StringFlag{Name: "format", Value: "text"},
+						},
+					},
+				},
+			}
+
+			args := append([]string{"namigo", "dns"}, tt.args...)
+			err := app.Run(args)
+
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SearchDNSAction() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if tt.wantErr && err != nil {
+				if !strings.Contains(err.Error(), tt.errMsg) {
+					t.Errorf("SearchDNSAction() error message = %v, want containing %v", err.Error(), tt.errMsg)
+				}
+			}
+		})
+	}
+}
+
+func TestSearchEmailAction(t *testing.T) {
+	tests := []struct {
+		name    string
+		args    []string
+		wantErr bool
+		errMsg  string
+	}{
+		{
+			name:    "Missing search term",
+			args:    []string{},
+			wantErr: true,
+			errMsg:  "missing search term",
+		},
+		{
+			name:    "Valid search term",
+			args:    []string{"test"},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			app := &cli.App{
+				Commands: []*cli.Command{
+					{
+						Name:   "email",
+						Action: sub.SearchEmailAction,
+						Flags: []cli.Flag{
+							&cli.IntFlag{Name: "size", Value: 5},
+							&cli.StringFlag{Name: "format", Value: "text"},
+						},
+					},
+				},
+			}
+
+			args := append([]string{"namigo", "email"}, tt.args...)
+			err := app.Run(args)
+
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SearchEmailAction() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if tt.wantErr && err != nil {
+				if !strings.Contains(err.Error(), tt.errMsg) {
+					t.Errorf("SearchEmailAction() error message = %v, want containing %v", err.Error(), tt.errMsg)
 				}
 			}
 		})

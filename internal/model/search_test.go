@@ -1,6 +1,8 @@
 package model
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestSearchKey_String(t *testing.T) {
 	tests := []struct {
@@ -19,5 +21,21 @@ func TestSearchKey_String(t *testing.T) {
 		if result := test.key.String(); result != test.expected {
 			t.Errorf("expected %s, got %s", test.expected, result)
 		}
+	}
+}
+
+func TestSearchRecord_Record(_ *testing.T) {
+	// Test that record methods can be called (they're just markers)
+	records := []SearchRecord{
+		&GoPackage{},
+		&NPMPackage{},
+		&PyPIPackage{},
+		&DNSRecord{},
+		&EmailRecord{},
+	}
+
+	for _, record := range records {
+		// Just call the method to ensure it exists and doesn't panic
+		record.record()
 	}
 }

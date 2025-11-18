@@ -3,6 +3,7 @@ package search
 import (
 	"bytes"
 	"errors"
+	"strings"
 	"testing"
 
 	"github.com/huangsam/namigo/internal/model"
@@ -62,5 +63,45 @@ func TestPortfolio_Run_Empty(t *testing.T) {
 	err := p.Run()
 	if err != ErrPorftolioEmpty {
 		t.Errorf("expected ErrPorftolioEmpty, got %v", err)
+	}
+}
+
+func TestPortfolio_Display_Text(t *testing.T) {
+	var buf bytes.Buffer
+	p := NewSearchPortfolio(TextOption, &buf)
+
+	// Add some test data
+	p.resultMap = map[model.SearchKey][]model.SearchRecord{
+		model.GoKey: {&model.GoPackage{Name: "test", Path: "github.com/test", Description: "A test package"}},
+	}
+
+	p.Display()
+
+	output := buf.String()
+	if !strings.Contains(output, "🍺 Prepare PlainText results") {
+		t.Errorf("expected display header, got: %s", output)
+	}
+	if !strings.Contains(output, "test") {
+		t.Errorf("expected package name in output, got: %s", output)
+	}
+}
+
+func TestPortfolio_Display_JSON(t *testing.T) {
+	var buf bytes.Buffer
+	p := NewSearchPortfolio(JSONOption, &buf)
+
+	// Add some test data
+	p.resultMap = map[model.SearchKey][]model.SearchRecord{
+		model.GoKey: {&model.GoPackage{Name: "test", Path: "github.com/test", Description: "A test package"}},
+	}
+
+	p.Display()
+
+	output := buf.String()
+	if !strings.Contains(output, "🍺 Prepare JSON results") {
+		t.Errorf("expected display header, got: %s", output)
+	}
+	if !strings.Contains(output, `"label": "Golang"`) {
+		t.Errorf("expected JSON label in output, got: %s", output)
 	}
 }
