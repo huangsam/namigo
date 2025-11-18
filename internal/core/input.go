@@ -23,7 +23,11 @@ func GetStringFromReader(c *cli.Context, flag, prompt string, reader io.Reader) 
 		fmt.Printf("%s: ", prompt)
 		scanner := bufio.NewScanner(reader)
 		if !scanner.Scan() {
-			return "", scanner.Err()
+			if err := scanner.Err(); err != nil {
+				return "", err
+			} else {
+				return "", errors.New("no input provided")
+			}
 		}
 		value = strings.TrimSpace(scanner.Text())
 		if value == "" {
