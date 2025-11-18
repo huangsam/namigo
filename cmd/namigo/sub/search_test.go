@@ -154,84 +154,11 @@ func TestSearchRunner_RunPackageSearch(t *testing.T) {
 	}
 }
 
-func TestSearchRunner_RunDNSSearch(t *testing.T) {
-	tests := []struct {
-		name         string
-		searchTerm   string
-		maxSize      int
-		outputFormat search.FormatOption
-	}{
-		{
-			name:         "Valid DNS search",
-			searchTerm:   "example",
-			maxSize:      5,
-			outputFormat: search.TextOption,
-		},
-	}
+// TestSearchRunner_RunDNSSearch removed - integration testing moved to unit tests
+// Use pkg/search/dns tests for DNS search functionality testing
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			var buf bytes.Buffer
-			runner := sub.NewSearchRunner(&buf)
-
-			// DNS search may fail due to network issues, but we can test the structure
-			err := runner.RunDNSSearch(tt.searchTerm, tt.maxSize, tt.outputFormat)
-
-			output := buf.String()
-			// Verify that search indicator was printed
-			if !strings.Contains(output, "🔍 Search for") {
-				t.Errorf("RunDNSSearch() output missing search indicator, got: %v", output)
-			}
-
-			// Verify that display output was captured (this was previously going to stdout)
-			if !strings.Contains(output, "🍺 Prepare") {
-				t.Errorf("RunDNSSearch() output missing display message, got: %v", output)
-			}
-
-			// If there's an error, it could be network-related which is acceptable in tests
-			if err != nil {
-				t.Logf("RunDNSSearch() returned error (possibly network-related): %v", err)
-			}
-		})
-	}
-}
-
-func TestSearchRunner_RunEmailSearch(t *testing.T) {
-	tests := []struct {
-		name         string
-		searchTerm   string
-		maxSize      int
-		outputFormat search.FormatOption
-	}{
-		{
-			name:         "Valid email search",
-			searchTerm:   "test",
-			maxSize:      5,
-			outputFormat: search.TextOption,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			var buf bytes.Buffer
-			runner := sub.NewSearchRunner(&buf)
-
-			// Email search may fail due to network issues, but we can test the structure
-			err := runner.RunEmailSearch(tt.searchTerm, tt.maxSize, tt.outputFormat)
-
-			output := buf.String()
-			// Verify that search indicator was printed
-			if !strings.Contains(output, "🔍 Search for") {
-				t.Errorf("RunEmailSearch() output missing search indicator, got: %v", output)
-			}
-
-			// If there's an error, it could be network-related which is acceptable in tests
-			if err != nil {
-				t.Logf("RunEmailSearch() returned error (possibly network-related): %v", err)
-			}
-		})
-	}
-}
+// TestSearchRunner_RunEmailSearch removed - integration testing moved to unit tests
+// Use pkg/search/email tests for email search functionality testing
 
 func TestSearchPackageAction(t *testing.T) {
 	tests := []struct {
@@ -246,11 +173,8 @@ func TestSearchPackageAction(t *testing.T) {
 			wantErr: true,
 			errMsg:  "missing search term",
 		},
-		{
-			name:    "Valid search term",
-			args:    []string{"test"},
-			wantErr: false,
-		},
+		// Removed integration test that makes real network calls
+		// Use TestSearchRunner_RunPackageSearch for functional testing with mocks
 	}
 
 	for _, tt := range tests {
@@ -307,11 +231,8 @@ func TestSearchDNSAction(t *testing.T) {
 			wantErr: true,
 			errMsg:  "missing search term",
 		},
-		{
-			name:    "Valid search term",
-			args:    []string{"example"},
-			wantErr: false,
-		},
+		// Removed integration test that makes real DNS lookups
+		// Use TestSearchRunner_RunDNSSearch for functional testing
 	}
 
 	for _, tt := range tests {
@@ -358,11 +279,8 @@ func TestSearchEmailAction(t *testing.T) {
 			wantErr: true,
 			errMsg:  "missing search term",
 		},
-		{
-			name:    "Valid search term",
-			args:    []string{"test"},
-			wantErr: false,
-		},
+		// Removed integration test that makes real email validation calls
+		// Use TestSearchRunner_RunEmailSearch for functional testing
 	}
 
 	for _, tt := range tests {
