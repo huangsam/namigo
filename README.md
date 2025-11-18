@@ -57,6 +57,6 @@ namigo search email 'hello'
 
 Here is a screencast to see the CLI in action:
 
-![asciicast](./images/demo.gif)
+<img src="./images/demo.gif" alt="Namigo Demo" width="800px" />
 
 Want to help make Namigo even better? Check out our [contribution guidelines](./CONTRIBUTING.md).
