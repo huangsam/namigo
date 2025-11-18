@@ -2,6 +2,7 @@ package sub
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"io"
@@ -22,6 +23,23 @@ import (
 // ErrMissingSearchTerm is returned when the search term is missing.
 var ErrMissingSearchTerm = errors.New("missing search term")
 
+// createOptimizedHTTPClient creates an HTTP client optimized for performance.
+func createOptimizedHTTPClient() *http.Client {
+	transport := &http.Transport{
+		MaxIdleConns:        100,
+		MaxIdleConnsPerHost: 10,
+		IdleConnTimeout:     90 * time.Second,
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: false, // Keep secure by default
+		},
+	}
+
+	return &http.Client{
+		Transport: transport,
+		Timeout:   15 * time.Second, // Increased timeout for better reliability
+	}
+}
+
 // SearchRunner encapsulates the logic for running searches.
 type SearchRunner struct {
 	output     io.Writer
@@ -31,10 +49,8 @@ type SearchRunner struct {
 // NewSearchRunner creates a new SearchRunner instance.
 func NewSearchRunner(output io.Writer) *SearchRunner {
 	return &SearchRunner{
-		output: output,
-		httpClient: &http.Client{
-			Timeout: 10 * time.Second, // Increased timeout for better reliability
-		},
+		output:     output,
+		httpClient: createOptimizedHTTPClient(),
 	}
 }
 

@@ -22,7 +22,7 @@ func SearchByScrapeWithBuilder(client *http.Client, name string, size int, build
 		return nil, err
 	}
 
-	result := []model.GoPackage{}
+	result := make([]model.GoPackage, 0, size) // Pre-allocate with capacity
 	doc.Find(".SearchSnippet").Each(func(_ int, section *goquery.Selection) {
 		if len(result) >= size {
 			return

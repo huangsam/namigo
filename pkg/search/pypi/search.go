@@ -34,11 +34,11 @@ func SearchByAPI(client *http.Client, name string, size int) ([]model.PyPIPackag
 		close(taskChan)
 	}()
 
-	result := []model.PyPIPackage{}
+	result := make([]model.PyPIPackage, 0, size) // Pre-allocate with capacity
 	errors := []error{}
 	var mu sync.Mutex
 
-	core.StartCommonWorkers(func() {
+	core.StartDynamicWorkers(len(listRes.Projects), func() {
 		for pkg := range taskChan {
 			bd, err := core.RESTAPIQuery(client, APIDetail(pkg))
 			if err != nil {

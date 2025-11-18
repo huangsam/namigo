@@ -11,7 +11,11 @@ import (
 	"github.com/huangsam/namigo/internal/model"
 )
 
+// resultDelay is the delay before displaying results.
 const resultDelay = 500 * time.Millisecond
+
+// searchTypeCount is the number of search types.
+const searchTypeCount = 5
 
 var (
 	// ErrPorftolioEmpty is returned when the portfolio is empty.
@@ -37,7 +41,7 @@ type Portfolio struct {
 // NewSearchPortfolio creates a new portfolio instance.
 func NewSearchPortfolio(format FormatOption, output io.Writer) *Portfolio {
 	return &Portfolio{
-		resultMap: map[model.SearchKey][]model.SearchRecord{},
+		resultMap: make(map[model.SearchKey][]model.SearchRecord, searchTypeCount), // Pre-allocate for 5 search types
 		lineMap: map[model.SearchKey]LineFunc{
 			model.GoKey:    GoLine,
 			model.NPMKey:   NPMLine,
@@ -46,8 +50,8 @@ func NewSearchPortfolio(format FormatOption, output io.Writer) *Portfolio {
 			model.EmailKey: EmailLine,
 		},
 		option: format,
-		funcs:  []ResultFunc{},
-		errors: []error{},
+		funcs:  make([]ResultFunc, 0, searchTypeCount), // Pre-allocate capacity
+		errors: make([]error, 0, searchTypeCount),      // Pre-allocate capacity
 		output: output,
 	}
 }

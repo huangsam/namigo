@@ -27,7 +27,7 @@ func SearchByAPIWithBuilder(client *http.Client, builder core.RequestBuilder) ([
 		return nil, err
 	}
 
-	result := []model.NPMPackage{}
+	result := make([]model.NPMPackage, 0, len(listRes.Objects)) // Pre-allocate with capacity
 	for _, object := range listRes.Objects {
 		pkg := object.Package.Name
 

@@ -29,7 +29,7 @@ func SearchByProbeWithLookup(name string, size int, lookup LookupIPFunc) ([]mode
 		close(domainChan)
 	}()
 
-	result := []model.DNSRecord{}
+	result := make([]model.DNSRecord, 0, size) // Pre-allocate with capacity
 	errors := []error{}
 	var mu sync.Mutex
 

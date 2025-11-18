@@ -37,7 +37,7 @@ func SearchByProbe(name string, size int) ([]model.EmailRecord, error) {
 
 // SearchByProbeWithDeps searches for email records using dependencies.
 func SearchByProbeWithDeps(name string, size int, v Verifier, lookup LookupMXFunc) ([]model.EmailRecord, error) {
-	result := []model.EmailRecord{}
+	result := make([]model.EmailRecord, 0, size) // Pre-allocate with capacity
 	for _, domain := range domains {
 		if len(result) >= size {
 			break
