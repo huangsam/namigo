@@ -42,3 +42,12 @@ func TestGetAllFormatOptionValues(t *testing.T) {
 		}
 	}
 }
+
+func TestFormatOption_String(t *testing.T) {
+	if got := search.TextOption.String(); got != "PlainText" {
+		t.Errorf("TextOption.String() = %v, want %v", got, "PlainText")
+	}
+	if got := search.JSONOption.String(); got != "JSON" {
+		t.Errorf("JSONOption.String() = %v, want %v", got, "JSON")
+	}
+}
