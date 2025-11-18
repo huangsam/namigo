@@ -12,8 +12,13 @@ import (
 
 // SearchByScrape searches for Go packages by scraping pkg.go.dev.
 func SearchByScrape(name string, size int) ([]model.GoPackage, error) {
+	return SearchByScrapeWithBuilder(name, size, ScrapeList(name))
+}
+
+// SearchByScrapeWithBuilder searches using a custom request builder.
+func SearchByScrapeWithBuilder(name string, size int, builder core.RequestBuilder) ([]model.GoPackage, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
-	pipeline := core.NewDocumentPipeline(client, ScrapeList(name))
+	pipeline := core.NewDocumentPipeline(client, builder)
 	doc, err := pipeline.Execute()
 	if err != nil {
 		return nil, err

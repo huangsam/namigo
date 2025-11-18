@@ -9,8 +9,16 @@ import (
 	"github.com/huangsam/namigo/internal/model"
 )
 
+// LookupIPFunc is a function type for IP lookup.
+type LookupIPFunc func(string) ([]net.IP, error)
+
 // SearchByProbe searches for DNS records via nameserver lookups.
 func SearchByProbe(name string, size int) ([]model.DNSRecord, error) {
+	return SearchByProbeWithLookup(name, size, net.LookupIP)
+}
+
+// SearchByProbeWithLookup searches for DNS records using a custom lookup function.
+func SearchByProbeWithLookup(name string, size int, lookup LookupIPFunc) ([]model.DNSRecord, error) {
 	domains := []string{"com", "org", "net", "io", "tech", "ai", "me", "shop"}
 	domainChan := make(chan string)
 
@@ -27,7 +35,7 @@ func SearchByProbe(name string, size int) ([]model.DNSRecord, error) {
 
 	core.StartCommonWorkers(func() {
 		for domain := range domainChan {
-			ips, err := net.LookupIP(domain)
+			ips, err := lookup(domain)
 			if err != nil {
 				mu.Lock() // Critical section
 				errors = append(errors, err)
