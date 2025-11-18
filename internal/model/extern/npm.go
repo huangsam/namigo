@@ -9,14 +9,14 @@ type NPMAPIListResponse struct {
 			Monthly int `json:"monthly"`
 			Weekly  int `json:"weekly"`
 		} `json:"downloads"`
-		Dependents  int       `json:"dependents"`
+		Dependents  any       `json:"dependents"`
 		Updated     time.Time `json:"updated"`
 		SearchScore float64   `json:"searchScore"`
 		Package     struct {
-			Name        string        `json:"name"`
-			Keywords    []interface{} `json:"keywords"`
-			Version     string        `json:"version"`
-			Description string        `json:"description"`
+			Name        string `json:"name"`
+			Keywords    []any  `json:"keywords"`
+			Version     string `json:"version"`
+			Description string `json:"description"`
 			Publisher   struct {
 				Email    string `json:"email"`
 				Username string `json:"username"`

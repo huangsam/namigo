@@ -60,22 +60,23 @@ Output images/demo.gif
 Require namigo
 
 Set Shell "zsh"
-Set FontSize 16
-Set Width 1000
-Set Height 500
+Set FontSize 18
+Set Width 1280
+Set Height 720
+Set TypingSpeed 100ms
 
-Type "namigo generate prompt" Sleep 500ms Enter
-Type "a" Sleep 500ms Enter
-Type "b" Sleep 500ms Enter
-Type "c" Sleep 500ms Enter
-Type "d" Sleep 500ms Enter
-Sleep 3s
+Type "namigo generate prompt" Enter
+Sleep 500ms Type "a" Enter
+Sleep 500ms Type "b" Enter
+Sleep 500ms Type "c" Enter
+Sleep 500ms Type "d" Enter
+Sleep 1s
 
-Type "namigo search package hello" Sleep 500ms Enter
-Sleep 3s
+Type "namigo search package hello" Enter
+Sleep 4s
 
-Type "namigo search dns hello" Sleep 500ms Enter
-Sleep 3s
+Type "namigo search dns hello" Enter
+Sleep 4s
 
-Type "namigo search email hello" Sleep 500ms Enter
-Sleep 3s
+Type "namigo search email hello" Enter
+Sleep 4s
