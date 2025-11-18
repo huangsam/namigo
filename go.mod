@@ -1,6 +1,6 @@
 module github.com/huangsam/namigo
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/AfterShip/email-verifier v1.4.1

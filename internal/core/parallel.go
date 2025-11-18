@@ -34,11 +34,7 @@ func StartDynamicWorkers(workloadSize int, worker func()) {
 func StartWorkers(count int, worker func()) {
 	var wg sync.WaitGroup
 	for range count {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			worker()
-		}()
+		wg.Go(func() { worker() })
 	}
 	wg.Wait()
 }

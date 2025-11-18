@@ -67,9 +67,7 @@ func (p *Portfolio) Run() error {
 	var emu sync.Mutex
 	var rmu sync.Mutex
 	for _, fn := range p.funcs {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			if result, err := fn(); err != nil {
 				emu.Lock() // Critical section
 				p.errors = append(p.errors, err)
@@ -79,7 +77,7 @@ func (p *Portfolio) Run() error {
 				p.resultMap[result.Key] = result.Records
 				rmu.Unlock()
 			}
-		}()
+		})
 	}
 	wg.Wait()
 
