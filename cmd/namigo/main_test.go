@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
 	"testing"
+
+	"github.com/urfave/cli/v3"
 )
 
 func TestCheckSizeFlag(t *testing.T) {
@@ -29,7 +32,7 @@ func TestCheckSizeFlag(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := checkSizeFlag(nil, tt.value)
+			err := checkSizeFlag(context.Background(), &cli.Command{}, tt.value)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("checkSizeFlag() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -62,7 +65,7 @@ func TestCheckLengthFlag(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := checkLengthFlag(nil, tt.value)
+			err := checkLengthFlag(context.Background(), &cli.Command{}, tt.value)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("checkLengthFlag() error = %v, wantErr %v", err, tt.wantErr)
 			}

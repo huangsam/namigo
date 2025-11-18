@@ -1,36 +1,37 @@
 package sub
 
 import (
+	"context"
 	"fmt"
 	"time"
 
 	"github.com/huangsam/namigo/internal/core"
 	"github.com/huangsam/namigo/pkg/generate"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 const outputDelay = 500 * time.Millisecond
 
 // GeneratePromptAction generates a prompt for AI chatbots.
-func GeneratePromptAction(c *cli.Context) error {
-	purpose, err := core.GetString(c, "purpose", "👋 Enter project purpose")
+func GeneratePromptAction(_ context.Context, cmd *cli.Command) error {
+	purpose, err := core.GetString(cmd, "purpose", "👋 Enter project purpose")
 	if err != nil {
 		return err
 	}
-	theme, err := core.GetString(c, "theme", "👋 Enter project theme")
+	theme, err := core.GetString(cmd, "theme", "👋 Enter project theme")
 	if err != nil {
 		return err
 	}
-	demographics, err := core.GetString(c, "demographics", "👋 Enter target demographics")
+	demographics, err := core.GetString(cmd, "demographics", "👋 Enter target demographics")
 	if err != nil {
 		return err
 	}
-	interests, err := core.GetString(c, "interests", "👋 Enter target interests")
+	interests, err := core.GetString(cmd, "interests", "👋 Enter target interests")
 	if err != nil {
 		return err
 	}
-	maxSize := c.Int("size")
-	maxLength := c.Int("length")
+	maxSize := cmd.Int("size")
+	maxLength := cmd.Int("length")
 
 	prompt, err := generate.Prompt(purpose, theme, demographics, interests, maxSize, maxLength)
 	if err != nil {

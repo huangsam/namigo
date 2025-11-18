@@ -2,13 +2,14 @@ package sub_test
 
 import (
 	"bytes"
+	"context"
 	"net/http"
 	"strings"
 	"testing"
 
 	"github.com/huangsam/namigo/cmd/namigo/sub"
 	"github.com/huangsam/namigo/pkg/search"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func TestSearchRunner_RunPackageSearch(t *testing.T) {
@@ -155,7 +156,7 @@ func TestSearchPackageAction(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			app := &cli.App{
+			cmd := &cli.Command{
 				Commands: []*cli.Command{
 					{
 						Name:   "search",
@@ -169,7 +170,7 @@ func TestSearchPackageAction(t *testing.T) {
 			}
 
 			args := append([]string{"namigo", "search"}, tt.args...)
-			err := app.Run(args)
+			err := cmd.Run(context.Background(), args)
 
 			if (err != nil) != tt.wantErr {
 				t.Errorf("SearchPackageAction() error = %v, wantErr %v", err, tt.wantErr)
@@ -216,7 +217,7 @@ func TestSearchDNSAction(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			app := &cli.App{
+			cmd := &cli.Command{
 				Commands: []*cli.Command{
 					{
 						Name:   "dns",
@@ -230,7 +231,7 @@ func TestSearchDNSAction(t *testing.T) {
 			}
 
 			args := append([]string{"namigo", "dns"}, tt.args...)
-			err := app.Run(args)
+			err := cmd.Run(context.Background(), args)
 
 			if (err != nil) != tt.wantErr {
 				t.Errorf("SearchDNSAction() error = %v, wantErr %v", err, tt.wantErr)
@@ -267,7 +268,7 @@ func TestSearchEmailAction(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			app := &cli.App{
+			cmd := &cli.Command{
 				Commands: []*cli.Command{
 					{
 						Name:   "email",
@@ -281,7 +282,7 @@ func TestSearchEmailAction(t *testing.T) {
 			}
 
 			args := append([]string{"namigo", "email"}, tt.args...)
-			err := app.Run(args)
+			err := cmd.Run(context.Background(), args)
 
 			if (err != nil) != tt.wantErr {
 				t.Errorf("SearchEmailAction() error = %v, wantErr %v", err, tt.wantErr)

@@ -2,12 +2,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	"github.com/huangsam/namigo/cmd/namigo/sub"
 	"github.com/huangsam/namigo/pkg/search"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -17,7 +18,7 @@ var (
 )
 
 // checkSizeFlag checks for valid size flag.
-func checkSizeFlag(_ *cli.Context, i int) error {
+func checkSizeFlag(_ context.Context, _ *cli.Command, i int) error {
 	if i <= 0 {
 		return fmt.Errorf("size %d is invalid", i)
 	}
@@ -25,7 +26,7 @@ func checkSizeFlag(_ *cli.Context, i int) error {
 }
 
 // checkLengthFlag checks for valid length flag.
-func checkLengthFlag(_ *cli.Context, i int) error {
+func checkLengthFlag(_ context.Context, _ *cli.Command, i int) error {
 	if i <= 0 {
 		return fmt.Errorf("length %d is invalid", i)
 	}
@@ -33,14 +34,14 @@ func checkLengthFlag(_ *cli.Context, i int) error {
 }
 
 func main() {
-	app := &cli.App{
+	app := &cli.Command{
 		Name:  "namigo",
 		Usage: "Your naming pal, written in Go 🐶",
 		Commands: []*cli.Command{
 			{ // Lots of goodies to come. Stay tuned!
 				Name:  "generate",
 				Usage: "Generate names with AI",
-				Subcommands: []*cli.Command{
+				Commands: []*cli.Command{
 					{
 						Name:  "prompt",
 						Usage: "Generate prompt for AI chatbots",
@@ -94,7 +95,7 @@ func main() {
 						Value: search.TextOption.Value,
 					},
 				},
-				Subcommands: []*cli.Command{
+				Commands: []*cli.Command{
 					{
 						Name:   "package",
 						Usage:  "Search for packages",
@@ -115,7 +116,7 @@ func main() {
 			{
 				Name:  "version",
 				Usage: "Print version information",
-				Action: func(*cli.Context) error {
+				Action: func(_ context.Context, _ *cli.Command) error {
 					fmt.Printf("namigo %s, commit %s, built at %s\n", version, commit, date)
 					return nil
 				},
@@ -123,7 +124,7 @@ func main() {
 		},
 	}
 
-	err := app.Run(os.Args)
+	err := app.Run(context.Background(), os.Args)
 	if err != nil {
 		fmt.Printf("💥 Error: %v\n", err.Error())
 		os.Exit(1)

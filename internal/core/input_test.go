@@ -1,39 +1,40 @@
 package core
 
 import (
-	"flag"
+	"context"
 	"strings"
 	"testing"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func TestGetStringFromReader_CLIValue(t *testing.T) {
 	flagName := "flag"
-	app := &cli.App{
+	cmd := &cli.Command{
 		Flags: []cli.Flag{
 			&cli.StringFlag{Name: flagName},
 		},
+		Action: func(_ context.Context, cmd *cli.Command) error {
+			result, err := GetStringFromReader(cmd, flagName, "prompt", strings.NewReader(""))
+			if err != nil {
+				t.Fatalf("expected no error, got %v", err)
+			}
+			if result != "testvalue" {
+				t.Errorf("expected 'testvalue', got '%s'", result)
+			}
+			return nil
+		},
 	}
-	set := flag.NewFlagSet("test", 0)
-	set.String(flagName, "testvalue", "")
-	c := cli.NewContext(app, set, nil)
 
-	result, err := GetStringFromReader(c, flagName, "prompt", strings.NewReader(""))
+	err := cmd.Run(context.Background(), []string{"test", "--flag", "testvalue"})
 	if err != nil {
-		t.Fatalf("expected no error, got %v", err)
-	}
-	if result != "testvalue" {
-		t.Errorf("expected 'testvalue', got '%s'", result)
+		t.Fatalf("command run failed: %v", err)
 	}
 }
 
 func TestGetStringFromReader_ReaderInput(t *testing.T) {
-	app := &cli.App{}
-	c := &cli.Context{}
-	c.App = app
-
-	result, err := GetStringFromReader(c, "flag", "prompt", strings.NewReader("input\n"))
+	cmd := &cli.Command{}
+	result, err := GetStringFromReader(cmd, "flag", "prompt", strings.NewReader("input\n"))
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -43,11 +44,8 @@ func TestGetStringFromReader_ReaderInput(t *testing.T) {
 }
 
 func TestGetStringFromReader_EmptyAfterTrim(t *testing.T) {
-	app := &cli.App{}
-	c := &cli.Context{}
-	c.App = app
-
-	_, err := GetStringFromReader(c, "flag", "prompt", strings.NewReader("   \n"))
+	cmd := &cli.Command{}
+	_, err := GetStringFromReader(cmd, "flag", "prompt", strings.NewReader("   \n"))
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}

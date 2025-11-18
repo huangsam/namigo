@@ -8,17 +8,17 @@ import (
 	"os"
 	"strings"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 // GetString gets string from CLI or manual input.
-func GetString(c *cli.Context, flag, prompt string) (string, error) {
-	return GetStringFromReader(c, flag, prompt, os.Stdin)
+func GetString(cmd *cli.Command, flag, prompt string) (string, error) {
+	return GetStringFromReader(cmd, flag, prompt, os.Stdin)
 }
 
 // GetStringFromReader gets string from CLI or reader input.
-func GetStringFromReader(c *cli.Context, flag, prompt string, reader io.Reader) (string, error) {
-	value := c.String(flag)
+func GetStringFromReader(cmd *cli.Command, flag, prompt string, reader io.Reader) (string, error) {
+	value := cmd.String(flag)
 	if value == "" {
 		fmt.Printf("%s: ", prompt)
 		scanner := bufio.NewScanner(reader)

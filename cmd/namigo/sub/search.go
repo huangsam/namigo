@@ -1,6 +1,7 @@
 package sub
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -15,7 +16,7 @@ import (
 	"github.com/huangsam/namigo/pkg/search/golang"
 	"github.com/huangsam/namigo/pkg/search/npm"
 	"github.com/huangsam/namigo/pkg/search/pypi"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 // ErrMissingSearchTerm is returned when the search term is missing.
@@ -100,13 +101,13 @@ func (sr *SearchRunner) RunPackageSearch(searchTerm string, maxSize int, outputF
 }
 
 // SearchPackageAction searches for packages.
-func SearchPackageAction(c *cli.Context) error {
-	searchTerm := c.Args().First()
+func SearchPackageAction(_ context.Context, cmd *cli.Command) error {
+	searchTerm := cmd.Args().First()
 	if len(searchTerm) == 0 {
 		return ErrMissingSearchTerm
 	}
-	maxSize := c.Int("size")
-	outputFormat := search.GetFormatOption(c.String("format"))
+	maxSize := cmd.Int("size")
+	outputFormat := search.GetFormatOption(cmd.String("format"))
 
 	runner := NewSearchRunner(os.Stdout)
 	return runner.RunPackageSearch(searchTerm, maxSize, outputFormat)
@@ -139,13 +140,13 @@ func (sr *SearchRunner) RunDNSSearch(searchTerm string, maxSize int, outputForma
 }
 
 // SearchDNSAction searches for DNS records.
-func SearchDNSAction(c *cli.Context) error {
-	searchTerm := c.Args().First()
+func SearchDNSAction(_ context.Context, cmd *cli.Command) error {
+	searchTerm := cmd.Args().First()
 	if len(searchTerm) == 0 {
 		return ErrMissingSearchTerm
 	}
-	maxSize := c.Int("size")
-	outputFormat := search.GetFormatOption(c.String("format"))
+	maxSize := cmd.Int("size")
+	outputFormat := search.GetFormatOption(cmd.String("format"))
 
 	runner := NewSearchRunner(os.Stdout)
 	return runner.RunDNSSearch(searchTerm, maxSize, outputFormat)
@@ -178,13 +179,13 @@ func (sr *SearchRunner) RunEmailSearch(searchTerm string, maxSize int, outputFor
 }
 
 // SearchEmailAction searches for email records.
-func SearchEmailAction(c *cli.Context) error {
-	searchTerm := c.Args().First()
+func SearchEmailAction(_ context.Context, cmd *cli.Command) error {
+	searchTerm := cmd.Args().First()
 	if len(searchTerm) == 0 {
 		return ErrMissingSearchTerm
 	}
-	maxSize := c.Int("size")
-	outputFormat := search.GetFormatOption(c.String("format"))
+	maxSize := cmd.Int("size")
+	outputFormat := search.GetFormatOption(cmd.String("format"))
 
 	runner := NewSearchRunner(os.Stdout)
 	return runner.RunEmailSearch(searchTerm, maxSize, outputFormat)
