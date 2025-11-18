@@ -10,6 +10,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/huangsam/namigo/internal/core"
 	"github.com/huangsam/namigo/internal/model"
 	"github.com/huangsam/namigo/pkg/search"
 	"github.com/huangsam/namigo/pkg/search/dns"
@@ -161,6 +162,12 @@ func SearchDNSAction(_ context.Context, cmd *cli.Command) error {
 	if len(searchTerm) == 0 {
 		return ErrMissingSearchTerm
 	}
+
+	// Validate domain name before proceeding
+	if !core.IsValidDomainName(searchTerm) {
+		return fmt.Errorf("invalid domain name: %s", searchTerm)
+	}
+
 	maxSize := cmd.Int("size")
 	outputFormat := search.GetFormatOption(cmd.String("format"))
 
