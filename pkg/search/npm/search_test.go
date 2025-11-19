@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/huangsam/namigo/internal/model"
-	"github.com/huangsam/namigo/pkg/search/npm"
+	"github.com/huangsam/namigo/v2/internal/model"
+	"github.com/huangsam/namigo/v2/pkg/search/npm"
 )
 
 func TestSearchByAPI(t *testing.T) {

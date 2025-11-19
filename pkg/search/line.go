@@ -3,7 +3,7 @@ package search
 import (
 	"fmt"
 
-	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/v2/internal/model"
 )
 
 const (

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/huangsam/namigo/pkg/search/pypi"
+	"github.com/huangsam/namigo/v2/pkg/search/pypi"
 )
 
 func TestAPIList(t *testing.T) {

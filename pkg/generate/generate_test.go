@@ -3,7 +3,7 @@ package generate_test
 import (
 	"testing"
 
-	"github.com/huangsam/namigo/pkg/generate"
+	"github.com/huangsam/namigo/v2/pkg/generate"
 )
 
 func TestGeneratePrompt(t *testing.T) {

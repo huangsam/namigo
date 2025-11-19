@@ -10,14 +10,14 @@ import (
 	"os"
 	"time"
 
-	"github.com/huangsam/namigo/internal/core"
-	"github.com/huangsam/namigo/internal/model"
-	"github.com/huangsam/namigo/pkg/search"
-	"github.com/huangsam/namigo/pkg/search/dns"
-	"github.com/huangsam/namigo/pkg/search/email"
-	"github.com/huangsam/namigo/pkg/search/golang"
-	"github.com/huangsam/namigo/pkg/search/npm"
-	"github.com/huangsam/namigo/pkg/search/pypi"
+	"github.com/huangsam/namigo/v2/internal/core"
+	"github.com/huangsam/namigo/v2/internal/model"
+	"github.com/huangsam/namigo/v2/pkg/search"
+	"github.com/huangsam/namigo/v2/pkg/search/dns"
+	"github.com/huangsam/namigo/v2/pkg/search/email"
+	"github.com/huangsam/namigo/v2/pkg/search/golang"
+	"github.com/huangsam/namigo/v2/pkg/search/npm"
+	"github.com/huangsam/namigo/v2/pkg/search/pypi"
 	"github.com/urfave/cli/v3"
 )
 

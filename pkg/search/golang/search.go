@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/huangsam/namigo/internal/core"
-	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/v2/internal/core"
+	"github.com/huangsam/namigo/v2/internal/model"
 )
 
 // SearchByScrape searches for Go packages by scraping pkg.go.dev.

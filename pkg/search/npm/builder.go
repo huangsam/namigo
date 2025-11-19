@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/huangsam/namigo/internal/core"
+	"github.com/huangsam/namigo/v2/internal/core"
 )
 
 // APIList builds the request for NPM list view.

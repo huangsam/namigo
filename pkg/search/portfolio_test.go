@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/v2/internal/model"
 )
 
 func TestNewSearchPortfolio(t *testing.T) {

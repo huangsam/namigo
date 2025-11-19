@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/huangsam/namigo/internal/core"
-	"github.com/huangsam/namigo/pkg/generate"
+	"github.com/huangsam/namigo/v2/internal/core"
+	"github.com/huangsam/namigo/v2/pkg/generate"
 	"github.com/urfave/cli/v3"
 )
 

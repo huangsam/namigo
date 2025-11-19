@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/v2/internal/model"
 )
 
 // resultDelay is the delay before displaying results.

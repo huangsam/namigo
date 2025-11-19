@@ -6,7 +6,7 @@ import (
 	"time"
 
 	emailverifier "github.com/AfterShip/email-verifier"
-	"github.com/huangsam/namigo/internal/model"
+	"github.com/huangsam/namigo/v2/internal/model"
 )
 
 const probeInterval = 100 * time.Millisecond // Adjust as needed

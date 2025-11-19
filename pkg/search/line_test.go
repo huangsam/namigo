@@ -4,8 +4,8 @@ import (
 	"net"
 	"testing"
 
-	"github.com/huangsam/namigo/internal/model"
-	"github.com/huangsam/namigo/pkg/search"
+	"github.com/huangsam/namigo/v2/internal/model"
+	"github.com/huangsam/namigo/v2/pkg/search"
 )
 
 func TestGoLine_Format(t *testing.T) {

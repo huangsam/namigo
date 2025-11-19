@@ -7,9 +7,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/huangsam/namigo/internal/core"
-	"github.com/huangsam/namigo/internal/model"
-	"github.com/huangsam/namigo/internal/model/extern"
+	"github.com/huangsam/namigo/v2/internal/core"
+	"github.com/huangsam/namigo/v2/internal/model"
+	"github.com/huangsam/namigo/v2/internal/model/extern"
 )
 
 // SearchByAPI searches for PyPI packages by querying pypi.org.

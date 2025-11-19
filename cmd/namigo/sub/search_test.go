@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/huangsam/namigo/cmd/namigo/sub"
-	"github.com/huangsam/namigo/pkg/search"
+	"github.com/huangsam/namigo/v2/cmd/namigo/sub"
+	"github.com/huangsam/namigo/v2/pkg/search"
 	"github.com/urfave/cli/v3"
 )
 

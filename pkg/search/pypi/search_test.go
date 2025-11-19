@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/huangsam/namigo/internal/model"
-	"github.com/huangsam/namigo/internal/model/extern"
+	"github.com/huangsam/namigo/v2/internal/model"
+	"github.com/huangsam/namigo/v2/internal/model/extern"
 )
 
 // testTransport rewrites request URLs to point to the test server.

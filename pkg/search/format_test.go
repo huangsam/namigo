@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/huangsam/namigo/pkg/search"
+	"github.com/huangsam/namigo/v2/pkg/search"
 )
 
 func TestGetFormatOption(t *testing.T) {

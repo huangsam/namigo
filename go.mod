@@ -1,4 +1,4 @@
-module github.com/huangsam/namigo
+module github.com/huangsam/namigo/v2
 
 go 1.25.0
 

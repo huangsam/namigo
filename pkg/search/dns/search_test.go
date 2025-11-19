@@ -4,7 +4,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/huangsam/namigo/internal/core"
+	"github.com/huangsam/namigo/v2/internal/core"
 )
 
 func TestSearchByProbeWithLookup(t *testing.T) {

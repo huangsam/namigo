@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/huangsam/namigo/internal/model"
-	"github.com/huangsam/namigo/pkg/search/golang"
+	"github.com/huangsam/namigo/v2/internal/model"
+	"github.com/huangsam/namigo/v2/pkg/search/golang"
 )
 
 func TestSearchByScrapeMain(t *testing.T) {

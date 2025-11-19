@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/huangsam/namigo/internal/core"
+	"github.com/huangsam/namigo/v2/internal/core"
 )
 
 // ScrapeList builds the request for Go package list view.

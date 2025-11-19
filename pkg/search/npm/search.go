@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/huangsam/namigo/internal/core"
-	"github.com/huangsam/namigo/internal/model"
-	"github.com/huangsam/namigo/internal/model/extern"
+	"github.com/huangsam/namigo/v2/internal/core"
+	"github.com/huangsam/namigo/v2/internal/model"
+	"github.com/huangsam/namigo/v2/internal/model/extern"
 )
 
 // SearchByAPI searches for NPM packages by querying registry.npmjs.com.
