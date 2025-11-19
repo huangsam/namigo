@@ -3,14 +3,14 @@ package model
 import "net"
 
 const (
-	// NoAuthor is a fallback for author
+	// NoAuthor is a fallback for author.
 	NoAuthor = "No author"
 
-	// NoDescription is a fallback for description
+	// NoDescription is a fallback for description.
 	NoDescription = "No description"
 )
 
-// SearchKey is an enum for search keys
+// SearchKey is an enum for search keys.
 type SearchKey int
 
 const (

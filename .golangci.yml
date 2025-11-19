@@ -11,6 +11,12 @@ linters:
     - unconvert
     # https://github.com/mvdan/unparam
     - unparam
+    # https://pkg.go.dev/golang.org/x/tools/go/analysis/passes/modernize
+    - modernize
+    # https://github.com/fzipp/gocyclo
+    - gocyclo
+    # https://github.com/tetafro/godot
+    - godot
 formatters:
   enable:
     - gofmt

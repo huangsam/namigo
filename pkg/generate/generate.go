@@ -8,7 +8,7 @@ import (
 	"text/template"
 )
 
-// ErrNegativeInput happens when negative input occurs
+// ErrNegativeInput happens when negative input occurs.
 var ErrNegativeInput = errors.New("negative input")
 
 // promptName is a name for the template below.

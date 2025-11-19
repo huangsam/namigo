@@ -90,7 +90,7 @@ func (p *Portfolio) Run() error {
 	return nil
 }
 
-// Display prints results across all results
+// Display prints results across all results.
 func (p *Portfolio) Display() {
 	_, _ = fmt.Fprintf(p.output, "🍺 Prepare %s results\n\n", p.option)
 	time.Sleep(resultDelay)
