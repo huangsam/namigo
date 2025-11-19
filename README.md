@@ -13,18 +13,9 @@ Your naming pal, written in Go 🐶
 
 ## Motivation
 
-Finding the right name for projects is often harder than it seems. Namigo
-solves this "naming block" by providing a simple tool to quickly search for
-available names across package repositories, DNS, and email, letting you
-focus on building. By automating the search process, Namigo saves you time
-and effort, ensuring that you can find the perfect name without the usual
-hassle.
+Finding the right name for projects is often harder than it seems. Namigo solves this "naming block" by providing a simple tool to quickly search for available names across package repositories, DNS, and email, letting you focus on building. By automating the search process, Namigo saves you time and effort, ensuring that you can find the perfect name without the usual hassle.
 
-Additionally, Namigo can generate new names via AI prompts to chatbots,
-offering creative and unique suggestions. This feature leverages the power
-of artificial intelligence to provide you with a variety of name options
-that you might not have considered. Whether you need a name for a new
-project, package, domain, or email address, Namigo is your go-to naming pal.
+Additionally, Namigo can generate new names via AI prompts to chatbots, offering creative and unique suggestions. This feature leverages the power of artificial intelligence to provide you with a variety of name options that you might not have considered. Whether you need a name for a new project, package, domain, or email address, Namigo is your go-to naming pal.
 
 ## Getting started
 
