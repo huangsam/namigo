@@ -1,7 +1,7 @@
 # Namigo
 
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/huangsam/namigo/ci.yml)](https://github.com/huangsam/namigo/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/huangsam/namigo)](https://goreportcard.com/report/github.com/huangsam/namigo)
+[![Go Report Card](https://goreportcard.com/badge/github.com/huangsam/namigo/v2)](https://goreportcard.com/report/github.com/huangsam/namigo/v2)
 [![License](https://img.shields.io/github/license/huangsam/namigo)](https://github.com/huangsam/namigo/blob/main/LICENSE)
 [![GitHub Release](https://img.shields.io/github/v/release/huangsam/namigo)](https://github.com/huangsam/namigo/releases/latest)
 
