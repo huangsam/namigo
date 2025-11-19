@@ -23,7 +23,7 @@ Installing the CLI:
 
 ```shell
 # With `go install`
-go install github.com/huangsam/namigo/cmd/namigo@latest
+go install github.com/huangsam/namigo/v2/cmd/namigo@latest
 
 # With https://github.com/huangsam/namigo/releases
 # Access the link with the browser of your choice
