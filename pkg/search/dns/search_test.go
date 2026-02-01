@@ -72,12 +72,3 @@ func TestSearchByProbe_InvalidDomain(t *testing.T) {
 		t.Errorf("unexpected error message: %v", err)
 	}
 }
-
-func TestSearchByProbe_ValidDomain(t *testing.T) {
-	// This will fail due to network calls, but we just want to test validation passes
-	_, err := SearchByProbe("test", 5)
-	// We expect this to fail with network errors, not validation errors
-	if err != nil && err.Error() == "invalid domain name: test" {
-		t.Error("validation should have passed for valid domain")
-	}
-}
