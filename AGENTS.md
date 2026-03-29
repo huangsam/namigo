@@ -37,4 +37,7 @@ Test agents in isolation using the CLI before aggregating results:
 
 ## Future Directions
 
-- **Expanded Registries**: Implementation of additional agents for Rust (Crates.io), Java (Maven Central), and historical WHOIS data.
+- **Portfolio Tracking**: A local identity management system (`portfolio.json`) to track "Interested" vs "Registered" vs "Reserved" names.
+- **CI/CD Integration**: Official **GitHub Actions** support to verify name availability during the software release lifecycle.
+- **Social Media Presence**: Checking availability for usernames/handles on platforms like **X (Twitter)**, **GitHub**, and **Instagram**.
+- **Trademark Search**: Basic lookups against free trademark databases (e.g., **USPTO/TESS**) to flag potential conflicts early.
