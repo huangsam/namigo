@@ -1,39 +1,36 @@
-# Agents & Architecture
+# Namigo Agentic Guidelines
 
-Namigo's architecture is built around the concept of **Agents**. Rather than having a monolithic search function, Namigo utilizes specialized agents that know how to query specific platforms, registries, or infrastructure to determine name availability.
-
-## Motivation
-
-When creating a new project, startup, or brand, developers usually need to check name availability across multiple platforms:
-1. Is the `.com` domain available?
-2. Is the Go module path free on `pkg.go.dev`?
-3. Is the NPM package name taken?
-4. Is it registered on PyPI?
-
-Checking these manually is tedious. Namigo automates this by dispatching independent agents to perform these checks concurrently, aggregating the results into a unified summary. This agent-based design ensures that Namigo is extensible; if we want to add support for a new registry (like RubyGems or crates.io), we simply implement a new agent.
+Namigo leverages specialized, concurrent **Agents** to query name availability and generate content across diverse platforms.
 
 ## Architecture
 
-Namigo's architecture is divided into three main layers:
+1.  **Agents** (`pkg/`): Independent workers (e.g., `npm`, `dns`, `pypi`) that implement platform-specific logic and interfaces.
+2.  **Core** (`internal/core/`): Standardized infrastructure for networking, parallelization (worker pools), and document parsing.
+3.  **Models** (`internal/model/`): A common domain language (e.g., `SearchKey`, `Portfolio`) that standardizes IO across all agents.
 
-### 1. Agents (`pkg/search/`, `pkg/generate/`)
-Agents are the specialized workers that interface with external systems.
-- **Search Agents**: Implement concurrent querying and parsing for specific platforms.
-  - `golang`: Scrapes `pkg.go.dev` for existing packages.
-  - `npm`: Queries the `registry.npmjs.com` REST API.
-  - `pypi`: Interacts with the Python Package Index API.
-  - `dns`: Probes standard TLDs for domain availability using DNS resolution.
-  - `email`: Validates syntax and checks MX records for email deliverability.
-- **Generate Agents**: (e.g., `pkg/generate`) Focus on creative tasks, such as combining user inputs into structured prompts for AI chatbots to brainstorm name ideas.
+## Behavioral Cues
 
-### 2. Core Utilities (`internal/core/`)
-Instead of each agent reinventing the wheel, they rely on a shared core library. This ensures consistent networking and performance.
-- **Concurrency**: Worker pools and pipelines for hitting APIs without overwhelming them.
-- **Networking**: Standardized HTTP clients, robust retries, and rate limiting.
-- **Document Processing**: Shared utilities for parsing HTML/JSON.
+### Modern Go Syntax
+We prefer **Go 1.22+** idioms. Avoid legacy patterns where modern alternatives exist:
+- Use `for range count` instead of standard for-loops for simple repetitions.
+- Leverage the `slices` and `maps` packages for collection manipulation.
+- Use `errors.Join` for multi-error handling.
+- Prefer generics for shared core utilities where type safety is paramount.
+- Run `go fix ./...` to automatically update deprecated APIs to modern equivalents.
+- Use `golangci-lint run` and `golangci-lint fmt` to maintain code quality and formatting.
 
-### 3. Data Models (`internal/model/`)
-A shared vocabulary (`SearchKey`, `GoPackage`, `NPMPackage`, etc.) ensures that regardless of how an agent retrieves its data (REST API, direct DNS probe, or HTML scraping), the resulting format is returned in a predictable, strongly-typed domain model.
+### Extensibility
+To add a new search or generation extension:
+1.  **Logic**: Implement the core logic in a new package under `pkg/search/` or `pkg/generate/`.
+2.  **Model**: Ensure the result complies with an existing `internal/model/` or define a new one if necessary.
+3.  **CLI**: Register the new command in `cmd/namigo/main.go` and its corresponding action in `cmd/namigo/sub/`.
 
-### Orchestration
-The CLI (`cmd/namigo/`) acts as the conductor. It reads the user's input, instantiates the requested agents, and dispatches them. A `Portfolio` struct aggregates the asynchronous results from the agents and formats them for the user's terminal output.
+### Manual Verification
+Test agents in isolation using the CLI before aggregating results:
+- **Search**: `go run cmd/namigo/main.go search package <term>`
+- **DNS**: `go run cmd/namigo/main.go search dns <domain>`
+- **Email**: `go run cmd/namigo/main.go search email <address>`
+
+### Concurrency & Resilience
+- **Parallelism**: Always use `internal/core/parallel.go` to dispatch concurrent tasks. Do not manually manage goroutine lifecycles for agents.
+- **Fail-Fast**: Ensure agents respect timeouts and handle API rate limits gracefully using shared core HTTP clients.
