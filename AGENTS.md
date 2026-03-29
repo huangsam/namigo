@@ -34,3 +34,7 @@ Test agents in isolation using the CLI before aggregating results:
 ### Concurrency & Resilience
 - **Parallelism**: Always use `internal/core/parallel.go` to dispatch concurrent tasks. Do not manually manage goroutine lifecycles for agents.
 - **Fail-Fast**: Ensure agents respect timeouts and handle API rate limits gracefully using shared core HTTP clients.
+
+## Future Directions
+
+- **Expanded Registries**: Implementation of additional agents for Rust (Crates.io), Java (Maven Central), and historical WHOIS data.

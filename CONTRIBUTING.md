@@ -1,50 +1,21 @@
-# Welcome to Namigo! 🐶
+# Contributing to Namigo 🐶
 
-Welcome to the Namigo project! Thanks for your interest in contributing.
-This document outlines the process for contributing to the project, including
-guidelines for reporting issues, submitting pull requests, and coding style.
+Thanks for your interest! We aim for a lean, high-velocity contribution process.
 
-Additionally, you will find information on the design documents and the overall
-code structure to help you get started with understanding the project.
+## Pull Requests
 
-## Reporting issues
+1. **Branch**: `git checkout -b <type>/<name>` (e.g., `feature/my-extra-search`)
+2. **Implement**: Add tests and follow [Namigo Agentic Guidelines](AGENTS.md).
+3. **Verify**: Run `bash scripts/test.sh` and `bash scripts/lint.sh`.
+4. **Submit**: Open a PR with a concise description of your changes.
 
-If you find a bug or have a feature request, please open an issue on GitHub. When reporting a bug, please include:
+## Issues
 
-* A clear and descriptive title
-* Steps to reproduce the bug
-* The expected behavior
-* The actual behavior
-* Your operating system and version
+For bugs or feature requests, [open an issue](https://github.com/huangsam/namigo/issues) with reproduction steps and expected outcomes.
 
-## Pull request process
+## Architecture & Design
 
-1.  Fork the repository
-2.  Create a feature branch (`git checkout -b feature/my-feature`)
-3.  Make your changes
-4.  Run tests and linters (`bash scripts/test.sh`, `bash scripts/lint.sh`)
-5.  Commit your changes
-6.  Push to your branch (`git push origin feature/my-feature`)
-7.  Open a pull request
-
-Please ensure your pull request adheres to the following:
-
-* Include tests for new features and bug fixes
-* Update documentation as needed
-* Follow the coding style guidelines
-
-## Design docs
-
-[Click here](docs/search_approach.md) to learn about the `search` implementation.
-
-[Click here](docs/generate_approach.md) to learn about the `generate` implementation.
-
-## Code structure
-
-This codebase closely resembles [golang-standards/project-layout](https://github.com/golang-standards/project-layout).
-
-The TLDR is:
-
-- `cmd` has entry points
-- `pkg` has business logic
-- `internal` has helpers
+Namigo follows the standard [Go Project Layout](https://github.com/golang-standards/project-layout):
+- `cmd/`: CLI entry points.
+- `pkg/`: Public search and generation logic.
+- `internal/`: Private core infrastructure and data models.
