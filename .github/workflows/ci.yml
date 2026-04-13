@@ -24,6 +24,6 @@ jobs:
       - name: Run build
         run: bash ./scripts/build.sh
       - name: Run linters
-        uses: golangci/golangci-lint-action@v8
+        uses: golangci/golangci-lint-action@v9
         with:
           version: v2.10
