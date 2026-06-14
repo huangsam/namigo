@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/PuerkitoBio/goquery v1.12.0
-	github.com/urfave/cli/v3 v3.9.0
+	github.com/urfave/cli/v3 v3.9.1
 )
 
 require (
