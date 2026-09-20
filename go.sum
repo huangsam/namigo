@@ -1,5 +1,5 @@
-github.com/AfterShip/email-verifier v1.4.1 h1:vDmnqq680siSLw8rtiAYaqgmqYeW+AUoMfEY1RjWK8k=
-github.com/AfterShip/email-verifier v1.4.1/go.mod h1:AcFyA5b7X6L4l5dBuemWBSh8mq74nxkBTtoWgLOFrbw=
+github.com/AfterShip/email-verifier v1.5.0 h1:RIvyE7O3KwnVPyzVUqc9f2vYMbOFH2GLLsHzz+3gkyI=
+github.com/AfterShip/email-verifier v1.5.0/go.mod h1:0swBUZHxU1t2SYs8FOztJaaNJm0At5eMSjt5pGpjNsA=
 github.com/PuerkitoBio/goquery v1.13.0 h1:mqHbjD7Jmnul4DTR24LKTjo1uUmHUh072kteGV+xpFM=
 github.com/PuerkitoBio/goquery v1.13.0/go.mod h1:Hip5mdBL8K2wEGKJdr27sRaNwIdDajmCwB/ExUPwW+g=
 github.com/andybalholm/cascadia v1.3.4 h1:vM2lgh0Vru9Vwyfm4cQqWP2HHMW0u0+2PAW7Q38Qufg=

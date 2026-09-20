@@ -3,7 +3,7 @@ module github.com/huangsam/namigo/v2
 go 1.25.0
 
 require (
-	github.com/AfterShip/email-verifier v1.4.1
+	github.com/AfterShip/email-verifier v1.5.0
 	github.com/PuerkitoBio/goquery v1.13.0
 	github.com/urfave/cli/v3 v3.12.0
 )
